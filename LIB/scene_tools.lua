@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
-dofile('E:/MODZ_stuff/NoMansSky/AMUMss_Scripts/~LIB/lua_2_exml.lua')
+dofile('./lua_2_exml.lua')
 --------------------------------------------------------------------------------
 --	Helper functions for adding new TkSceneNodeData nodes and properties
 --------------------------------------------------------------------------------
