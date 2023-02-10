@@ -1,5 +1,5 @@
 ----------------------------------------------------------------------
-dofile('E:/MODZ_stuff/NoMansSky/AMUMss_Scripts/~LIB/scene_tools.lua')
+dofile('./scene_tools.lua')
 ----------------------------------------------------------------------
 
 --	Returns a light TkSceneNodeData section.
