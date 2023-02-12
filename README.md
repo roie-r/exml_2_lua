@@ -1,6 +1,6 @@
 # EXML 2 LUA
 A system for converting EXML - a No Mans Sky data set - to a lua table and back.
-The tool handles full files or specific sections. It either loads the data to memory as a table for editing or writes the lua table to a text file for later use.
+The tool handles full files or specific sections. It can load the data to memory directly or write the data as a ready-to-use script to a text file.
 ## Exml-as-lua table format
 Every section in its own table, and the section has a META table describing its attributes. The first item in a meta table is `name`, `value`, or the named attribute. A string looks like this:
 ```lua
