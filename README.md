@@ -35,20 +35,22 @@ Using this format allows to describe any EXML data.
 ## Editing full EXML files
 While this tool is meant as an extension for AMUMSS, it can be used to edit an re-write a full EXML file:
 ```lua
+dofile("./LIB/lua_2_exml.lua")
+
 function ReadExml(path)
-    local f = io.open(path, 'r')
-    local t = ToLua(f:read('*a'))
+    local f = io.open(path, "r")
+    local t = ToLua(f:read("*a"))
     f:close()
     return t
 end
 
 function WriteExml(t, path)
-    local f = io.open(path, 'w')
+    local f = io.open(path, "w")
     f:write(FileWrapping(t))
     f:close()
 end
 
-src1 = './METADATA/REALITY/TABLES/NMS_REALITY_GCTECHNOLOGYTABLE.EXML'
+src1 = "./METADATA/REALITY/TABLES/NMS_REALITY_GCTECHNOLOGYTABLE.EXML"
 
 gc_tech = ReadExml(src1)
 
@@ -59,7 +61,7 @@ for i, tch in ipairs(all_tech) do tid[tch.ID] = i end
 
 all_tech[tid.UT_TOX].ChargeAmount = 1200
 for _,sb in ipairs(all_tech[tid.SHIPGUN1].StatBonuses) do
-    if sb.Stat.StatsType:find('Range') then
+    if sb.Stat.StatsType:find("Range") then
         sb.Bonus = sb.Bonus + 500
     end
 end
