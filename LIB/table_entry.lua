@@ -1,5 +1,5 @@
 ---------------------------------------------------------------------
-dofile('./lua_2_exml.lua')
+dofile('C:/TEMP/LIB/lua_2_exml.lua')
 ---------------------------------------------------------------------
 
 --	build the requirements table for tech and products

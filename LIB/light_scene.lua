@@ -1,5 +1,5 @@
 ----------------------------------------------------------------------
-dofile('./scene_tools.lua')
+dofile('C:/TEMP/LIB/scene_tools.lua')
 ----------------------------------------------------------------------
 
 --	Returns a light TkSceneNodeData section.
