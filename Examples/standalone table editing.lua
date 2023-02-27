@@ -3,7 +3,8 @@ dofile('C:/TEMP/LIB/table_entry.lua')
 --[[-------------------------------------------------------------------------------------
   While this tool is meant as an extension for AMUMSS, it really can be used to edit
   and re-write a full EXML file by itself.
-  Here's a simple example of using ToLua & ToExml (called from inside FileWrapping)
+
+  This is a simple example of using ToLua & ToExml (called from inside FileWrapping)
   as a stand-alone EXML editor (just the editing itself - it's not a full modding tool).
 ]]---------------------------------------------------------------------------------------
 
@@ -19,39 +20,80 @@ function WriteExml(t, path)
 	f:write(FileWrapping(t))
 	f:close()
 end
-
 -----------------------------------------------------------------------------------------
-src1 = 'C:/TEMP/UNPACKED/METADATA/REALITY/TABLES/NMS_REALITY_GCTECHNOLOGYTABLE.EXML'
-gc_tech = ReadExml(src1)
 
-local all_tech = gc_tech.template.Table
+local src0 = 'E:/MODZ_stuff/NoMansSky/UNPACKED/GCCAMERAGLOBALS.GLOBAL.EXML'
+local gc_cam_file = ReadExml(src0)
+local gc_cam = gc_cam_file.template
+
+gc_cam.VehicleExitFlashTime		= 0.5
+gc_cam.VehicleExitFlashStrength	= 0.5
+gc_cam.BinocularFlashTime			= 0.12
+gc_cam.BinocularFlashStrength		= 0.4
+gc_cam.MechCameraArmShootOffsetY	= 2
+gc_cam.InteractionHeadHeightDefault= 1.5
+
+for _,flwcam in pairs({
+	'SpaceshipFollowCam',
+	'DropshipFollowCam',
+	'ShuttleFollowCam',
+	'RoyalShipFollowCam',
+	'SailShipFollowCam',
+	'ScienceShipFollowCam',
+	'AlienShipFollowCam'
+}) do
+	gc_cam[flwcam].LookStickLimitAngle = 205
+end
+
+local shk = {}
+--	map GcCameraShakeData names for use as table keys
+for i, s in ipairs(gc_cam.CameraShakeTable) do shk[s.Name] = i end
+
+gc_cam.CameraShakeTable[shk.LAND].StrengthScale = 2
+gc_cam.CameraShakeTable[shk.LAND].CapturedData.ShakeStrength = 0.01
+gc_cam.CameraShakeTable[shk.WALKERWALK].StrengthScale = 2
+gc_cam.CameraShakeTable[shk.WALKERWALK].CapturedData.ShakeStrength = 0.02
+gc_cam.CameraShakeTable[shk.DOCKINGSHAKE].StrengthScale = 8
+gc_cam.CameraShakeTable[shk.DOCKINGSHAKE].CapturedData.ShakeStrength = 0.006
+gc_cam.CameraShakeTable[shk.FLYBY].StrengthScale = 1000
+gc_cam.CameraShakeTable[shk.FLYBY].CapturedData.ShakeStrength = 1.2
+
+WriteExml(gc_cam_file, 'e:/_dump/gccameraglobals.global.exml')
+-----------------------------------------------------------------------------------------
+
+local src1 = 'E:/MODZ_stuff/NoMansSky/UNPACKED/METADATA/REALITY/TABLES/NMS_REALITY_GCTECHNOLOGYTABLE.EXML'
+local gc_tech_file = ReadExml(src1)
+local gc_tech = gc_tech_file.template.Table
+
 local tid = {}
---	map IDs to be used as table keys
-for i, tch in ipairs(all_tech) do tid[tch.ID] = i end
+--	map IDs for use as table keys
+for i, tch in ipairs(gc_tech) do tid[tch.ID] = i end
 
-all_tech[tid.UT_TOX].ChargeAmount = 1200
-for _,sb in ipairs(all_tech[tid.SHIPGUN1].StatBonuses) do
+gc_tech[tid.UT_TOX].ChargeAmount = 1200
+for _,sb in ipairs(gc_tech[tid.SHIPGUN1].StatBonuses) do
 	if sb.Stat.StatsType:find('Range') then
 		sb.Bonus = sb.Bonus + 500
 	end
 end
-table.remove(all_tech, tid.MECH_GUN)
+table.remove(gc_tech, tid.MECH_GUN)
 
-WriteExml(gc_tech, 'C:/TEMP/gc_tech.exml')
+WriteExml(gc_tech_file, 'e:/_dump/gc_tech.exml')
 -----------------------------------------------------------------------------------------
-src2 = 'C:/TEMP/UNPACKED/METADATA/REALITY/TABLES/NMS_REALITY_GCPRODUCTTABLE.EXML'
-gc_prod = ReadExml(src2)
 
-local all_prod = gc_prod.template.Table
+local src2 = 'E:/MODZ_stuff/NoMansSky/UNPACKED/METADATA/REALITY/TABLES/NMS_REALITY_GCPRODUCTTABLE.EXML'
+local gc_prod_file = ReadExml(src2)
+local gc_prod = gc_prod_file.template.Table
+
 local pid = {}
---	map IDs to be used as table keys
-for i, prd in ipairs(all_prod) do pid[prd.ID] = i end
+--	map IDs for use as table keys
+for i, prd in ipairs(gc_prod) do pid[prd.ID] = i end
 
-for _,prd in ipairs(all_prod) do
+for _,prd in ipairs(gc_prod) do
 	prd.StackMultiplier = prd.StackMultiplier * 10
 end
-all_prod[pid.MICROCHIP].Requirements[2].Amount = 2
+gc_prod[pid.MICROCHIP].Requirements[2].Amount = 2
 
-WriteExml(gc_prod, 'C:/TEMP/gc_prod.exml')
+WriteExml(gc_prod_file, 'e:/_dump/gc_prod.exml')
 -----------------------------------------------------------------------------------------
+
 print('...done')
