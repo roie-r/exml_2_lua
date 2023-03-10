@@ -4,7 +4,7 @@ dofile('C:/TEMP/LIB/table_entry.lua')
 --[[
   PrintExmlAsLua function is a tool for printing the exml-2-lua data.
   Paste one or more sections (must be complete sections) or full exml files,
-  run the string through PrintExmlAsLua, then print to output or save to file.
+  run the string through PrintExmlAsLua, then print to output or save it to file.
 ]]
 
 exml_sections = [[<Property name="Requirements">

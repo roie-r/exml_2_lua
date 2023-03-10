@@ -35,7 +35,7 @@ local function GetIdTable(t, prop)
 end
 
 --	Build a new entry for NMS_REALITY_GCTECHNOLOGYTABLE
---	gets requirements and color in separate tables
+--	sub lists (requirements and color) are entered in separate tables
 function TechnologyEntry(tech)
 	local function getStats(s)
 	--	receives a table of {type, bonus, level} items
@@ -123,7 +123,7 @@ function TechnologyEntry(tech)
 end
 
 --	Build a new entry for NMS_REALITY_GCPRODUCTTABLE
---	sub lists (requirements and color) should be in separate tables
+--	sub lists (requirements and color) are entered in separate tables
 function ProductEntry(prod)
 	return {
 		META	= {'value', 'GcProductData.xml'},

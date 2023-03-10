@@ -61,27 +61,3 @@ function ScChildren(t)
 	t.META = {'name', 'Children'}
 	return t
 end
-
---	Returns a descriptor data table array
--- function DescriptorData(descr)
--- 	local T = { META = {'name', 'Descriptors'} }
--- 	for _,rd in ipairs(descr) do
--- 		T[#T+1] = {
--- 			META	= {'value', 'TkResourceDescriptorData.xml'},
--- 			Id		= rd[1],
--- 			Name	= rd[2],
--- 			Chance	= rd[3] or 0
--- 		}
--- 	end
--- 	return T
--- end
-
---	Returns a descriptor list
--- function DescriptorList(id, data)
--- 	local T = {
--- 		META		= {'value', 'TkResourceDescriptorList.xml'},
--- 		TypeId		= id,
--- 		Descriptors	= DescriptorData(data)
--- 	}
--- 	return T
--- end

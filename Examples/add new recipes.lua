@@ -72,7 +72,7 @@ end
 NMS_MOD_DEFINITION_CONTAINER = {
 	MOD_FILENAME 		= '_L2E_EXAMPLE add new recipes.pak',
 	MOD_AUTHOR			= 'lMonk',
-	NMS_VERSION			= '4.10',
+	NMS_VERSION			= '4.13',
 	MODIFICATIONS 		= {{
 	MBIN_CHANGE_TABLE	= {
 	{

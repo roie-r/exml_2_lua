@@ -5,7 +5,7 @@ dofile('C:/TEMP/LIB/table_entry.lua')
   and re-write a full EXML file by itself.
 
   This is a simple example of using ToLua & ToExml (called from inside FileWrapping)
-  as a stand-alone EXML editor (just the editing itself - it's not a full modding tool).
+  as a stand-alone EXML editor (just the editing itself - it's not a full modding tool)
 ]]---------------------------------------------------------------------------------------
 
 function ReadExml(path)

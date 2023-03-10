@@ -1,6 +1,6 @@
 --------------------------------------------------------------------------------
 ---	Convert EXML to an equivalent lua table and back again to exml text
----	helper functions and ENUMs...
+---	helper functions and ENUMs.
 --------------------------------------------------------------------------------
 
 --	replace a boolean with its text (ignore otherwise)

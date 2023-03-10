@@ -2,7 +2,7 @@
 dofile('C:/TEMP/LIB/scene_tools.lua')
 ----------------------------------------------------------------------
 
---	Returns a light TkSceneNodeData section.
+--	Builds a light TkSceneNodeData section.
 --	receives a table with the following (optional) variables
 --		name= 'n9',	fov= 360,
 --		i=	30000,	f= 'q',		fr=	2,
