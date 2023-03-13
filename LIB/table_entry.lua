@@ -1,5 +1,5 @@
 ---------------------------------------------------------------------
-dofile('C:/TEMP/LIB/lua_2_exml.lua')
+dofile('E:/MODZ_stuff/NoMansSky/AMUMss_Scripts/~LIB/lua_2_exml.lua')
 ---------------------------------------------------------------------
 
 --	build the requirements table for tech and products
@@ -267,13 +267,17 @@ function BaseBuildObjectEntry(bpart)
 	return {
 		META = {'value', 'GcBaseBuildingEntry.xml'},
 		ID							= bpart.id,
+		Style						= {
+			META		= {'Style', 'GcBaseBuildingPartStyle.xml'},
+			Style		= bpart.style or 'None'							--	Enum
+		},
 		PlacementScene				= {
 			META		= {'PlacementScene', 'TkModelResource.xml'},
 			Filename	= bpart.placementscene
 		},
 		DecorationType				= {
-			META	= {'DecorationType', 'GcBaseBuildingObjectDecorationTypes.xml'},
-			BaseBuildingDecorationType = bpart.decorationtype or 'Normal'
+			META		= {'DecorationType', 'GcBaseBuildingObjectDecorationTypes.xml'},
+			BaseBuildingDecorationType = bpart.decorationtype or 'Normal'--	Enum
 		},
 		IsPlaceable					= bpart.isplaceable,				--	b
 		IsDecoration				= bpart.isdecoration,				--	b
@@ -319,11 +323,7 @@ function BaseBuildObjectEntry(bpart)
 		ShowGhosts					= bpart.showghosts or true,
 		GhostsCountOverride			= 0,
 		SnappingDistanceOverride	= 0,
-		RegionSpawnLOD				= 1,
-		NPCInteractionScene			= {
-			META = {'NPCInteractionScene', 'TkModelResource.xml'},
-			Filename = bpart.npcinteractionscene
-		}
+		RegionSpawnLOD				= 1
 	}
 end
 
