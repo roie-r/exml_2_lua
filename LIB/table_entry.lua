@@ -1,6 +1,11 @@
----------------------------------------------------------------------
+----------------------------------------------------------------------------
 dofile('E:/MODZ_stuff/NoMansSky/AMUMss_Scripts/~LIB/lua_2_exml.lua')
----------------------------------------------------------------------
+----------------------------------------------------------------------------
+---	VERSION: 0.8
+---	Add new items into technology, proc-tech, product & basebuilding tables
+---	* Properties who can be safely left with their deafult value are omited.
+---	 so not ALL properties of the tables' classes are included.
+----------------------------------------------------------------------------
 
 --	build the requirements table for tech and products
 --	receives a table of {id, amount, product/substance} items

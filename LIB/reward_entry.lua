@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------
-dofile('C:/TEMP/LIB/lua_2_exml.lua')
+dofile('E:/MODZ_stuff/NoMansSky/AMUMss_Scripts/~LIB/lua_2_exml.lua')
 --------------------------------------------------------------------------
 ---	construct reward table entries
 --------------------------------------------------------------------------
@@ -41,14 +41,14 @@ R_={	C='Common',			U='Uncommon',		R='Rare' }
 F_={	S='SingleShip',		G='AmbientGroup',	W='DeepSpaceCommon' }
 
 function R_RewardTableEntry(rte)
+	-- allows to supply the reward list from outside
 	if not rte.item_list then
-		rte.item_list = {META = {'name', 'List'}}
+		rte.item_list = {}
 		for _,rwd in pairs(rte.rewardlist) do
 			rte.item_list[#rte.item_list+1] = rwd.f(rwd)
 		end
-	else
-		rte.item_list.META = {'name', 'List'}
 	end
+	rte.item_list.META = {'name', 'List'}
 	return {
 		META = {'value', 'GcGenericRewardTableEntry.xml'},
 		Id	 = rte.id,
@@ -300,7 +300,6 @@ function R_Ship(item)
 		item,
 		'GcRewardSpecificShip.xml',
 		{
-			-- NameOverride = item.name or '',
 			NameOverride = item.name,
 			ShipResource = {
 				META	= {'ShipResource', 'GcResourceElement.xml'},
@@ -336,7 +335,6 @@ function R_Multitool(item)
 		item,
 		'GcRewardSpecificWeapon.xml',
 		{
-			-- NameOverride = item.name or '',
 			NameOverride = item.name,
 			{
 				META	= {'WeaponResource', 'GcExactResource.xml'},

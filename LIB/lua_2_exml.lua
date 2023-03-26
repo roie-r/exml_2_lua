@@ -1,6 +1,7 @@
 --------------------------------------------------------------------------------
+---	VERSION: 0.8
 ---	Convert EXML to an equivalent lua table and back again to exml text
----	helper functions and ENUMs.
+---	helper functions and ENUMs...
 --------------------------------------------------------------------------------
 
 --	replace a boolean with its text (ignore otherwise)
@@ -72,7 +73,7 @@ function FileWrapping(data, template)
 	if type(data) == 'string' then
 		return string.format(wrapper, template, data)
 	end
-	-- remove the extra table added by ToLua (FIX THIS!)
+	-- remove the extra table added by ToLua
 	if data.template then data = data.template end
 	-- table loaded from file
 	if data.META[1] == 'template' then
@@ -99,7 +100,7 @@ end
 --	Returns a table representation of EXML sections
 --	When parsing a full file, the header is stripped and a mock template is added
 --	Rquires complete EXML sections in the nomral format ...
---	 Each property in a separate line with no blank lines or comments
+--	 Each property in a separate line with no commented lines
 function ToLua(exml)
 	local function eval(val)
 		if val == 'True' then
@@ -162,7 +163,7 @@ end
 --	Converts EXML to a pretty-printed, ready-to-work, lua table script
 --	When parsing a full file, the header is stripped and a mock template is added
 --	Rquires complete EXML sections in the nomral format ...
---	 Each property in a separate line with no blank lines or comments
+--	 Each property in a separate line with no commented lines
 function PrintExmlAsLua(exml, indent, com)
 	local function eval(val)
 		if #val == 0 then
@@ -252,7 +253,7 @@ function ColorData(t, n)
 		end
 	end
 	return {
-		-- if a name (n) is present then use 2-property tag
+		-- if a name (n) is present then use 2-property tags
 		META= {n or 'value', 'Colour.xml'},
 		R	= t[1] or 1,
 		G	= t[2] or 1,
