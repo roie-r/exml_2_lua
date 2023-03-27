@@ -1,6 +1,8 @@
 -----------------------------------------------------------------------------------------
-dofile('C:/TEMP/LIB/table_entry.lua')
+dofile('C:/AMUMSS/ModScript/ModHelperScripts/LIB/lua_2_exml.lua')
 --[[-------------------------------------------------------------------------------------
+  * THIS IS A STAND-ALONE EXML-2-LUA SCRIPT - NOT MEANT FOR AMUMSS.
+
   While this tool is meant as an extension for AMUMSS, it really can be used to edit
   and re-write a full EXML file by itself.
 

@@ -1,6 +1,6 @@
-----------------------------------------------------------------------
-dofile('E:/MODZ_stuff/NoMansSky/AMUMss_Scripts/~LIB/table_entry.lua')
-----------------------------------------------------------------------
+----------------------------------
+dofile('LIB/table_entry.lua')
+----------------------------------
 
 NMS_MOD_DEFINITION_CONTAINER = {
 	MOD_FILENAME 		= '_TEST L2E add new basepart.pak',

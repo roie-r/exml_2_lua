@@ -1,5 +1,5 @@
 --------------------------------------
-dofile('C:/TEMP/LIB/table_entry.lua')
+dofile('LIB/lua_2_exml.lua')
 --------------------------------------
 
 local new_recipes = {

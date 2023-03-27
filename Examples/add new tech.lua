@@ -1,5 +1,5 @@
 --------------------------------------
-dofile('C:/TEMP/LIB/table_entry.lua')
+dofile('LIB/table_entry.lua')
 --------------------------------------
 
 NMS_MOD_DEFINITION_CONTAINER = {

@@ -1,6 +1,5 @@
--------------------------------------------------------------------------
-dofile('E:/MODZ_stuff/NoMansSky/AMUMss_Scripts/~LIB/lua_2_exml.lua')
--------------------------------------------------------------------------
+----------------------------------------------------------------------------
+---	VERSION: 0.81
 --	Helper functions for adding new TkSceneNodeData nodes and properties
 -------------------------------------------------------------------------
 
@@ -20,9 +19,10 @@ end
 --	T (optional) is a table for scene class properties - attributes, transform and children
 function ScNode(name, stype, T)
 	T = T or {}
-	T.META = {'value', 'TkSceneNodeData.xml'}
-	T.Name = name
-	T.Type = stype
+	T.META 		= {'value', 'TkSceneNodeData.xml'}
+	T.Name 		= name
+	T.NameHash	= JenkinsHash(name)
+	T.Type 		= stype
 	return T
 end
 
@@ -60,3 +60,59 @@ function ScChildren(t)
 	t.META = {'name', 'Children'}
 	return t
 end
+
+---	returns a jenkins hash from a string
+function JenkinsHash(input)
+    local hash = 0
+    local charTable = {string.byte(input:upper(), 1, #input)}
+
+    for i = 1, #input do
+        hash = (hash + charTable[i]) & 0xffffffff
+        hash = (hash + (hash << 10)) & 0xffffffff
+        hash = (hash ~ (hash >> 6)) & 0xffffffff
+    end
+    hash = (hash + (hash << 3)) & 0xffffffff
+    hash = (hash ~ (hash >> 11)) & 0xffffffff
+    hash = (hash + (hash << 15)) & 0xffffffff
+
+    return tostring(hash)
+end
+
+--	Builds a light TkSceneNodeData section.
+--	receives a table with the following (optional) variables
+--		name= 'n9',	fov= 360,
+--		i=	30000,	f= 'q',		fr=	2,
+--		r=	1,		g=	1,		b=	1,
+--		c=	'7E450A' (color as hex - overwrites rgb)
+--		tx=	0,		ty=	0,		tz=	0,
+--		rx=	0,		ry=	0,		rz=	0,
+--		sx=	1,		sy=	1,		sz=	1
+function ScLight(light)
+	-- c = color as hex string. overwrites rgb if present.
+	if light.c then
+		light.r = Hex2Prc(light.c:sub(1, 2))
+		light.g = Hex2Prc(light.c:sub(3, 4))
+		light.b = Hex2Prc(light.c:sub(5, 6))
+	end
+	return ScNode(
+		light.name or 'n9',
+		'LIGHT',
+		{
+			ScTransform(light),
+			ScAttributes({
+				{'FOV',		 	light.fov or 360},
+				{'FALLOFF',	 	(light.f and light.f:sub(1,1) == 'l') and 'linear' or 'quadratic'},
+				{'FALLOFF_RATE',light.fr or 2},
+				{'INTENSITY',	light.i  or 30000},
+				{'COL_R',		light.r  or 1},
+				{'COL_G',		light.g  or 1},
+				{'COL_B',		light.b  or 1},
+				{'VOLUMETRIC',	0},
+				{'COOKIE_IDX',	-1},
+				{'MATERIAL',	'MATERIALS/LIGHT.MATERIAL.MBIN'}
+			})
+		}
+	)
+end
+--	wrapper: returns the exml text of ScLight
+function AddNewLight(l)  return ToExml(ScLight(l)) end
