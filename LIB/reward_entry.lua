@@ -1,5 +1,5 @@
 ----------------------------------------------------------------------------
----	VERSION: 0.81
+---	VERSION: 0.81.1
 ---	construct reward table entries
 --------------------------------------------------------------------------
 
@@ -302,10 +302,10 @@ function R_Ship(item)
 			NameOverride = item.name,
 			ShipResource = {
 				META	= {'ShipResource', 'GcResourceElement.xml'},
-				Filename = item.file,
+				Filename = item.filename,
 				Seed	= {
 					META		= {'Seed', 'GcSeed.xml'},
-					Seed			= item.seed,
+					Seed			= tonumber(item.seed),
 					UseSeedValue	= true
 				}
 			},
@@ -315,15 +315,15 @@ function R_Ship(item)
 			},
 			{
 				META	= {'ShipInventory', 'GcInventoryContainer.xml'},
-				Inventory= item.inventory,
+				Inventory	= R_Inventory(item.inventory),
 				Class	= {
 					META	= {'Class', 'GcInventoryClass.xml'},
-					InventoryClass	= 'S'
+					InventoryClass	= item.class or 'S'
 				}
 			},
 			ShipType	= {
 				META	= {'ShipType', 'GcSpaceshipClasses.xml'},
-				ShipClass	= item.class or nil
+				ShipClass	= item.shiptype or nil
 			}
 		}
 	)
@@ -337,10 +337,10 @@ function R_Multitool(item)
 			NameOverride = item.name,
 			{
 				META	= {'WeaponResource', 'GcExactResource.xml'},
-				Filename	= item.file,
+				Filename	= item.filename,
 				GenerationSeed	= {
 					META	= {'GenerationSeed', 'GcSeed.xml'},
-					Seed			= item.seed,
+					Seed			= tonumber(item.seed),
 					UseSeedValue	= true
 				}
 			},
@@ -350,22 +350,22 @@ function R_Multitool(item)
 			},
 			WeaponInventory	= {
 				META	= {'WeaponInventory', 'GcInventoryContainer.xml'},
-				Inventory	= item.inventory,
+				Inventory	= R_Inventory(item.inventory),
 				Class		= {
 					META	= {'Class', 'GcInventoryClass.xml'},
-					InventoryClass	= 'S'
+					InventoryClass	= item.class or 'S'
 				}
 			},
 			WeaponType		= {
 				META	= {'WeaponType', 'GcWeaponClasses.xml'},
-				WeaponStatClass	= item.class or nil
+				WeaponStatClass	= item.weapontype or nil
 			}
 		}
 	)
 end
 
 function R_Inventory(inv)
-	-- if not inv then return nil end
+	if not inv then return nil end
 	local T = {META = {'name', 'Slots'}}
 	for _,i in ipairs(inv) do
 		T[#T+1] = {
