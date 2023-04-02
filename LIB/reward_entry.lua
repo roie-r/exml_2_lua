@@ -54,7 +54,7 @@ function R_RewardTableEntry(rte)
 		List = {
 			META = {'List', 'GcRewardTableItemList.xml'},
 			RewardChoice	= rte.choice or C_.ONE,
-			OverrideZeroSeed= bool(rte.zeroseed),
+			OverrideZeroSeed= rte.zeroseed,
 			[1]				= rte.item_list
 		}
 	}
@@ -81,7 +81,7 @@ function R_MultiItem(item)
 			Amount				= itm.n or 1,
 			ProcTechGroup		= itm.tg,
 			ProcTechQuality		= itm.q,
-			IllegalProcTech		= bool(itm.l),
+			IllegalProcTech		= itm.l,
 			ProcProdType		= {
 				META = {'ProcProdType', 'GcProceduralProductCategory.xml'},
 				ProceduralProductCategory = itm.pid or 'Loot'
@@ -92,7 +92,7 @@ function R_MultiItem(item)
 		item,
 		'GcRewardMultiSpecificItems.xml',
 		{
-			Silent	= bool(item.s),
+			Silent	= item.s,
 			Items	= multies
 		}
 	)
@@ -111,7 +111,7 @@ function R_Procedural(item)
 				META = {'Rarity', 'GcRarity.xml'},
 				Rarity = item.r or 'Common'
 			},
-			OverrideRarity	= bool(item.o)
+			OverrideRarity	= item.o
 		}
 	)
 end
@@ -122,7 +122,7 @@ function R_Substance(item)
 		'GcRewardSpecificSubstance.xml',
 		{
 			ID		= item.id,
-			Silent	= bool(item.s)
+			Silent	= item.s
 		}
 	)
 end
@@ -133,7 +133,7 @@ function R_Product(item)
 		'GcRewardSpecificProduct.xml',
 		{
 			ID		= item.id,
-			Silent	= bool(item.s)
+			Silent	= item.s
 		}
 	)
 end
@@ -174,7 +174,7 @@ function R_Technology(item)
 		'GcRewardSpecificTech.xml',
 		{
 			TechId	= item.id,
-			Silent	= bool(item.s)
+			Silent	= item.s
 		}
 	)
 end
@@ -185,7 +185,7 @@ function R_ProductRecipe(item)
 		'GcRewardSpecificProductRecipe.xml',
 		{
 			ID		= item.id,
-			Silent	= bool(item.s)
+			Silent	= item.s
 		}
 	)
 end
@@ -243,7 +243,7 @@ function R_Hazard(item)
 		'GcRewardRefreshHazProt.xml',
 		{
 			Amount	= item.z,
-			Silent	= bool(item.s)
+			Silent	= item.s
 		}
 	)
 end
@@ -256,7 +256,7 @@ function R_Health(item)
 	return R_TableItem(
 		item,
 		'GcRewardHealth.xml',
-		{ SilentUnlessShieldAtMax = bool(item.s) }
+		{ SilentUnlessShieldAtMax = item.s }
 	)
 end
 
