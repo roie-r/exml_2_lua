@@ -24,6 +24,7 @@ local new_rewards = {
 				filename	= 'MODELS/COMMON/SPACECRAFT/SHUTTLE/SHUTTLE_PROC.SCENE.MBIN',
 				seed		= '0x1015EED',
 				slots		= 42,
+				class		= 'A',
 				shiptype	= 'Shuttle',
 				inventory	= {
 					{id='HYPERDRIVE',	amount=true},
@@ -31,6 +32,30 @@ local new_rewards = {
 					{id='SHIPSHIELD',	amount=true},
 					{id='SHIPJUMP1',	amount=true},
 					{id='SHIPGUN1'}
+				}
+			},
+			{id=U_.HG,	n=100,	x=160,	c=100,	f=R_Money}
+		}
+	},
+	{
+	---	add new multitool ---
+		id			= 'MY_1ST_TOOL',
+		choice		= C_.ALL,
+		rewardlist	= {
+			{
+				f			= R_Multitool,
+				c			= 100,
+				name		= 'Royale With Cheese',
+				filename	= 'MODELS/COMMON/WEAPONS/MULTITOOL/ROYALMULTITOOL.SCENE.MBIN',
+				seed		= '0x1015EED',
+				slots		= 24,
+				class		= 'A',
+				weapontype	= 'Royal',
+				inventory	= {
+					{id='LASER',	amount=true},
+					{id='BOLT'},
+					{id='SCAN1'},
+					{id='SCANBINOC1'}
 				}
 			},
 			{id=U_.HG,	n=100,	x=160,	c=100,	f=R_Money}

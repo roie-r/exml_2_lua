@@ -1,5 +1,5 @@
 ----------------------------------------------------------------------------
----	VERSION: 0.81.1
+---	VERSION: 0.81.2
 ---	construct reward table entries
 --------------------------------------------------------------------------
 
@@ -294,6 +294,30 @@ function R_FlyBy(item)
 	)
 end
 
+local function InventoryContainer(inv)
+	if not inv then return nil end
+	local T = {META = {'name', 'Slots'}}
+	for _,i in ipairs(inv) do
+		T[#T+1] = {
+			META	= {'value', 'GcInventoryElement.xml'},
+			Id				= i.id,
+			Amount			= i.itype and i.amount or (i.amount and 1000 or -1),
+			MaxAmount		= i.amount and 10000 or 100,
+			FullyInstalled	= true,
+			Type			= {
+				META	= {'Type', 'GcInventoryType.xml'},
+				InventoryType	= i.itype or I_.TCH
+			},
+			Index	= {
+				META	= {'Index', 'GcInventoryIndex.xml'},
+				X		= -1,
+				Y		= -1
+			}
+		}
+	end
+	return T
+end
+
 function R_Ship(item)
 	return R_TableItem(
 		item,
@@ -315,10 +339,10 @@ function R_Ship(item)
 			},
 			{
 				META	= {'ShipInventory', 'GcInventoryContainer.xml'},
-				Inventory	= R_Inventory(item.inventory),
+				Inventory	= InventoryContainer(item.inventory),
 				Class	= {
 					META	= {'Class', 'GcInventoryClass.xml'},
-					InventoryClass	= item.class or 'S'
+					InventoryClass	= item.class:upper() or 'C'
 				}
 			},
 			ShipType	= {
@@ -350,10 +374,10 @@ function R_Multitool(item)
 			},
 			WeaponInventory	= {
 				META	= {'WeaponInventory', 'GcInventoryContainer.xml'},
-				Inventory	= R_Inventory(item.inventory),
+				Inventory	= InventoryContainer(item.inventory),
 				Class		= {
 					META	= {'Class', 'GcInventoryClass.xml'},
-					InventoryClass	= item.class or 'S'
+					InventoryClass	= item.class:upper() or 'C'
 				}
 			},
 			WeaponType		= {
@@ -362,28 +386,4 @@ function R_Multitool(item)
 			}
 		}
 	)
-end
-
-function R_Inventory(inv)
-	if not inv then return nil end
-	local T = {META = {'name', 'Slots'}}
-	for _,i in ipairs(inv) do
-		T[#T+1] = {
-			META	= {'value', 'GcInventoryElement.xml'},
-			Id				= i.id,
-			Amount			= i.itype and i.amount or (i.amount and 1000 or -1),
-			MaxAmount		= i.amount and 10000 or 100,
-			FullyInstalled	= true,
-			Type			= {
-				META	= {'Type', 'GcInventoryType.xml'},
-				InventoryType	= i.itype or I_.TCH
-			},
-			Index	= {
-				META	= {'Index', 'GcInventoryIndex.xml'},
-				X		= -1,
-				Y		= -1
-			}
-		}
-	end
-	return T
 end
