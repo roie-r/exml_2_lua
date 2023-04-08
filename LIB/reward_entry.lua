@@ -1,5 +1,5 @@
 ----------------------------------------------------------------------------
----	VERSION: 0.81.2
+---	VERSION: 0.81.3
 ---	construct reward table entries
 --------------------------------------------------------------------------
 
@@ -342,7 +342,21 @@ function R_Ship(item)
 				Inventory	= InventoryContainer(item.inventory),
 				Class	= {
 					META	= {'Class', 'GcInventoryClass.xml'},
-					InventoryClass	= item.class:upper() or 'C'
+					InventoryClass	= item.class and item.class:upper() or 'C'
+				},
+				BaseStatValues	= {
+					META	= {'name', 'BaseStatValues'},
+					{
+						META		= {'value', 'GcInventoryBaseStatEntry.xml'},
+						Value		= 1,
+						BaseStatID	= (
+							function()
+								if item.filename:find('BIOSHIP')  then return 'ALIEN_SHIP' end
+								if item.filename:find('SENTINEL') then return 'ROBOT_SHIP' end
+								return nil
+							end
+						)()
+					}
 				}
 			},
 			ShipType	= {
@@ -377,7 +391,7 @@ function R_Multitool(item)
 				Inventory	= InventoryContainer(item.inventory),
 				Class		= {
 					META	= {'Class', 'GcInventoryClass.xml'},
-					InventoryClass	= item.class:upper() or 'C'
+					InventoryClass	= item.class and item.class:upper() or 'C'
 				}
 			},
 			WeaponType		= {
