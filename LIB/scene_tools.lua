@@ -1,6 +1,7 @@
-----------------------------------------------------------------------------
----	VERSION: 0.81
---	Helper functions for adding new TkSceneNodeData nodes and properties
+-------------------------------------------------------------------------
+---	Model scene tools (VERSION: 0.81) ... by lMonk
+---	Helper functions for adding new TkSceneNodeData nodes and properties
+---	!! Requires lua_2_exml.lua !!
 -------------------------------------------------------------------------
 
 --	Returns a keyed table of TkSceneNodeData sections, using the Name property as keys,
@@ -16,7 +17,7 @@ function SceneNames(node, keys)
 	return keys
 end
 
---	T (optional) is a table for scene class properties - attributes, transform and children
+--	T (optional) is a table for scene class properties >> attributes, transform and children
 function ScNode(name, stype, T)
 	T = T or {}
 	T.META 		= {'value', 'TkSceneNodeData.xml'}
@@ -26,7 +27,7 @@ function ScNode(name, stype, T)
 	return T
 end
 
---	accepts either a list of 9 values or keyed values (but NOT a combiantion of the two)
+--	accepts either a list of 9 values or keyed values (but NOT a combination of the two)
 function ScTransform(t)
 	t = t or {}
 	return {

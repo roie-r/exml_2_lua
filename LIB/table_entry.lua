@@ -1,9 +1,10 @@
-----------------------------------------------------------------------------
----	VERSION: 0.81
----	Add new items into technology, proc-tech, product & basebuilding tables
----	* Properties who can be safely left with their deafult value are omited.
----	 so not ALL properties of the tables' classes are included.
-----------------------------------------------------------------------------
+------------------------------------------------------------------------------
+---	Construct reality tables entries (VERSION: 0.81) ... by lMonk
+---	Add new items into technology, proc-tech, product & basebuilding
+---	* Not ALL properties of the tables' classes are included, ones which
+---   can be safely left with their deafult value are omited.
+---	!! Requires lua_2_exml.lua !!
+------------------------------------------------------------------------------
 
 --	build the requirements table for tech and products
 --	receives a table of {id, amount, product/substance} items

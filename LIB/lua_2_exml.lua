@@ -1,8 +1,8 @@
-----------------------------------------------------------------------------
----	VERSION: 0.81
----	Convert EXML to an equivalent lua table and back again to exml text
----	helper functions and ENUMs...
---------------------------------------------------------------------------------
+-------------------------------------------------------------------------
+---	LUA 2 EXML (VERSION: 0.81) ... by lMonk
+---	A tool for converting exml to an equivalent lua table and back again
+---	(with added color helper functions)
+-------------------------------------------------------------------------
 
 --	replace a boolean with its text (ignore otherwise)
 function bool(b)
@@ -264,8 +264,3 @@ end
 
 --	InventoryType Enum
 I_={ PRD='Product', SBT='Substance', TCH='Technology' }
-
---	just let me clutter up my code in peace
-NMS_MOD_DEFINITION_CONTAINER = {
-	AMUMSS_SUPPRESS_MSG = 'MULTIPLE_STATEMENTS,UNDEFINED_VARIABLE,UNUSED_VARIABLE'
-}

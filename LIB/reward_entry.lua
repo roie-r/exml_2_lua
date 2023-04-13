@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------
----	VERSION: 0.81.3
----	construct reward table entries
+---	Construct reward table entries (VERSION: 0.81.3) ... by lMonk
+---	!! Requires lua_2_exml.lua !!
 --------------------------------------------------------------------------
 
 ---	RewardChoice Enum
@@ -342,7 +342,7 @@ function R_Ship(item)
 				Inventory	= InventoryContainer(item.inventory),
 				Class	= {
 					META	= {'Class', 'GcInventoryClass.xml'},
-					InventoryClass	= item.class and item.class:upper() or 'C'
+					InventoryClass	= item.class and item.class:upper() or 'A'
 				},
 				BaseStatValues	= {
 					META	= {'name', 'BaseStatValues'},
@@ -391,7 +391,7 @@ function R_Multitool(item)
 				Inventory	= InventoryContainer(item.inventory),
 				Class		= {
 					META	= {'Class', 'GcInventoryClass.xml'},
-					InventoryClass	= item.class and item.class:upper() or 'C'
+					InventoryClass	= item.class and item.class:upper() or 'A'
 				}
 			},
 			WeaponType		= {
