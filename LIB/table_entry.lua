@@ -1,5 +1,5 @@
 ------------------------------------------------------------------------------
----	Construct reality tables entries (VERSION: 0.81) ... by lMonk
+---	Construct reality tables entries (VERSION: 0.82) ... by lMonk
 ---	Add new items into technology, proc-tech, product & basebuilding
 ---	* Not ALL properties of the tables' classes are included, ones which
 ---   can be safely left with their deafult value are omited.

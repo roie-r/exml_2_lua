@@ -1,12 +1,10 @@
-------------------------------------------------------------------
-dofile('C:/AMUMSS/ModScript/ModHelperScripts/LIB/lua_2_exml.lua')
-------------------------------------------------------------------
+--------------------------------------------------------------------------------
+dofile('C:/AMUMSS/ModScript/ModHelperScripts/LIB/exml_2_lua.lua')
+--------------------------------------------------------------------------------
 --[[
-  * THIS IS A STAND-ALONE EXML-2-LUA HELPER SCRIPT - NOT MEANT FOR AMUMSS.
-
   PrintExmlAsLua function is a tool for printing the exml-2-lua data.
   Paste one or more sections (must be complete sections) or full exml files,
-  run the string through PrintExmlAsLua, then print to output or save it to file.
+  run the string through PrintExmlAsLua, then print to output or save to file.
 ]]
 
 exml_sections = [[<Property name="Requirements">

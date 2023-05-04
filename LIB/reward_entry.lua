@@ -1,5 +1,5 @@
 ----------------------------------------------------------------------------
----	Construct reward table entries (VERSION: 0.81.3) ... by lMonk
+---	Construct reward table entries (VERSION: 0.82) ... by lMonk
 ---	!! Requires lua_2_exml.lua !!
 --------------------------------------------------------------------------
 

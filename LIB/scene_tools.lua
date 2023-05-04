@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------
----	Model scene tools (VERSION: 0.81) ... by lMonk
+---	Model scene tools (VERSION: 0.82) ... by lMonk
 ---	Helper functions for adding new TkSceneNodeData nodes and properties
 ---	!! Requires lua_2_exml.lua !!
 -------------------------------------------------------------------------
