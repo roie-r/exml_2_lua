@@ -1,5 +1,5 @@
 ----------------------------------------------------------------------------
----	Construct reward table entries (VERSION: 0.82) ... by lMonk
+---	Construct reward table entries (VERSION: 0.81.3) ... by lMonk
 ---	!! Requires lua_2_exml.lua !!
 --------------------------------------------------------------------------
 
@@ -279,6 +279,14 @@ function R_NoSentinels(item)
 	)
 end
 
+function R_Storm(item)
+	return R_TableItem(
+		item,
+		'GcRewardTriggerStorm.xml',
+		{ Duration			= item.t or -1 }
+	)
+end
+
 function R_FlyBy(item)
 	return R_TableItem(
 		item,
@@ -342,7 +350,7 @@ function R_Ship(item)
 				Inventory	= InventoryContainer(item.inventory),
 				Class	= {
 					META	= {'Class', 'GcInventoryClass.xml'},
-					InventoryClass	= item.class and item.class:upper() or 'A'
+					InventoryClass	= item.class and item.class:upper() or 'S'
 				},
 				BaseStatValues	= {
 					META	= {'name', 'BaseStatValues'},

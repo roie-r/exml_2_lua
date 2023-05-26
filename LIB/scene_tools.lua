@@ -62,13 +62,13 @@ function ScChildren(t)
 	return t
 end
 
----	returns a jenkins hash from a string
+--	returns a jenkins hash from a string (by lyravega)
 function JenkinsHash(input)
     local hash = 0
-    local charTable = {string.byte(input:upper(), 1, #input)}
+    local t_chars = {string.byte(input:upper(), 1, #input)}
 
     for i = 1, #input do
-        hash = (hash + charTable[i]) & 0xffffffff
+        hash = (hash + t_chars[i]) & 0xffffffff
         hash = (hash + (hash << 10)) & 0xffffffff
         hash = (hash ~ (hash >> 6)) & 0xffffffff
     end
@@ -80,20 +80,20 @@ function JenkinsHash(input)
 end
 
 --	Builds a light TkSceneNodeData section.
---	receives a table with the following (optional) variables
---		name= 'n9',	fov= 360,
---		i=	30000,	f= 'q',		fr=	2,
---		r=	1,		g=	1,		b=	1,
---		c=	'7E450A' (color as hex - overwrites rgb)
---		tx=	0,		ty=	0,		tz=	0,
---		rx=	0,		ry=	0,		rz=	0,
---		sx=	1,		sy=	1,		sz=	1
+--	receives a table with the following (optional) parameters
+--	  name= 'n9',	fov= 360,
+--	  i=	30000,	f= 'q',		fr=	2,
+--	  r=	1,		g=	1,		b=	1,
+--	  c=	'7E450A' (color as hex - overwrites rgb)
+--	  tx=	0,		ty=	0,		tz=	0,
+--	  rx=	0,		ry=	0,		rz=	0,
+--	  sx=	1,		sy=	1,		sz=	1
 function ScLight(light)
-	-- c = color as hex string. overwrites rgb if present.
 	if light.c then
-		light.r = Hex2Prc(light.c:sub(1, 2))
-		light.g = Hex2Prc(light.c:sub(3, 4))
-		light.b = Hex2Prc(light.c:sub(5, 6))
+		for i, col in ipairs({'r', 'g', 'b'}) do
+			--  skip the alpha if present
+			light[col] = Hex2Prc(light.c, #light.c > 6 and i+1 or i)
+		end
 	end
 	return ScNode(
 		light.name or 'n9',

@@ -85,36 +85,38 @@ function FileWrapping(data, template)
 	end
 end
 
-function Hex2Prc(h)
-	-- translates a 0xFF hex string to 0-1.0 percentage
-	-- math.floor(X / 255 * 1000) / 1000 == X * 0.00392
-	return tonumber(h, 16) * 0.00392
+-- translates a 0xFF hex section from a longer string to 0-1.0 percentage
+-- param i: the hex pair's index
+function Hex2Prc(hex, i)
+	return math.floor(tonumber(hex:sub(i * 2 - 1, i * 2), 16) / 255 * 1000) / 1000
 end
 
+--	* hex format is ARGB(!)
 function ColorFromHex(hex)
-	local rgb = {{'R', 1}, {'G', 1}, {'B', 1}, {'A', 1}}
-	for i=1, (#hex/2) do
-		rgb[i][2] = Hex2Prc(hex:sub(i*2-1, i*2))
+	local rgb = {{'A', 1}, {'R', 1}, {'G', 1}, {'B', 1}}
+	for i=1, (#hex / 2) do
+		rgb[#hex > 6 and i or i + 1][2] = Hex2Prc(hex, i)
 	end
 	return rgb
 end
 
 --	return a color table from 3-4 number table or hex
 --	n=class name, c=hex color (overwrites the rgb)
+--	* The color format, in a table or hex, is ARGB(!)
 function ColorData(t, n)
 	t = t  or {}
 	if t.c then
-		for i=1, (#t.c/2) do
-			t[i] = Hex2Prc(t.c:sub(i*2-1, i*2))
+		for i=1, (#t.c / 2) do
+			t[#t.c > 6 and i or i + 1] = Hex2Prc(t.c, i)
 		end
 	end
 	return {
 		-- if a name (n) is present then use 2-property tags
 		META= {n or 'value', 'Colour.xml'},
-		R	= t[1] or 1,
-		G	= t[2] or 1,
-		B	= t[3] or 1,
-		A	= t[4] or 1
+		A	= t[1] or 1,
+		R	= t[2] or 1,
+		G	= t[3] or 1,
+		B	= t[4] or 1
 	}
 end
 

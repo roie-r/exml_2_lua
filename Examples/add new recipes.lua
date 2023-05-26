@@ -1,6 +1,9 @@
---------------------------------------
+---------------------------------------------------------------------
 dofile('LIB/lua_2_exml.lua')
---------------------------------------
+---------------------------------------------------------------------
+mod_desc = [[
+  Add new recipes
+]]-------------------------------------------------------------------
 
 local new_recipes = {
 	{
@@ -70,9 +73,10 @@ local function AddNewRecipes()
 end
 
 NMS_MOD_DEFINITION_CONTAINER = {
-	MOD_FILENAME 		= '_L2E_EXAMPLE add new recipes.pak',
+	MOD_FILENAME 		= '_TEST L2E add new recipes.pak',
 	MOD_AUTHOR			= 'lMonk',
-	NMS_VERSION			= '4.13',
+	NMS_VERSION			= '4.23',
+	MOD_DESCRIPTION		= mod_desc,
 	MODIFICATIONS 		= {{
 	MBIN_CHANGE_TABLE	= {
 	{
