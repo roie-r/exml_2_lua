@@ -1,5 +1,5 @@
 ----------------------------------------------------------------------------
----	Construct reward table entries (VERSION: 0.81.3) ... by lMonk
+---	Construct reward table entries (VERSION: 0.82) ... by lMonk
 ---	!! Requires lua_2_exml.lua !!
 --------------------------------------------------------------------------
 
@@ -331,7 +331,6 @@ function R_Ship(item)
 		item,
 		'GcRewardSpecificShip.xml',
 		{
-			NameOverride = item.name,
 			ShipResource = {
 				META	= {'ShipResource', 'GcResourceElement.xml'},
 				Filename = item.filename,
@@ -343,7 +342,7 @@ function R_Ship(item)
 			},
 			ShipLayout	= {
 				META	= {'ShipLayout', 'GcInventoryLayout.xml'},
-				Slots	= item.slots or 36
+				Slots	= item.slots or 50
 			},
 			{
 				META	= {'ShipInventory', 'GcInventoryContainer.xml'},
@@ -370,7 +369,9 @@ function R_Ship(item)
 			ShipType	= {
 				META	= {'ShipType', 'GcSpaceshipClasses.xml'},
 				ShipClass	= item.shiptype or nil
-			}
+			},
+			NameOverride = item.name,
+			IsRewardShip = true
 		}
 	)
 end
@@ -380,8 +381,7 @@ function R_Multitool(item)
 		item,
 		'GcRewardSpecificWeapon.xml',
 		{
-			NameOverride = item.name,
-			{
+			WeaponResource = {
 				META	= {'WeaponResource', 'GcExactResource.xml'},
 				Filename	= item.filename,
 				GenerationSeed	= {
@@ -399,13 +399,15 @@ function R_Multitool(item)
 				Inventory	= InventoryContainer(item.inventory),
 				Class		= {
 					META	= {'Class', 'GcInventoryClass.xml'},
-					InventoryClass	= item.class and item.class:upper() or 'A'
+					InventoryClass	= item.class and item.class:upper() or 'S'
 				}
 			},
 			WeaponType		= {
 				META	= {'WeaponType', 'GcWeaponClasses.xml'},
 				WeaponStatClass	= item.weapontype or nil
-			}
+			},
+			NameOverride = item.name,
+			IsRewardWeapon = true
 		}
 	)
 end
