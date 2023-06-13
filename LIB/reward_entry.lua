@@ -302,6 +302,7 @@ function R_FlyBy(item)
 	)
 end
 
+--	for tech inventory only. used by ship & tool rewards
 local function InventoryContainer(inv)
 	if not inv then return nil end
 	local T = {META = {'name', 'Slots'}}
@@ -349,7 +350,7 @@ function R_Ship(item)
 				Inventory	= InventoryContainer(item.inventory),
 				Class	= {
 					META	= {'Class', 'GcInventoryClass.xml'},
-					InventoryClass	= item.class and item.class:upper() or 'S'
+					InventoryClass	= item.class and item.class:upper() or nil
 				},
 				BaseStatValues	= {
 					META	= {'name', 'BaseStatValues'},
@@ -368,7 +369,7 @@ function R_Ship(item)
 			},
 			ShipType	= {
 				META	= {'ShipType', 'GcSpaceshipClasses.xml'},
-				ShipClass	= item.shiptype or nil
+				ShipClass	= item.shiptype
 			},
 			NameOverride = item.name,
 			IsRewardShip = true
@@ -392,19 +393,19 @@ function R_Multitool(item)
 			},
 			WeaponLayout	= {
 				META	= {'WeaponLayout', 'GcInventoryLayout.xml'},
-				Slots	= item.slots or 24
+				Slots	= item.slots or 30
 			},
 			WeaponInventory	= {
 				META	= {'WeaponInventory', 'GcInventoryContainer.xml'},
 				Inventory	= InventoryContainer(item.inventory),
 				Class		= {
 					META	= {'Class', 'GcInventoryClass.xml'},
-					InventoryClass	= item.class and item.class:upper() or 'S'
+					InventoryClass	= item.class and item.class:upper() or nil
 				}
 			},
 			WeaponType		= {
 				META	= {'WeaponType', 'GcWeaponClasses.xml'},
-				WeaponStatClass	= item.weapontype or nil
+				WeaponStatClass	= item.weapontype
 			},
 			NameOverride = item.name,
 			IsRewardWeapon = true

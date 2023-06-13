@@ -8,7 +8,7 @@
 
 --	build the requirements table for tech and products
 --	receives a table of {id, amount, product/substance} items
-local function GetRequirements(r)
+function GetRequirements(r)
 	if not r then return nil end
 	local reqs = {META = {'name', 'Requirements'}}
 	for _,req in ipairs(r) do

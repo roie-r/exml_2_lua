@@ -5,21 +5,22 @@
 ---	 a lua table during run-time, or printing the exml as a lua script.
 -------------------------------------------------------------------------
 
---	Remove the EXML header and data template if found
+--	Strip the XML header and data template if found
 --	The template is re-added as a property
-local function UnWrap(data)
-	if data:sub(1, 5) == '<?xml' then
-		local template = data:match('<Data template="([%w_]+)">')
+--	@param exml: exml-formatted string
+local function UnWrap(exml)
+	if exml:sub(1, 5) == '<?xml' then
+		local template = exml:match('<Data template="([%w_]+)">')
 		return '<Property name="template" value="'..template..'">\n'..
-				data:sub(data:find('<Property'), -8)..'</Property>'
+				exml:sub(exml:find('<Property'), -8)..'</Property>'
 	else
-		return data
+		return exml
 	end
 end
 
 --	Returns a table representation of EXML sections
 --	When parsing a full file, the header is stripped and a mock template is added
---	Rquires complete EXML sections in the nomral format ...
+--	@param exml: complete EXML sections in the nomral format ...
 --	 Each property in a separate line with no commented lines
 function ToLua(exml)
 	local function eval(val)
@@ -82,7 +83,7 @@ end
 
 --	Converts EXML to a pretty-printed, ready-to-work, lua script.
 --	When parsing a full file, the header is stripped and a mock template is added
---	Rquires complete EXML sections in the nomral format ...
+--	@param exml: complete EXML sections in the nomral format ...
 --	 Each property in a separate line with no commented lines
 function PrintExmlAsLua(exml, indent, com)
 	local function eval(val)

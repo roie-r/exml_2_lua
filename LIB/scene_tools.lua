@@ -92,7 +92,7 @@ function ScLight(light)
 	if light.c then
 		for i, col in ipairs({'r', 'g', 'b'}) do
 			--  skip the alpha if present
-			light[col] = Hex2Prc(light.c, #light.c > 6 and i+1 or i)
+			light[col] = Hex2Percent(light.c, #light.c > 6 and i+1 or i)
 		end
 	end
 	return ScNode(

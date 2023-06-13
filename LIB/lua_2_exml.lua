@@ -4,12 +4,14 @@
 ---	(with added color helper functions)
 -------------------------------------------------------------------------
 
---	replace a boolean with its text (ignore otherwise)
+--	replace a boolean with its text equivalent (ignore otherwise)
+--	@param b: any value
 function bool(b)
 	return (type(b) == 'boolean') and ((b == true) and 'True' or 'False') or b
 end
 
 --	Generate an EXML-tagged text from a lua table representation of exml class
+--	@param class: a lua2exml formatted table
 function ToExml(class)
 	local function len2(t)
 	--	get the count of ALL objects in a table (non-recursive)
@@ -68,6 +70,8 @@ end
 
 --	Adds the xml header and data template
 --	Uses the contained template META if found (instead of the received variable)
+--	@param data: a lua2exml formatted table
+--	@param template: an nms template string
 function FileWrapping(data, template)
 	local wrapper = [[<?xml version="1.0" encoding="utf-8"?><Data template="%s">%s</Data>]]
 	if type(data) == 'string' then
@@ -86,37 +90,39 @@ function FileWrapping(data, template)
 end
 
 -- translates a 0xFF hex section from a longer string to 0-1.0 percentage
--- param i: the hex pair's index
-function Hex2Prc(hex, i)
+-- @param i: the hex pair's index
+function Hex2Percent(hex, i)
 	return math.floor(tonumber(hex:sub(i * 2 - 1, i * 2), 16) / 255 * 1000) / 1000
 end
 
---	* hex format is ARGB(!)
-function ColorFromHex(hex)
+--	@param h: hex color string in ARGB or RGB format (default is white)
+function ColorFromHex(h)
 	local rgb = {{'A', 1}, {'R', 1}, {'G', 1}, {'B', 1}}
-	for i=1, (#hex / 2) do
-		rgb[#hex > 6 and i or i + 1][2] = Hex2Prc(hex, i)
+	for i=1, (#h / 2) do
+		rgb[#h > 6 and i or i + 1][2] = Hex2Percent(h, i)
 	end
 	return rgb
 end
 
---	return a color table from 3-4 number table or hex
---	n=class name, c=hex color (overwrites the rgb)
---	* The color format, in a table or hex, is ARGB(!)
-function ColorData(t, n)
-	t = t  or {}
-	if t.c then
-		for i=1, (#t.c / 2) do
-			t[#t.c > 6 and i or i + 1] = Hex2Prc(t.c, i)
+--	returns a Colour.xml table
+--	@param T: ARGB color in percentage values (and optinal c=hex).
+--	  Either {1.0, 0.5, 0.4, 0.3} or {a=1.0, r=0.5, g=0.4, b=0.3}
+--	@param name: class name
+--	@param c: (c is a key inside table T) hex color in ARGB format (overwrites the rgb)
+function ColorData(T, name)
+	T = T  or {}
+	if T.c then
+		for i=1, (#T.c / 2) do
+			T[#T.c > 6 and i or i + 1] = Hex2Percent(T.c, i)
 		end
 	end
 	return {
-		-- if a name (n) is present then use 2-property tags
-		META= {n or 'value', 'Colour.xml'},
-		A	= t[1] or 1,
-		R	= t[2] or 1,
-		G	= t[3] or 1,
-		B	= t[4] or 1
+		-- if a name is present then use 2-property tags
+		META= {name or 'value', 'Colour.xml'},
+		A	= (T[1] or T.a) or 1,
+		R	= (T[2] or T.r) or 1,
+		G	= (T[3] or T.g) or 1,
+		B	= (T[4] or T.b) or 1
 	}
 end
 
