@@ -1,7 +1,7 @@
 -------------------------------------------------------------------------
----	LUA 2 EXML (VERSION: 0.82) ... by lMonk
+---	LUA 2 EXML (VERSION: 0.82.1) ... by lMonk
 ---	A tool for converting exml to an equivalent lua table and back again
----	(with added color helper functions)
+---	(with added color and vector helper functions)
 -------------------------------------------------------------------------
 
 --	replace a boolean with its text equivalent (ignore otherwise)
@@ -10,13 +10,15 @@ function bool(b)
 	return (type(b) == 'boolean') and ((b == true) and 'True' or 'False') or b
 end
 
+--	get the count of ALL objects in a table (non-recursive)
+--	@param t: any table
+function len2(t)
+	i=0; for _ in pairs(t) do i=i+1 end; return i
+end
+
 --	Generate an EXML-tagged text from a lua table representation of exml class
 --	@param class: a lua2exml formatted table
 function ToExml(class)
-	local function len2(t)
-	--	get the count of ALL objects in a table (non-recursive)
-		i=0; for _ in pairs(t) do i=i+1 end ; return i
-	end
 	local function exml_r(tlua)
 		local exml = {}
 		function exml:add(t)
@@ -104,7 +106,7 @@ function ColorFromHex(h)
 	return rgb
 end
 
---	returns a Colour.xml table
+--	Returns a Colour.xml table
 --	@param T: ARGB color in percentage values (and optinal c=hex).
 --	  Either {1.0, 0.5, 0.4, 0.3} or {a=1.0, r=0.5, g=0.4, b=0.3}
 --	@param name: class name
@@ -123,6 +125,23 @@ function ColorData(T, name)
 		R	= (T[2] or T.r) or 1,
 		G	= (T[3] or T.g) or 1,
 		B	= (T[4] or T.b) or 1
+	}
+end
+
+--	Returns a Vector3f.xml or Vector4f.xml table, depending on number of values
+--	@param T: xyz<t> vector
+--	  Either {1.0, 0.5, 0.4, <2>} or {x=1.0, y=0.5, z=0.4, <t=2>}
+--	@param name: class name
+function VectorData(T, name)
+	T = T  or {}
+	return {
+		-- if a name is present then use 2-property tags
+		-- META= {name or 'value', len2(T) > 3 and 'Vector4f.xml' or 'Vector3f.xml'},
+		META= {name or 'value', (T.t or #T > 3) and 'Vector4f.xml' or 'Vector3f.xml'},
+		x	= (T[1] or T.x) or 0,
+		y	= (T[2] or T.y) or 0,
+		z	= (T[3] or T.z) or 0,
+		t	= (T[4] or T.t) or nil,
 	}
 end
 
