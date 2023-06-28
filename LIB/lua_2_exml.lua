@@ -136,7 +136,6 @@ function VectorData(T, name)
 	T = T  or {}
 	return {
 		-- if a name is present then use 2-property tags
-		-- META= {name or 'value', len2(T) > 3 and 'Vector4f.xml' or 'Vector3f.xml'},
 		META= {name or 'value', (T.t or #T > 3) and 'Vector4f.xml' or 'Vector3f.xml'},
 		x	= (T[1] or T.x) or 0,
 		y	= (T[2] or T.y) or 0,

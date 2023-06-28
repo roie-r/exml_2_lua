@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------
----	EXML 2 LUA (VERSION: 0.82) ... by lMonk
+---	EXML 2 LUA (VERSION: 0.82.1) ... by lMonk
 ---	A tool for converting exml to an equivalent lua table and back again
 ---	functions for converting an exml file, or sections of one, to
 ---	 a lua table during run-time, or printing the exml as a lua script.
@@ -20,8 +20,8 @@ end
 
 --	Returns a table representation of EXML sections
 --	When parsing a full file, the header is stripped and a mock template is added
---	@param exml: complete EXML sections in the nomral format ...
---	 Each property in a separate line with no commented lines
+--	@param exml: requires complete EXML sections in the nomral format
+--	* Does not handle commented lines (for now)
 function ToLua(exml)
 	local function eval(val)
 		if val == 'True' then
@@ -32,50 +32,49 @@ function ToLua(exml)
 			return val
 		end
 	end
-	local tag1	= [[<Property ([%w_]+)="(.+)"[ ]?([/]?)>]]
-	local tag2	= [[<Property name="([%w_]+)" value="(.*)"[ ]?([/]?)>]]
+	local tag	= [[<[/]?Property[ ]?(.-[/]?)>]]
+	local tag1	= [[([%w_]+)="(.+)"[ ]?([/]?)]]
+	local tag2	= [[name="([%w_]+)" value="(.*)"[ ]?([/]?)]]
 	local tlua, st_node, st_array = {}, {}, {false}
 	local parent= tlua
 	local node	= nil
 	--	array=true when processing an ordered (name) section
 	local array	= false
-	for line in UnWrap(exml):gmatch('([^\n]+)') do -- parse lines
-		if line:match('Property') then -- properties only
-			_,eql = line:gsub('=', '')
-			if eql > 0 then
-				-- choose tag by the count of [=] in a line
-				local att, val, close = line:match(eql > 1 and tag2 or tag1)
-				if close == '' then
-					array = att == 'name'
-					-- open new property table
-					table.insert(st_node, parent)
-					node = {META = {att , val}}
+	for prop in UnWrap(exml):gmatch(tag) do
+		_,eql = prop:gsub('=', '')
+		if eql > 0 then
+			-- choose tag by the count of [=] in a property
+			local att, val, close = prop:match(eql > 1 and tag2 or tag1)
+			if close == '' then
+				array = att == 'name'
+				-- open new property table
+				table.insert(st_node, parent)
+				node = {META = {att , val}}
 
-					 -- look up if parent is an array
-					if st_array[#st_array] or att == 'value' then
-						parent[#parent+1] = node
-					elseif att == 'name' then
-						parent[val] = node
-					else
-						parent[att] = node
-					end
-					table.insert(st_array, att == 'name')
-					parent = node
+				 -- look up if parent is an array
+				if st_array[#st_array] or att == 'value' then
+					parent[#parent+1] = node
+				elseif att == 'name' then
+					parent[val] = node
 				else
-					-- add property to parent table
-					if att == 'value' or array then
-						node[#node+1] = {[att] = eval(val)}
-					-- regular property (skips stubs)
-					elseif att ~= 'name' then
-						node[att] = eval(val)
-					end
+					parent[att] = node
 				end
+				table.insert(st_array, att == 'name')
+				parent = node
 			else
-				-- go back to parent node
-				parent = table.remove(st_node)
-				table.remove(st_array)
-				node = parent
+				-- add property to parent table
+				if att == 'value' or array then
+					node[#node+1] = {[att] = eval(val)}
+				-- regular property (skips stubs)
+				elseif att ~= 'name' then
+					node[att] = eval(val)
+				end
 			end
+		else
+			-- go back to parent node
+			parent = table.remove(st_node)
+			table.remove(st_array)
+			node = parent
 		end
 	end
 	return tlua
@@ -83,8 +82,8 @@ end
 
 --	Converts EXML to a pretty-printed, ready-to-work, lua script.
 --	When parsing a full file, the header is stripped and a mock template is added
---	@param exml: complete EXML sections in the nomral format ...
---	 Each property in a separate line with no commented lines
+--	@param exml: requires complete EXML sections in the nomral format
+--	* Does not handle commented lines (for now)
 function PrintExmlAsLua(exml, indent, com)
 	local function eval(val)
 		if #val == 0 then
@@ -97,8 +96,9 @@ function PrintExmlAsLua(exml, indent, com)
 			return '[['..val..']]'
 		end
 	end
-	local tag1	= [[<Property ([%w_]+)="(.+)"[ ]?([/]?)>]]
-	local tag2	= [[<Property name="([%w_]+)" value="(.*)"[ ]?([/]?)>]]
+	local tag	= [[<[/]?Property[ ]?(.-[/]?)>]]
+	local tag1	= [[([%w_]+)="(.+)"[ ]?([/]?)]]
+	local tag2	= [[name="([%w_]+)" value="(.*)"[ ]?([/]?)]]
 	indent		= indent or '\t'
 	com			= com or [[']]
 	local lvl	= 0
@@ -109,39 +109,37 @@ function PrintExmlAsLua(exml, indent, com)
 	--	array=true when processing an ordered (name) section
 	local array	= false
 	local st_array = {false}
-	for line in UnWrap(exml):gmatch('([^\n]+)') do -- parse lines
-		if line:match('Property') then -- properties only
-			_,eql = line:gsub('=', '')
-			if eql > 0 then
-				-- choose tag by the count of [=] in a line
-				local att, val, close = line:match(eql > 1 and tag2 or tag1)
-				if close == '' then
-					-- opening a new table
-					array = att == 'name'
-					-- look up if parent is an array
-					if st_array[#st_array] or att == 'value' then
-						tlua:add({indent:rep(lvl), '{\n'})
-					else
-						tlua:add({indent:rep(lvl), (att == 'name' and val or att), ' = ', '{\n'})
-					end
-					table.insert(st_array, att == 'name')
-					lvl = lvl + 1
-					tlua:add({indent:rep(lvl), 'META = {', com, att, com, ',', com, val, com, '},\n'})
+	for prop in UnWrap(exml):gmatch(tag) do
+		_,eql = prop:gsub('=', '')
+		if eql > 0 then
+			-- choose tag by the count of [=] in a property
+			local att, val, close = prop:match(eql > 1 and tag2 or tag1)
+			if close == '' then
+				-- opening a new table
+				array = att == 'name'
+				-- look up if parent is an array
+				if st_array[#st_array] or att == 'value' then
+					tlua:add({indent:rep(lvl), '{\n'})
 				else
-					-- value property or properties in an array
-					if att == 'value' or array then
-						tlua:add({indent:rep(lvl), '{', att, ' = ', com, val, com, '},\n'})
-					-- regular property (skips stubs)
-					elseif att ~= 'name' then
-						tlua:add({indent:rep(lvl), att, ' = ', eval(val), ',\n'})
-					end
+					tlua:add({indent:rep(lvl), (att == 'name' and val or att), ' = ', '{\n'})
 				end
+				table.insert(st_array, att == 'name')
+				lvl = lvl + 1
+				tlua:add({indent:rep(lvl), 'META = {', com, att, com, ',', com, val, com, '},\n'})
 			else
-				-- closing the table
-				lvl = lvl - 1
-				tlua:add({indent:rep(lvl), '},\n'})
-				table.remove(st_array)
+				-- value property or properties in an array
+				if att == 'value' or array then
+					tlua:add({indent:rep(lvl), '{', att, ' = ', com, val, com, '},\n'})
+				-- regular property (skips stubs)
+				elseif att ~= 'name' then
+					tlua:add({indent:rep(lvl), att, ' = ', eval(val), ',\n'})
+				end
 			end
+		else
+			-- closing the table
+			lvl = lvl - 1
+			tlua:add({indent:rep(lvl), '},\n'})
+			table.remove(st_array)
 		end
 	end
 	-- start & end trims
