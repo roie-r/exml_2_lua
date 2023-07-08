@@ -6,7 +6,7 @@ dofile('LIB/table_entry.lua')
 NMS_MOD_DEFINITION_CONTAINER = {
 	MOD_FILENAME 		= '_TEST L2E add new tech.pak',
 	MOD_AUTHOR			= 'lMonk',
-	NMS_VERSION			= '4.23',
+	NMS_VERSION			= '4.36.2',
 	MODIFICATIONS 		= {{
 	MBIN_CHANGE_TABLE	= {
 	{
@@ -30,12 +30,14 @@ NMS_MOD_DEFINITION_CONTAINER = {
 					category		= 'Suit',
 					rarity			= 'Always',
 					value			= 5,
-					requirements	= { {'POWERCELL', 1, 'Product'} },
+					requirements	= {
+						{id='POWERCELL', n=1, tp='Product'}
+					},
 					basestat		= 'Suit_Armour_Shield',
 					statbonuses		= {
-						{'Suit_Armour_Shield',			1,	1},
-						{'Suit_Armour_Shield_Strength',	24,	1},
-						{'Suit_Armour_Health',			60,	20}
+						{st='Suit_Armour_Shield',			bn=1,	lv=1},
+						{st='Suit_Armour_Shield_Strength',	bn=24,	lv=1},
+						{st='Suit_Armour_Health',			bn=60,	lv=20}
 					},
 					fragmentcost	= 980
 				}))

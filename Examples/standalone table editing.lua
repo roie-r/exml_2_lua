@@ -21,7 +21,7 @@ function WriteExml(t, path)
 end
 -----------------------------------------------------------------------------------------
 
-local src0 = 'E:/MODZ_stuff/NoMansSky/UNPACKED/GCCAMERAGLOBALS.GLOBAL.EXML'
+local src0 = 'D:/MODZ_stuff/NoMansSky/UNPACKED/GCCAMERAGLOBALS.GLOBAL.EXML'
 local gc_cam_file = ReadExml(src0)
 local gc_cam = gc_cam_file.template
 
@@ -30,7 +30,7 @@ gc_cam.VehicleExitFlashStrength		= 0.5
 gc_cam.BinocularFlashTime			= 0.12
 gc_cam.BinocularFlashStrength		= 0.4
 gc_cam.MechCameraArmShootOffsetY	= 2
-gc_cam.InteractionHeadHeightDefault	= 1.5
+gc_cam.InteractionHeadHeightDefault= 1.5
 
 for _,flwcam in pairs({
 	'SpaceshipFollowCam',
@@ -60,7 +60,7 @@ gc_cam.CameraShakeTable[shk.FLYBY].CapturedData.ShakeStrength			= 1.2
 WriteExml(gc_cam_file, 'e:/_dump/gccameraglobals.global.exml')
 -----------------------------------------------------------------------------------------
 
-local src1 = 'E:/MODZ_stuff/NoMansSky/UNPACKED/METADATA/REALITY/TABLES/NMS_REALITY_GCTECHNOLOGYTABLE.EXML'
+local src1 = 'D:/MODZ_stuff/NoMansSky/UNPACKED/METADATA/REALITY/TABLES/NMS_REALITY_GCTECHNOLOGYTABLE.EXML'
 local gc_tech_file = ReadExml(src1)
 local gc_tech = gc_tech_file.template.Table
 
@@ -79,7 +79,7 @@ table.remove(gc_tech, tid.MECH_GUN)
 WriteExml(gc_tech_file, 'e:/_dump/gc_tech.exml')
 -----------------------------------------------------------------------------------------
 
-local src2 = 'E:/MODZ_stuff/NoMansSky/UNPACKED/METADATA/REALITY/TABLES/NMS_REALITY_GCPRODUCTTABLE.EXML'
+local src2 = 'D:/MODZ_stuff/NoMansSky/UNPACKED/METADATA/REALITY/TABLES/NMS_REALITY_GCPRODUCTTABLE.EXML'
 local gc_prod_file = ReadExml(src2)
 local gc_prod = gc_prod_file.template.Table
 

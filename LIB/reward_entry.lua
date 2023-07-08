@@ -264,7 +264,7 @@ function R_Wanted(item)
 	return R_TableItem(
 		item,
 		'GcRewardWantedLevel.xml',
-		{ Level	= item.n or 0 }
+		{ Level	= item.l or 0 }
 	)
 end
 

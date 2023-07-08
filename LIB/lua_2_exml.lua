@@ -73,7 +73,7 @@ end
 --	Adds the xml header and data template
 --	Uses the contained template META if found (instead of the received variable)
 --	@param data: a lua2exml formatted table
---	@param template: an nms template string
+--	@param template: an nms file template string
 function FileWrapping(data, template)
 	local wrapper = [[<?xml version="1.0" encoding="utf-8"?><Data template="%s">%s</Data>]]
 	if type(data) == 'string' then
@@ -110,7 +110,7 @@ end
 --	@param T: ARGB color in percentage values (and optinal c=hex).
 --	  Either {1.0, 0.5, 0.4, 0.3} or {a=1.0, r=0.5, g=0.4, b=0.3}
 --	@param name: class name
---	@param c: (c is a key inside table T) hex color in ARGB format (overwrites the rgb)
+--	* hex color in ARGB format (c is a key inside table T) will overwrite the rgb
 function ColorData(T, name)
 	T = T  or {}
 	if T.c then
@@ -140,7 +140,7 @@ function VectorData(T, name)
 		x	= (T[1] or T.x) or 0,
 		y	= (T[2] or T.y) or 0,
 		z	= (T[3] or T.z) or 0,
-		t	= (T[4] or T.t) or nil,
+		t	= (T[4] or T.t) or nil
 	}
 end
 

@@ -1,5 +1,5 @@
 ------------------------------------------------------------------------------
----	Construct reality tables entries (VERSION: 0.81) ... by lMonk
+---	Construct reality tables entries (VERSION: 0.82) ... by lMonk
 ---	Add new items into technology, proc-tech, product & basebuilding
 ---	* Not ALL properties of the tables' classes are included, ones which
 ---   can be safely left with their deafult value are omited.
@@ -14,11 +14,11 @@ function GetRequirements(r)
 	for _,req in ipairs(r) do
 		reqs[#reqs+1] = {
 			META	= {'value', 'GcTechnologyRequirement.xml'},
-			ID		= req[1],
-			Amount	= req[2],						--	i
+			ID		= req.id,
+			Amount	= req.n,						--	i
 			Type	= {
 				META	= {'Type', 'GcInventoryType.xml'},
-				InventoryType = req[3]				--	Enum
+				InventoryType = req.tp				--	Enum
 			}
 		}
 	end
@@ -32,7 +32,7 @@ local function GetIdTable(t, prop)
 	for _,id in ipairs(t) do
 		T[#T+1] = {
 			META	= {'value', 'NMSString0x10.xml'},
-			Value	= id,
+			Value	= id
 		}
 	end
 	return T
@@ -44,15 +44,15 @@ function TechnologyEntry(tech)
 	local function getStats(s)
 	--	receives a table of {type, bonus, level} items
 		local stats = {META = {'name', 'StatBonuses'}}
-		for _,st in ipairs(s) do
+		for _,stb in ipairs(s) do
 			stats[#stats+1] = {
 				META	= {'value', 'GcStatsBonus.xml'},
 				Stat	= {
 					META		= {'Stat', 'GcStatsTypes.xml'},
-					StatsType	= st[1]					--	Enum
+					StatsType	= stb.st					--	Enum
 				},
-				Bonus	= st[2],						--	f
-				Level	= st[3] or 0					--	i 0-4
+				Bonus	= stb.bn,							--	f
+				Level	= stb.lv or 0						--	i 0-4
 			}
 		end
 		return stats
@@ -87,7 +87,7 @@ function TechnologyEntry(tech)
 			SubstanceCategory = (tech.chargetype or 'Earth'),			--	E
 		},
 		ChargeBy		= GetIdTable(tech.chargeby, 'ChargeBy'),		--	Id
-		ChargeMultiplier= 1,
+		ChargeMultiplier= tech.chargemultiply or 1,
 		BuildFullyCharged= true,
 		UsesAmmo		= tech.usesammo,								--	b
 		AmmoId			= tech.ammoid,									--	Id
@@ -210,20 +210,20 @@ function ProcTechEntry(tech)
 	local function getStatLevels(s)
 	--	receives a table of {type, min, max, weightcurve, always} items
 		local stats = {META = {'name', 'StatLevels'}}
-		for _,st in ipairs(s) do
+		for _,stl in ipairs(s) do
 			stats[#stats+1] = {
 				META		= {'value', 'GcProceduralTechnologyStatLevel.xml'},
 				Stat		= {
 					META = {'Stat', 'GcStatsTypes.xml'},
-					StatsType = st[1],							--	Enum
+					StatsType = stl.st,							--	Enum
 				},
-				ValueMin	= st[2],							--	f
-				ValueMax	= st[3],							--	f
+				ValueMin	= stl.n,							--	f
+				ValueMax	= stl.x,							--	f
 				WeightingCurve = {
 					META = {'WeightingCurve', 'GcWeightingCurve.xml'},
-					WeightingCurve = st[4] or 'NoWeighting',	--	Enum
+					WeightingCurve = stl.wc or 'NoWeighting',	--	Enum
 				},
-				AlwaysChoose= st[5]								--	b
+				AlwaysChoose= stl.ac							--	b
 			}
 		end
 		return stats
@@ -262,8 +262,8 @@ function BaseBuildObjectEntry(bpart)
 		for _,v in ipairs(t) do
 			T[#T+1] = {
 				META	= {'value', 'GcBaseBuildingEntryGroup.xml'},
-				Group			= v[1],
-				SubGroupName	= v[2]
+				Group			= v.grp,
+				SubGroupName	= v.sub
 			}
 		end
 		return T
@@ -344,11 +344,11 @@ function BaseBuildPartEntry(bpart)
 				},
 				Model = {
 					META = {'Model', 'TkModelResource.xml'},
-					Filename = src[1],
+					Filename = src.act,
 				},
 				Inactive = {
 					META = {'Inactive', 'TkModelResource.xml'},
-					Filename = src[2]
+					Filename = src.lod
 				}
 			}
 		end

@@ -6,7 +6,7 @@ dofile('LIB/table_entry.lua')
 NMS_MOD_DEFINITION_CONTAINER = {
 	MOD_FILENAME 		= '_TEST L2E add new products.pak',
 	MOD_AUTHOR			= 'lMonk',
-	NMS_VERSION			= '4.23',
+	NMS_VERSION			= '4.36.2',
 	MODIFICATIONS 		= {{
 	MBIN_CHANGE_TABLE	= {
 	{
@@ -29,8 +29,8 @@ NMS_MOD_DEFINITION_CONTAINER = {
 						legality		= 'Legal',
 						iscraftable		= true,
 						requirements	= {
-							{'ULTRAPROD1', 		20,	I_.PRD},
-							{'ULTRAPROD2', 		20,	I_.PRD}
+							{id='ULTRAPROD1', 		n=20,	tp=I_.PRD},
+							{id='ULTRAPROD2', 		n=20,	tp=I_.PRD}
 						},
 						stackmultiplier	= 16,
 						icon			= 'TEXTURES/UI/FRONTEND/ICONS/U4PRODUCTS/PRODUCT.CAPTUREDNANODE.DDS'
@@ -49,9 +49,9 @@ NMS_MOD_DEFINITION_CONTAINER = {
 						legality		= 'Legal',
 						consumable		= true,
 						requirements	= {
-							{'SENTINEL_LOOT',	2,	I_.PRD},
-							{'FOOD_V_ROBOT',	2,	I_.PRD},
-							{'STELLAR2',		50,	I_.SBT}
+							{id='SENTINEL_LOOT',	n=2,	tp=I_.PRD},
+							{id='FOOD_V_ROBOT',		n=2,	tp=I_.PRD},
+							{id='STELLAR2',			n=50,	tp=I_.SBT}
 						},
 						stackmultiplier	= 20,
 						icon			= 'TEXTURES/UI/FRONTEND/ICONS/PRODUCTS/PRODUCT.GLOWPELLET.DDS'
