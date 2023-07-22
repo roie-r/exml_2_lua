@@ -1,5 +1,5 @@
 ------------------------------------------------------------------------------
----	Construct reality tables entries (VERSION: 0.82) ... by lMonk
+---	Construct reality tables entries (VERSION: 0.82.1) ... by lMonk
 ---	Add new items into technology, proc-tech, product & basebuilding
 ---	* Not ALL properties of the tables' classes are included, ones which
 ---   can be safely left with their deafult value are omited.
@@ -23,19 +23,6 @@ function GetRequirements(r)
 		}
 	end
 	return reqs
-end
-
---	receives a table of id strings
-local function GetIdTable(t, prop)
-	if not t then return nil end
-	local T = {META = {'name', prop}}
-	for _,id in ipairs(t) do
-		T[#T+1] = {
-			META	= {'value', 'NMSString0x10.xml'},
-			Value	= id
-		}
-	end
-	return T
 end
 
 --	Build a new entry for NMS_REALITY_GCTECHNOLOGYTABLE
@@ -86,7 +73,7 @@ function TechnologyEntry(tech)
 			META	= {'ChargeType', 'GcRealitySubstanceCategory.xml'},
 			SubstanceCategory = (tech.chargetype or 'Earth'),			--	E
 		},
-		ChargeBy		= GetIdTable(tech.chargeby, 'ChargeBy'),		--	Id
+		ChargeBy		= StringArray(tech.chargeby, 'ChargeBy', 10),	--	Id
 		ChargeMultiplier= tech.chargemultiply or 1,
 		BuildFullyCharged= true,
 		UsesAmmo		= tech.usesammo,								--	b
@@ -299,8 +286,8 @@ function BaseBuildObjectEntry(bpart)
 		CanChangeMaterial			= true,
 		CanPickUp					= bpart.canpickup,					--	b
 		ShowInBuildMenu				= true,
-		CompositePartObjectIDs		= GetIdTable(bpart.compositeparts, 'CompositePartObjectIDs'),
-		FamilyIDs					= GetIdTable(bpart.familyids, 'FamilyIDs'),
+		CompositePartObjectIDs		= StringArray(bpart.compositeparts, 'CompositePartObjectIDs', 10),
+		FamilyIDs					= StringArray(bpart.familyids, 'FamilyIDs', 10),
 		BuildEffectAccelerator		= 1,								--	i
 		RemovesAttachedDecoration	= true,
 		RemovesWhenUnsnapped		= false,

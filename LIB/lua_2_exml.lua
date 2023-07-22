@@ -1,7 +1,7 @@
 -------------------------------------------------------------------------
----	LUA 2 EXML (VERSION: 0.82.1) ... by lMonk
+---	LUA 2 EXML (VERSION: 0.82.2) ... by lMonk
 ---	A tool for converting exml to an equivalent lua table and back again
----	(with added color and vector helper functions)
+---	Hlper functions for color class, vector class and string arrays
 -------------------------------------------------------------------------
 
 --	replace a boolean with its text equivalent (ignore otherwise)
@@ -142,6 +142,22 @@ function VectorData(T, name)
 		z	= (T[3] or T.z) or 0,
 		t	= (T[4] or T.t) or nil
 	}
+end
+
+--	Returns a 'name' type table of strings
+--	@param t: an ordered (non-keyed) table of strings
+--	@param name: class name
+--	@param size: string class size [10, 100, 20, 200, 40, 400, 80, 800]
+function StringArray(t, name, size)
+	if not t then return nil end
+	local T = {META = {'name', name}}
+	for _,str in ipairs(t) do
+		T[#T+1] = {
+			META	= {'value', 'NMSString0x'..size..'.xml'},
+			Value	= str
+		}
+	end
+	return T
 end
 
 --	InventoryType Enum
