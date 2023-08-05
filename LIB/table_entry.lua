@@ -1,10 +1,14 @@
-------------------------------------------------------------------------------
----	Construct reality tables entries (VERSION: 0.82.1) ... by lMonk
+-------------------------------------------------------------------------------
+---	Construct reality tables entries (VERSION: 0.82.2) ... by lMonk
 ---	Add new items into technology, proc-tech, product & basebuilding
 ---	* Not ALL properties of the tables' classes are included, ones which
----   can be safely left with their deafult value are omited.
----	!! Requires lua_2_exml.lua !!
-------------------------------------------------------------------------------
+---  can be safely left with their deafult value are omited.
+---	* Requires lua_2_exml.lua !
+---	* This should be placed at [AMUMSS folder]\ModScript\ModHelperScripts\LIB
+-------------------------------------------------------------------------------
+
+--	InventoryType Enum
+I_={ PRD='Product', SBT='Substance', TCH='Technology' }
 
 --	build the requirements table for tech and products
 --	receives a table of {id, amount, product/substance} items
@@ -345,5 +349,34 @@ function BaseBuildPartEntry(bpart)
 		META	= {'value', 'GcBaseBuildingPart.xml'},
 		ID		= bpart.id,
 		StyleModels = getStyleModels(bpart.stylemodels)
+	}
+end
+
+--	Build a new entry for NMS_REALITY_GCRECIPETABLE
+function RefinerRecipeEntry(recipe)
+	local function addIngredient(elem)
+		return {
+			META	= {elem.res and 'Result' or 'value', 'GcRefinerRecipeElement.xml'},
+			Id		= elem.id,
+			Amount	= elem.n,
+			Type	= {
+				META			= {'Type', 'GcInventoryType.xml'},
+				InventoryType	= elem.tp
+			}
+		}
+	end
+	local ingredients = { META = {'name', 'Ingredients'} }
+	for i=2, #recipe do
+		ingredients[#ingredients+1] = addIngredient(recipe[i])
+	end
+	return {
+		META		= {'value', 'GcRefinerRecipe.xml'},
+		Id			= recipe.id,
+		RecipeType	= recipe.name,
+		RecipeName	= recipe.name,
+		TimeToMake	= recipe.make,
+		Cooking		= recipe.cook,
+		Result		= addIngredient(recipe[1]),
+		Ingredients	= ingredients
 	}
 end

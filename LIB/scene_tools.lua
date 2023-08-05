@@ -1,21 +1,9 @@
--------------------------------------------------------------------------
----	Model scene tools (VERSION: 0.82) ... by lMonk TESTING!!
+-------------------------------------------------------------------------------
+---	Model scene tools (VERSION: 0.82.1) ... by lMonk
 ---	Helper functions for adding new TkSceneNodeData nodes and properties
----	!! Requires lua_2_exml.lua !!
--------------------------------------------------------------------------
-
---	Returns a keyed table of TkSceneNodeData sections, using the Name property as keys,
---	* Use to enable direct access to nodes in a table generated with ToLua
-function SceneNames(node, keys)
-	keys = keys or {}
-	if node.META[2] == 'TkSceneNodeData.xml' then
-		keys[node.Name] = node
-	end
-	for k, scn in pairs(node.Children or {}) do
-		if k ~= 'META' then SceneNames(scn, keys) end
-	end
-	return keys
-end
+---	* Requires lua_2_exml.lua !
+---	* This should be placed at [AMUMSS folder]\ModScript\ModHelperScripts\LIB
+-------------------------------------------------------------------------------
 
 --	T (optional) is a table for scene class properties >> attributes, transform and children
 function ScNode(name, stype, T)
@@ -116,4 +104,6 @@ function ScLight(light)
 	)
 end
 --	wrapper: returns the exml text of ScLight
-function AddNewLight(l)  return ToExml(ScLight(l)) end
+function AddNewLight(l)
+	return ToExml(ScLight(l))
+end

@@ -1,7 +1,8 @@
-----------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 ---	Construct reward table entries (VERSION: 0.82) ... by lMonk
----	!! Requires lua_2_exml.lua !!
---------------------------------------------------------------------------
+---	* Requires lua_2_exml.lua !
+---	* This should be placed at [AMUMSS folder]\ModScript\ModHelperScripts\LIB
+-------------------------------------------------------------------------------
 
 ---	RewardChoice Enum
 C_={	ALL   =	'GiveAll',			ALL_S =	'GiveAllSilent',
