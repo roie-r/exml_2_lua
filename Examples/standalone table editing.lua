@@ -30,7 +30,7 @@ gc_cam.VehicleExitFlashStrength		= 0.5
 gc_cam.BinocularFlashTime			= 0.12
 gc_cam.BinocularFlashStrength		= 0.4
 gc_cam.MechCameraArmShootOffsetY	= 2
-gc_cam.InteractionHeadHeightDefault= 1.5
+gc_cam.InteractionHeadHeightDefault	= 1.5
 
 for _,flwcam in pairs({
 	'SpaceshipFollowCam',

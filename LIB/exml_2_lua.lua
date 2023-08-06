@@ -149,7 +149,7 @@ function PrintExmlAsLua(exml, indent, com)
 	return table.concat(tlua)
 end
 
---	Returns a keyed table of TkSceneNodeData sections, using the Name property as keys,
+--	Returns a keyed table of TkSceneNodeData sections, with the Name property as keys,
 --	* Use to enable direct access to nodes in a table generated with ToLua
 function SceneNames(node, keys)
 	keys = keys or {}

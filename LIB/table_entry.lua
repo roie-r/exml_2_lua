@@ -354,29 +354,29 @@ end
 
 --	Build a new entry for NMS_REALITY_GCRECIPETABLE
 function RefinerRecipeEntry(recipe)
-	local function addIngredient(elem)
+	local function addIngredient(elem, result)
 		return {
-			META	= {elem.res and 'Result' or 'value', 'GcRefinerRecipeElement.xml'},
+			META	= {result and 'Result' or 'value', 'GcRefinerRecipeElement.xml'},
 			Id		= elem.id,
-			Amount	= elem.n,
+			Amount	= elem.n,										--	i
 			Type	= {
 				META			= {'Type', 'GcInventoryType.xml'},
-				InventoryType	= elem.tp
+				InventoryType	= elem.tp							--	Enum
 			}
 		}
 	end
-	local ingredients = { META = {'name', 'Ingredients'} }
-	for i=2, #recipe do
-		ingredients[#ingredients+1] = addIngredient(recipe[i])
+	local t_ings = { META = {'name', 'Ingredients'} }
+	for _,elem in ipairs(recipe.ingredients) do
+		t_ings[#t_ings+1] = addIngredient(elem)
 	end
 	return {
-		META		= {'value', 'GcRefinerRecipe.xml'},
+		META	= {'value', 'GcRefinerRecipe.xml'},
 		Id			= recipe.id,
-		RecipeType	= recipe.name,
-		RecipeName	= recipe.name,
-		TimeToMake	= recipe.make,
-		Cooking		= recipe.cook,
-		Result		= addIngredient(recipe[1]),
-		Ingredients	= ingredients
+		RecipeType	= recipe.name,									--	s
+		RecipeName	= recipe.name,									--	s
+		TimeToMake	= recipe.make,									--	i
+		Cooking		= recipe.cook,									--	b
+		Result		= addIngredient(recipe.result, true),
+		Ingredients	= t_ings
 	}
 end
