@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
----	Construct reward table entries (VERSION: 0.82) ... by lMonk
+---	Construct reward table entries (VERSION: 0.82.1) ... by lMonk
 ---	* Requires lua_2_exml.lua !
 ---	* This should be placed at [AMUMSS folder]\ModScript\ModHelperScripts\LIB
 -------------------------------------------------------------------------------
@@ -23,10 +23,12 @@ P_={	LOT='Loot',					SLV='Salvage',
 		SLT='SeaLoot',				SHR='SeaHorror',
 		SPB='SpaceBones',			SPH='SpaceHorror'
 }
+---	InventoryType Enum
+I_={	PRD='Product',		SBT='Substance',	TCH='Technology' }
 ---	AlienRace Enum
 A_={	TRD='Traders',		WAR='Warriors',		XPR='Explorers',
 		RBT='Robots',		ATL='Atlas',		DPL='Diplomats',
-		XTC='Exotics',		NON='None'
+		XTC='Exotics',		NON='None',			BLD='Builders'
 }
 ---	Currency Enum
 U_={	UT='Units',			NN='Nanites',		HG='Specials' }
@@ -303,6 +305,19 @@ function R_FlyBy(item)
 	)
 end
 
+function R_UnlockTree(item)
+	return R_TableItem(
+		item,
+		'GcRewardOpenUnlockTree.xml',
+		{
+			TreeToOpen = {
+				META	= {'TreeToOpen', 'GcUnlockableItemTreeGroups.xml'},
+				UnlockableItemTree = item.id
+			}
+		}
+	)
+end
+
 --	for tech inventory only. used by ship & tool rewards
 local function InventoryContainer(inv)
 	if not inv then return nil end
@@ -370,7 +385,7 @@ function R_Ship(item)
 			},
 			ShipType	= {
 				META	= {'ShipType', 'GcSpaceshipClasses.xml'},
-				ShipClass	= item.shiptype
+				ShipClass	= item.modeltype
 			},
 			NameOverride = item.name,
 			IsRewardShip = true
@@ -406,7 +421,7 @@ function R_Multitool(item)
 			},
 			WeaponType		= {
 				META	= {'WeaponType', 'GcWeaponClasses.xml'},
-				WeaponStatClass	= item.weapontype
+				WeaponStatClass	= item.modeltype
 			},
 			NameOverride = item.name,
 			IsRewardWeapon = true

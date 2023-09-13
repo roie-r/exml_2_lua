@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
----	Construct reality tables entries (VERSION: 0.82.2) ... by lMonk
+---	Construct reality tables entries (VERSION: 0.82.3) ... by lMonk
 ---	Add new items into technology, proc-tech, product & basebuilding
 ---	* Not ALL properties of the tables' classes are included, ones which
 ---  can be safely left with their deafult value are omited.
@@ -19,35 +19,32 @@ function GetRequirements(r)
 		reqs[#reqs+1] = {
 			META	= {'value', 'GcTechnologyRequirement.xml'},
 			ID		= req.id,
-			Amount	= req.n,						--	i
+			Amount	= req.n,							--	i
 			Type	= {
 				META	= {'Type', 'GcInventoryType.xml'},
-				InventoryType = req.tp				--	Enum
+				InventoryType = req.tp					--	Enum
 			}
 		}
 	end
 	return reqs
 end
 
+--	receives a table of {type, bonus, level} items
+function TechStatBonus(tsb)
+	return {
+		META	= {'value', 'GcStatsBonus.xml'},
+		Stat	= {
+			META		= {'Stat', 'GcStatsTypes.xml'},
+			StatsType	= tsb.st					--	Enum
+		},
+		Bonus	= tsb.bn,							--	f
+		Level	= tsb.lv or 0						--	i 0-4
+	}
+end
+
 --	Build a new entry for NMS_REALITY_GCTECHNOLOGYTABLE
 --	sub lists (requirements and color) are entered in separate tables
 function TechnologyEntry(tech)
-	local function getStats(s)
-	--	receives a table of {type, bonus, level} items
-		local stats = {META = {'name', 'StatBonuses'}}
-		for _,stb in ipairs(s) do
-			stats[#stats+1] = {
-				META	= {'value', 'GcStatsBonus.xml'},
-				Stat	= {
-					META		= {'Stat', 'GcStatsTypes.xml'},
-					StatsType	= stb.st					--	Enum
-				},
-				Bonus	= stb.bn,							--	f
-				Level	= stb.lv or 0						--	i 0-4
-			}
-		end
-		return stats
-	end
 	return {
 		META			= {'value', 'GcTechnology.xml'},
 		ID				= tech.id,
@@ -100,7 +97,15 @@ function TechnologyEntry(tech)
 			META	= {'BaseStat', 'GcStatsTypes.xml'},
 			StatsType	= tech.basestat,								--	Enum
 		},
-		StatBonuses		= getStats(tech.statbonuses),
+		StatBonuses		= (
+			function()
+				local stats = {META = {'name', 'StatBonuses'}}
+				for _,tsb in ipairs(tech.statbonuses) do
+					stats[#stats+1] = TechStatBonus(tsb)
+				end
+				return stats
+			end
+		)(),
 		RequiredTech	= tech.requiredtech,							--	Id
 		FocusLocator	= tech.focuslocator,							--	??
 		UpgradeColour	= ColorData(tech.upgradecolor, 'UpgradeColour'),--	rgb or hex
@@ -196,29 +201,26 @@ function ProductEntry(prod)
 	}
 end
 
+--	receives a table of {type, min, max, weightcurve, always} items
+function ProcTechStatLevel(tsl)
+	return {
+		META		= {'value', 'GcProceduralTechnologyStatLevel.xml'},
+		Stat		= {
+			META = {'Stat', 'GcStatsTypes.xml'},
+			StatsType = tsl.st,							--	Enum
+		},
+		ValueMin	= tsl.n,							--	f
+		ValueMax	= tsl.x,							--	f
+		WeightingCurve = {
+			META = {'WeightingCurve', 'GcWeightingCurve.xml'},
+			WeightingCurve = tsl.wc or 'NoWeighting',	--	Enum
+		},
+		AlwaysChoose= tsl.ac							--	b
+	}
+end
+
 --	Build a new entry for NMS_REALITY_GCPROCEDURALTECHNOLOGYTABLE
 function ProcTechEntry(tech)
-	local function getStatLevels(s)
-	--	receives a table of {type, min, max, weightcurve, always} items
-		local stats = {META = {'name', 'StatLevels'}}
-		for _,stl in ipairs(s) do
-			stats[#stats+1] = {
-				META		= {'value', 'GcProceduralTechnologyStatLevel.xml'},
-				Stat		= {
-					META = {'Stat', 'GcStatsTypes.xml'},
-					StatsType = stl.st,							--	Enum
-				},
-				ValueMin	= stl.n,							--	f
-				ValueMax	= stl.x,							--	f
-				WeightingCurve = {
-					META = {'WeightingCurve', 'GcWeightingCurve.xml'},
-					WeightingCurve = stl.wc or 'NoWeighting',	--	Enum
-				},
-				AlwaysChoose= stl.ac							--	b
-			}
-		end
-		return stats
-	end
 	return {
 		META	= {'value', 'GcProceduralTechnologyData.xml'},
 		ID				= tech.id,
@@ -241,7 +243,15 @@ function ProcTechEntry(tech)
 			WeightingCurve = tech.weightingcurve or 'NoWeighting',	--	Enum
 		},
 		UpgradeColour	= ColorData(tech.upgradecolor, 'UpgradeColour'),
-		StatLevels		= getStatLevels(tech.statlevels)
+		StatLevels		= (
+			function()
+				local stats = {META = {'name', 'StatLevels'}}
+				for _,sl in ipairs(tech.statlevels) do
+					stats[#stats+1] = ProcTechStatLevel(sl)
+				end
+				return stats
+			end
+		)()
 	}
 end
 
@@ -264,7 +274,7 @@ function BaseBuildObjectEntry(bpart)
 		ID							= bpart.id,
 		Style						= {
 			META		= {'Style', 'GcBaseBuildingPartStyle.xml'},
-			Style		= bpart.style or 'None'							--	Enum
+			Style		= bpart.style or 'None'						--	Enum
 		},
 		PlacementScene				= {
 			META		= {'PlacementScene', 'TkModelResource.xml'},
@@ -274,31 +284,31 @@ function BaseBuildObjectEntry(bpart)
 			META		= {'DecorationType', 'GcBaseBuildingObjectDecorationTypes.xml'},
 			BaseBuildingDecorationType = bpart.decorationtype or 'Normal'--	Enum
 		},
-		IsPlaceable					= bpart.isplaceable,				--	b
-		IsDecoration				= bpart.isdecoration,				--	b
-		BuildableOnPlanetBase 		= bpart.onplanetbase or true,		--	b
-		BuildableOnFreighter		= bpart.onfreighter,				--	b
-		BuildableOnPlanet			= bpart.onplanet,					--	b
+		IsPlaceable					= bpart.isplaceable,			--	b
+		IsDecoration				= bpart.isdecoration,			--	b
+		BuildableOnPlanetBase 		= bpart.onplanetbase or true,	--	b
+		BuildableOnFreighter		= bpart.onfreighter,			--	b
+		BuildableOnPlanet			= bpart.onplanet,				--	b
 		BuildableUnderwater			= true,
 		BuildableAboveWater			= true,
 		CheckPlayerCollision		= false,
 		CanRotate3D					= true,
 		CanScale					= true,
 		Groups						= getGroups(bpart.groups),
-		StorageContainerIndex 		= -1,								--	i
+		StorageContainerIndex 		= -1,							--	i
 		CanChangeColour				= true,
 		CanChangeMaterial			= true,
-		CanPickUp					= bpart.canpickup,					--	b
+		CanPickUp					= bpart.canpickup,				--	b
 		ShowInBuildMenu				= true,
 		CompositePartObjectIDs		= StringArray(bpart.compositeparts, 'CompositePartObjectIDs', 10),
 		FamilyIDs					= StringArray(bpart.familyids, 'FamilyIDs', 10),
-		BuildEffectAccelerator		= 1,								--	i
+		BuildEffectAccelerator		= 1,							--	i
 		RemovesAttachedDecoration	= true,
 		RemovesWhenUnsnapped		= false,
-		EditsTerrain				= bpart.editsterrain,				--	b
-		BaseTerrainEditShape		= 'Cube',							--	Enum
-		MinimumDeleteDistance		= 1,								--	i
-		IsSealed					= bpart.issealed,					--	b
+		EditsTerrain				= bpart.editsterrain,			--	b
+		BaseTerrainEditShape		= 'Cube',						--	Enum
+		MinimumDeleteDistance		= 1,							--	i
+		IsSealed					= bpart.issealed,				--	b
 		CloseMenuAfterBuild			= bpart.closemenuafterbuild,
 		LinkGridData				= {
 			META = {'LinkGridData', 'GcBaseLinkGridData.xml'},
@@ -306,16 +316,16 @@ function BaseBuildObjectEntry(bpart)
 				META	= {'Connection', 'GcBaseLinkGridConnectionData.xml'},
 				Network	= {
 					META = {'Network', 'GcLinkNetworkTypes.xml'},
-					LinkNetworkType = bpart.linknetwork or 'Power'		--	Enum
+					LinkNetworkType = bpart.linknetwork or 'Power'	--	Enum
 				},
-				NetworkSubGroup		= bpart.networksubgroup,			--	i
-				NetworkMask			= bpart.networkmask,				--	i
-				ConnectionDistance	= 0.1								--	f
+				NetworkSubGroup		= bpart.networksubgroup,		--	i
+				NetworkMask			= bpart.networkmask,			--	i
+				ConnectionDistance	= 0.1							--	f
 			},
-			Rate					= bpart.rate,						--	f
-			Storage					= bpart.storage						--	i
+			Rate					= bpart.rate,					--	f
+			Storage					= bpart.storage					--	i
 		},
-		ShowGhosts					= bpart.showghosts or true,
+		ShowGhosts					= bpart.showghosts or true,		--	b
 		GhostsCountOverride			= 0,
 		SnappingDistanceOverride	= 0,
 		RegionSpawnLOD				= 1
@@ -365,7 +375,7 @@ function RefinerRecipeEntry(recipe)
 			}
 		}
 	end
-	local t_ings = { META = {'name', 'Ingredients'} }
+	local t_ings = {META = {'name', 'Ingredients'}}
 	for _,elem in ipairs(recipe.ingredients) do
 		t_ings[#t_ings+1] = addIngredient(elem)
 	end
