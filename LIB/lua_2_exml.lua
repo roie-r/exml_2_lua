@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
----	LUA 2 EXML (VERSION: 0.82.3) ... by lMonk
+---	LUA 2 EXML (VERSION: 0.82.4) ... by lMonk
 ---	A tool for converting exml to an equivalent lua table and back again.
 ---	Helper functions for color class, vector class and string arrays
 ---	* This should be placed at [AMUMSS folder]\ModScript\ModHelperScripts\LIB
@@ -100,24 +100,25 @@ end
 
 --	@param h: hex color string in ARGB or RGB format (default is white)
 function ColorFromHex(h)
-	local rgb = {{'A', 1}, {'R', 1}, {'G', 1}, {'B', 1}}
+	local argb = {{'A', 1}, {'R', 1}, {'G', 1}, {'B', 1}}
 	for i=1, (#h / 2) do
-		rgb[#h > 6 and i or i + 1][2] = Hex2Percent(h, i)
+		argb[#h > 6 and i or i + 1][2] = Hex2Percent(h, i)
 	end
-	return rgb
+	return argb
 end
 
 --	Returns a Colour.xml table
---	@param T: ARGB color in percentage values (and optinal c=hex).
---	  Either {1.0, 0.5, 0.4, 0.3} or {a=1.0, r=0.5, g=0.4, b=0.3}
+--	@param T: ARGB color in percentage values or hex format.
+--	  Either {1.0, 0.5, 0.4, 0.3} or {a=1.0, r=0.5, g=0.4, b=0.3} or 'FFA0B1C2'
 --	@param name: class name
---	* hex color in ARGB format (c is a key inside table T) will overwrite the rgb
-function ColorData(T, name)
-	T = T  or {}
-	if T.c then
-		for i=1, (#T.c / 2) do
-			T[#T.c > 6 and i or i + 1] = Hex2Percent(T.c, i)
+function ColorData(argb, name)
+	local T = {}
+	if type(argb) == 'string' then
+		for i=1, (#argb / 2) do
+			T[#argb > 6 and i or i + 1] = Hex2Percent(argb, i)
 		end
+	else
+		T = argb or {}
 	end
 	return {
 		-- if a name is present then use 2-property tags

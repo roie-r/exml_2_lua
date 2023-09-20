@@ -6,7 +6,7 @@ dofile('LIB/table_entry.lua')
 NMS_MOD_DEFINITION_CONTAINER = {
 	MOD_FILENAME 		= '_TEST L2E add new tech.pak',
 	MOD_AUTHOR			= 'lMonk',
-	NMS_VERSION			= '4.38',
+	NMS_VERSION			= '4.45',
 	MODIFICATIONS 		= {{
 	MBIN_CHANGE_TABLE	= {
 	{
@@ -21,7 +21,7 @@ NMS_MOD_DEFINITION_CONTAINER = {
 					subtitle		= 'BODYSHIELD_SUB',
 					description		= 'BODYSHIELD_DESC',
 					icon			= 'TEXTURES/UI/FRONTEND/ICONS/TECHNOLOGY/RENDER.SHIELD.RED2.DDS',
-					color			= {c='095c77ff'},
+					color			= 'ff095c77',
 					chargeable		= true,
 					chargeamount	= 400,
 					chargetype		= 'Catalyst',

@@ -6,7 +6,7 @@ dofile('LIB/table_entry.lua')
 NMS_MOD_DEFINITION_CONTAINER = {
 	MOD_FILENAME 		= '_TEST L2E add new products.pak',
 	MOD_AUTHOR			= 'lMonk',
-	NMS_VERSION			= '4.38',
+	NMS_VERSION			= '4.45',
 	MODIFICATIONS 		= {{
 	MBIN_CHANGE_TABLE	= {
 	{
@@ -22,7 +22,7 @@ NMS_MOD_DEFINITION_CONTAINER = {
 						subtitle		= 'CURIO4_SUBTITLE',
 						description		= 'PRODX40_DESC',
 						basevalue		= 624000000,
-						color			= {c='ccccccff'},
+						color			= 'ffcccccc',
 						category		= 'Special',
 						type			= 'Tradeable',
 						rarity			= 'Rare',
@@ -42,7 +42,7 @@ NMS_MOD_DEFINITION_CONTAINER = {
 						subtitle		= 'PROD_NIP_SUBTITLE',
 						description		= 'SUPERFOOD_DESC',
 						basevalue		= 2,
-						color			= {c='1a273dff'},
+						color			= 'ff1a273d',
 						category		= 'Exotic',
 						type			= 'Consumable',
 						rarity			= 'Rare',

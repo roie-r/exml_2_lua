@@ -12,6 +12,7 @@
 -- multi-tool decommissioning >> 1 claim scrap worth ## units
 
 function PuzzleOption(option)
+---	!! WORK IN PROGESS !!
 	return {
 		META = {'value','GcAlienPuzzleOption.xml'},
 		Name					= option.name,
@@ -36,6 +37,7 @@ function PuzzleOption(option)
 end
 
 function PuzzleEntry(diag)
+---	!! WORK IN PROGESS !!
 	return {
 		META = {'value','GcAlienPuzzleEntry.xml'},
 		Id 							= diag.id,

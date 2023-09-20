@@ -197,7 +197,8 @@ function ProductEntry(prod)
 		CookingValue				= prod.cookingvalue,			--	i
 		GoodForSelling				= prod.goodforselling or true,
 		EggModifierIngredient		= prod.eggmodifier,				--	b
-		IsTechbox					= prod.istechbox				--	b
+		IsTechbox					= prod.istechbox,				--	b
+		CanSendToOtherPlayers		= prod.sendtoplayer				--	b
 	}
 end
 
