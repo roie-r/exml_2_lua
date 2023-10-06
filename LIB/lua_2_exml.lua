@@ -1,8 +1,8 @@
 -------------------------------------------------------------------------------
----	LUA 2 EXML (VERSION: 0.82.4) ... by lMonk
+---	LUA 2 EXML (VERSION: 0.82.5) ... by lMonk
 ---	A tool for converting exml to an equivalent lua table and back again.
 ---	Helper functions for color class, vector class and string arrays
----	* This should be placed at [AMUMSS folder]\ModScript\ModHelperScripts\LIB
+---	* This script should be in [AMUMSS folder]\ModScript\ModHelperScripts\LIB
 -------------------------------------------------------------------------------
 
 --	replace a boolean with its text equivalent (ignore otherwise)
@@ -107,30 +107,30 @@ function ColorFromHex(h)
 	return argb
 end
 
---	Returns a Colour.xml table
+--	Returns a Colour.xml class
 --	@param T: ARGB color in percentage values or hex format.
 --	  Either {1.0, 0.5, 0.4, 0.3} or {a=1.0, r=0.5, g=0.4, b=0.3} or 'FFA0B1C2'
 --	@param name: class name
-function ColorData(argb, name)
-	local T = {}
-	if type(argb) == 'string' then
-		for i=1, (#argb / 2) do
-			T[#argb > 6 and i or i + 1] = Hex2Percent(argb, i)
+function ColorData(T, name)
+	local argb = {}
+	if type(T) == 'string' then
+		for i=1, (#T / 2) do
+			argb[#T > 6 and i or i + 1] = Hex2Percent(T, i)
 		end
 	else
-		T = argb or {}
+		argb = T or {}
 	end
 	return {
 		-- if a name is present then use 2-property tags
 		META= {name or 'value', 'Colour.xml'},
-		A	= (T[1] or T.a) or 1,
-		R	= (T[2] or T.r) or 1,
-		G	= (T[3] or T.g) or 1,
-		B	= (T[4] or T.b) or 1
+		A	= (argb[1] or argb.a) or 1,
+		R	= (argb[2] or argb.r) or 1,
+		G	= (argb[3] or argb.g) or 1,
+		B	= (argb[4] or argb.b) or 1
 	}
 end
 
---	Returns a Vector3f.xml or Vector4f.xml table, depending on number of values
+--	Returns a Vector3f.xml or Vector4f.xml class, depending on number of values
 --	@param T: xyz<t> vector
 --	  Either {1.0, 0.5, 0.4, <2>} or {x=1.0, y=0.5, z=0.4, <t=2>}
 --	@param name: class name
@@ -138,15 +138,15 @@ function VectorData(T, name)
 	T = T  or {}
 	return {
 		-- if a name is present then use 2-property tags
-		META= {name or 'value', (T.t or #T > 3) and 'Vector4f.xml' or 'Vector3f.xml'},
-		x	= (T[1] or T.x) or 0,
-		y	= (T[2] or T.y) or 0,
-		z	= (T[3] or T.z) or 0,
+		META= {name or 'value', 'Vector'..len2(T)..'f.xml'},
+		x	= T[1] or T.x,
+		y	= T[2] or T.y,
+		z	= T[3] or T.z,
 		t	= (T[4] or T.t) or nil
 	}
 end
 
---	Returns a 'name' type table of strings
+--	Returns a 'name' type array of strings
 --	@param t: an ordered (non-keyed) table of strings
 --	@param name: class name
 --	@param size: string class size [10, 100, 20, 200, 40, 400, 80, 800]

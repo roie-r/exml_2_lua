@@ -2,11 +2,29 @@
 ---	Model scene tools (VERSION: 0.82.1) ... by lMonk
 ---	Helper functions for adding new TkSceneNodeData nodes and properties
 ---	* Requires lua_2_exml.lua !
----	* This should be placed at [AMUMSS folder]\ModScript\ModHelperScripts\LIB
+---	* This script should be in [AMUMSS folder]\ModScript\ModHelperScripts\LIB
 -------------------------------------------------------------------------------
 
---	T (optional) is a table for scene class properties >> attributes, transform and children
+--	Build a TkSceneNodeData class
+--	@param name: scene node name
+--	@param stype: scene node type
+--	@param T: (optional) a table for scene class properties >> attributes, transform and children
 function ScNode(name, stype, T)
+	--	returns a jenkins hash from a string (by lyravega)
+	local function JenkinsHash(input)
+		local hash = 0
+		local t_chars = {string.byte(input:upper(), 1, #input)}
+
+		for i = 1, #input do
+			hash = (hash + t_chars[i]) & 0xffffffff
+			hash = (hash + (hash << 10)) & 0xffffffff
+			hash = (hash ~ (hash >> 6)) & 0xffffffff
+		end
+		hash = (hash + (hash << 3)) & 0xffffffff
+		hash = (hash ~ (hash >> 11)) & 0xffffffff
+		hash = (hash + (hash << 15)) & 0xffffffff
+		return tostring(hash)
+	end
 	T = T or {}
 	T.META 		= {'value', 'TkSceneNodeData.xml'}
 	T.Name 		= name
@@ -15,56 +33,43 @@ function ScNode(name, stype, T)
 	return T
 end
 
---	accepts either a list of 9 values or keyed values (but NOT a combination of the two)
-function ScTransform(t)
-	t = t or {}
+--	Builds a TkTransformData class
+--	@param T: a list of 9 values in order or keyed values (but NOT a combination of the two)
+function ScTransform(T)
+	T = T or {}
 	return {
 		META	= {'Transform', 'TkTransformData.xml'},
-		TransX	= (t.tx or t[1]) or 0,
-		TransY	= (t.ty or t[2]) or 0,
-		TransZ	= (t.tz or t[3]) or 0,
-		RotX	= (t.rx or t[4]) or 0,
-		RotY	= (t.ry or t[5]) or 0,
-		RotZ	= (t.rz or t[6]) or 0,
-		ScaleX	= (t.sx or t[7]) or 1,
-		ScaleY	= (t.sy or t[8]) or 1,
-		ScaleZ	= (t.sz or t[9]) or 1
+		TransX	= (T.tx or T[1]) or 0,
+		TransY	= (T.ty or T[2]) or 0,
+		TransZ	= (T.tz or T[3]) or 0,
+		RotX	= (T.rx or T[4]) or 0,
+		RotY	= (T.ry or T[5]) or 0,
+		RotZ	= (T.rz or T[6]) or 0,
+		ScaleX	= (T.sx or T[7]) or 1,
+		ScaleY	= (T.sy or T[8]) or 1,
+		ScaleZ	= (T.sz or T[9]) or 1
 	}
 end
 
---	accepts a list of {name, value} pairs
-function ScAttributes(t)
-	local T = {META = {'name', 'Attributes'}}
-	for _,at in ipairs(t) do
-		T[#T+1] = {
+--	Builds a scene node attributes array
+--	@param T: a list of {name, value} pairs
+function ScAttributes(T)
+	local atr = {META = {'name', 'Attributes'}}
+	for _,at in ipairs(T) do
+		atr[#atr+1] = {
 			META	= {'value', 'TkSceneNodeAttributeData.xml'},
 			Name	= at[1],
 			Value	= at[2]
 		}
 	end
+	return atr
+end
+
+--	Returns a scene node's children list
+--	@param T: a list of scene classes
+function ScChildren(T)
+	T.META = {'name', 'Children'}
 	return T
-end
-
-function ScChildren(t)
-	t.META = {'name', 'Children'}
-	return t
-end
-
---	returns a jenkins hash from a string (by lyravega)
-function JenkinsHash(input)
-    local hash = 0
-    local t_chars = {string.byte(input:upper(), 1, #input)}
-
-    for i = 1, #input do
-        hash = (hash + t_chars[i]) & 0xffffffff
-        hash = (hash + (hash << 10)) & 0xffffffff
-        hash = (hash ~ (hash >> 6)) & 0xffffffff
-    end
-    hash = (hash + (hash << 3)) & 0xffffffff
-    hash = (hash ~ (hash >> 11)) & 0xffffffff
-    hash = (hash + (hash << 15)) & 0xffffffff
-
-    return tostring(hash)
 end
 
 --	Builds a light TkSceneNodeData section.

@@ -2,7 +2,7 @@
 ---	!! WORK IN PROGESS !! WORK IN PROGESS !! WORK IN PROGESS !!
 ---	Construct alien puzzle dialog entries (VERSION: 0.2) ... by lMonk
 ---	* Requires lua_2_exml.lua !
----	* This should be placed at [AMUMSS folder]\ModScript\ModHelperScripts\LIB
+---	* This script should be in [AMUMSS folder]\ModScript\ModHelperScripts\LIB
 -------------------------------------------------------------------------------
 
 -- mutlitool upgrade station >> 1 install slot / 2 purchase new slot / 3 upgrade class

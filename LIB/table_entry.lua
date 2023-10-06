@@ -1,10 +1,10 @@
 -------------------------------------------------------------------------------
----	Construct reality tables entries (VERSION: 0.82.3) ... by lMonk
+---	Build reality tables entries (VERSION: 0.82.3) ... by lMonk
 ---	Add new items into technology, proc-tech, product & basebuilding
----	* Not ALL properties of the tables' classes are included, ones which
+---	* Not ALL properties of the tables' classes are included, some which
 ---  can be safely left with their deafult value are omited.
 ---	* Requires lua_2_exml.lua !
----	* This should be placed at [AMUMSS folder]\ModScript\ModHelperScripts\LIB
+---	* This script should be in [AMUMSS folder]\ModScript\ModHelperScripts\LIB
 -------------------------------------------------------------------------------
 
 --	InventoryType Enum

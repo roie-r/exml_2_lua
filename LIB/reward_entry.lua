@@ -1,7 +1,7 @@
 -------------------------------------------------------------------------------
 ---	Construct reward table entries (VERSION: 0.82.1) ... by lMonk
 ---	* Requires lua_2_exml.lua !
----	* This should be placed at [AMUMSS folder]\ModScript\ModHelperScripts\LIB
+---	* This script should be in [AMUMSS folder]\ModScript\ModHelperScripts\LIB
 -------------------------------------------------------------------------------
 
 ---	RewardChoice Enum
@@ -319,19 +319,19 @@ function R_UnlockTree(item)
 end
 
 --	for tech inventory only. used by ship & tool rewards
-local function InventoryContainer(inv)
-	if not inv then return nil end
+local function InventoryContainer(inventory)
+	if not inventory then return nil end
 	local T = {META = {'name', 'Slots'}}
-	for _,i in ipairs(inv) do
+	for _,itm in ipairs(inventory) do
 		T[#T+1] = {
 			META	= {'value', 'GcInventoryElement.xml'},
-			Id				= i.id,
-			Amount			= i.itype and i.amount or (i.amount and 1000 or -1),
-			MaxAmount		= i.amount and 10000 or 100,
+			Id				= itm.id,
+			Amount			= itm.itype and itm.amount or (itm.amount and 1000 or -1),
+			MaxAmount		= itm.amount and 10000 or 100,
 			FullyInstalled	= true,
 			Type			= {
 				META	= {'Type', 'GcInventoryType.xml'},
-				InventoryType	= i.itype or I_.TCH
+				InventoryType	= itm.itype or I_.TCH
 			},
 			Index	= {
 				META	= {'Index', 'GcInventoryIndex.xml'},

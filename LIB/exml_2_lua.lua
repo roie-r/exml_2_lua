@@ -3,7 +3,7 @@
 ---	A tool for converting exml to an equivalent lua table and back again.
 ---	Functions for converting an exml file, or sections of one, to
 ---	 a lua table during run-time, or printing the exml as a lua script.
----	* This should be placed at [AMUMSS folder]\ModScript\ModHelperScripts\LIB
+---	* This script should be in [AMUMSS folder]\ModScript\ModHelperScripts\LIB
 -------------------------------------------------------------------------------
 
 --	Strip the XML header and data template if found
