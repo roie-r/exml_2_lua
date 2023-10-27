@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
----	LUA 2 EXML (VERSION: 0.82.5) ... by lMonk
+---	LUA 2 EXML (VERSION: 0.82.6) ... by lMonk
 ---	A tool for converting exml to an equivalent lua table and back again.
 ---	Helper functions for color class, vector class and string arrays
 ---	* This script should be in [AMUMSS folder]\ModScript\ModHelperScripts\LIB
@@ -40,8 +40,7 @@ function ToExml(class)
 				else
 					-- add normal property
 					if type(cls) == 'table' then
-						-- because you can't read an unknown key directly
-						for k,v in pairs(cls) do key = k; cls = v end
+						key, cls = next(cls)
 					end
 					if key == 'name' or key == 'value' then
 						exml:add({key, '="', bool(cls), '"/>'})
@@ -135,7 +134,7 @@ end
 --	  Either {1.0, 0.5, 0.4, <2>} or {x=1.0, y=0.5, z=0.4, <t=2>}
 --	@param name: class name
 function VectorData(T, name)
-	T = T  or {}
+	T = T or {}
 	return {
 		-- if a name is present then use 2-property tags
 		META= {name or 'value', 'Vector'..len2(T)..'f.xml'},

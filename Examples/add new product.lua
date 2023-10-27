@@ -15,14 +15,14 @@ NMS_MOD_DEFINITION_CONTAINER = {
 			{
 				PRECEDING_KEY_WORDS	= 'Table',
 				ADD					= ToExml({
-					[1] = ProductEntry({
+					ProductEntry({
 						id				= 'ULTRAPRODX40',
 						name			= 'PRODX40_NAME',
 						namelower		= 'PRODX40_NAME_L',
 						subtitle		= 'CURIO4_SUBTITLE',
 						description		= 'PRODX40_DESC',
 						basevalue		= 624000000,
-						color			= 'ffcccccc',
+						color			= 'FFCCCCCC',
 						category		= 'Special',
 						type			= 'Tradeable',
 						rarity			= 'Rare',
@@ -35,14 +35,14 @@ NMS_MOD_DEFINITION_CONTAINER = {
 						stackmultiplier	= 16,
 						icon			= 'TEXTURES/UI/FRONTEND/ICONS/U4PRODUCTS/PRODUCT.CAPTUREDNANODE.DDS'
 					}),
-					[2] = ProductEntry({
+					ProductEntry({
 						id				= 'SUPERFOOD',
 						name			= 'SUPERFOOD_NAME',
 						namelower		= 'SUPERFOOD_NAME_L',
 						subtitle		= 'PROD_NIP_SUBTITLE',
 						description		= 'SUPERFOOD_DESC',
 						basevalue		= 2,
-						color			= 'ff1a273d',
+						color			= 'FF1A273D',
 						category		= 'Exotic',
 						type			= 'Consumable',
 						rarity			= 'Rare',

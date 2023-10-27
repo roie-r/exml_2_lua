@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
----	Construct reward table entries (VERSION: 0.82.1) ... by lMonk
+---	Construct reward table entries (VERSION: 0.82.5) ... by lMonk
 ---	* Requires lua_2_exml.lua !
 ---	* This script should be in [AMUMSS folder]\ModScript\ModHelperScripts\LIB
 -------------------------------------------------------------------------------
@@ -44,13 +44,13 @@ F_={	S='SingleShip',		G='AmbientGroup',	W='DeepSpaceCommon' }
 
 function R_RewardTableEntry(rte)
 	-- allows to supply the reward list from outside
-	if not rte.item_list then
-		rte.item_list = {}
+	if not rte.list then
+		rte.list = {}
 		for _,rwd in pairs(rte.rewardlist) do
-			rte.item_list[#rte.item_list+1] = rwd.f(rwd)
+			rte.list[#rte.list+1] = rwd.f(rwd)
 		end
 	end
-	rte.item_list.META = {'name', 'List'}
+	rte.list.META = {'name', 'List'}
 	return {
 		META = {'value', 'GcGenericRewardTableEntry.xml'},
 		Id	 = rte.id,
@@ -58,15 +58,15 @@ function R_RewardTableEntry(rte)
 			META = {'List', 'GcRewardTableItemList.xml'},
 			RewardChoice	= rte.choice or C_.ONE,
 			OverrideZeroSeed= rte.zeroseed,
-			[1]				= rte.item_list
+			ItemList		= rte.list
 		}
 	}
 end
 
 function R_TableItem(item, reward_type, props)
 	props.META		= {'Reward', reward_type}
-	props.AmountMin	= item.n or item.x
-	props.AmountMax	= item.x
+	props.AmountMin	= item.mn or item.mx
+	props.AmountMax	= item.mx
 	return {
 		META	= {'value', 'GcRewardTableItem.xml'},
 		PercentageChance	= item.c or 1,
@@ -79,12 +79,12 @@ function R_MultiItem(item)
 	for _,itm in ipairs(item) do
 		multies[#multies+1] = {
 			META = {'value', 'GcMultiSpecificItemEntry.xml'},
-			MultiItemRewardType	= itm.t,
+			MultiItemRewardType	= itm.tp,
 			Id					= itm.id,
-			Amount				= itm.n or 1,
+			Amount				= itm.mn or 1,
 			ProcTechGroup		= itm.tg,
-			ProcTechQuality		= itm.q,
-			IllegalProcTech		= itm.l,
+			ProcTechQuality		= itm.qt,
+			IllegalProcTech		= itm.lgl,
 			ProcProdType		= {
 				META = {'ProcProdType', 'GcProceduralProductCategory.xml'},
 				ProceduralProductCategory = itm.pid or 'Loot'
@@ -95,7 +95,7 @@ function R_MultiItem(item)
 		item,
 		'GcRewardMultiSpecificItems.xml',
 		{
-			Silent	= item.s,
+			Silent	= item.sl,
 			Items	= multies
 		}
 	)
@@ -112,9 +112,9 @@ function R_Procedural(item)
 			},
 			Rarity	= {
 				META = {'Rarity', 'GcRarity.xml'},
-				Rarity = item.r or 'Common'
+				Rarity = item.rt or 'Common'
 			},
-			OverrideRarity	= item.o
+			OverrideRarity	= item.ort
 		}
 	)
 end
@@ -125,7 +125,7 @@ function R_Substance(item)
 		'GcRewardSpecificSubstance.xml',
 		{
 			ID		= item.id,
-			Silent	= item.s
+			Silent	= item.sl
 		}
 	)
 end
@@ -136,38 +136,24 @@ function R_Product(item)
 		'GcRewardSpecificProduct.xml',
 		{
 			ID		= item.id,
-			Silent	= item.s
+			Silent	= item.sl
 		}
 	)
 end
 
 function R_ProductSysList(item)
-	local T = {META = {'name', 'ProductList'}}
-	for _,v  in ipairs(item.id) do
-		T[#T+1] = {
-			META	= {'value', 'NMSString0x10.xml'},
-			Value	= v
-		}
-	end
 	return R_TableItem(
 		item,
 		'GcRewardSystemSpecificProductFromList.xml',
-		{ ProductList = T }
+		{ ProductList = StringArray(item.id, 'ProductList', 10) }
 	)
 end
 
 function R_ProductAllList(item)
-	local T = {META = {'name', 'ProductIds'}}
-	for _,v  in ipairs(item.id) do
-		T[#T+1] = {
-			META	= {'value', 'NMSString0x10.xml'},
-			Value	= v
-		}
-	end
 	return R_TableItem(
 		item,
 		'GcRewardMultiSpecificProducts.xml',
-		{ ProductIds = T }
+		{ ProductIds = StringArray(item.id, 'ProductIds', 10) }
 	)
 end
 
@@ -177,7 +163,7 @@ function R_Technology(item)
 		'GcRewardSpecificTech.xml',
 		{
 			TechId	= item.id,
-			Silent	= item.s
+			Silent	= item.sl
 		}
 	)
 end
@@ -188,7 +174,7 @@ function R_ProductRecipe(item)
 		'GcRewardSpecificProductRecipe.xml',
 		{
 			ID		= item.id,
-			Silent	= item.s
+			Silent	= item.sl
 		}
 	)
 end
@@ -224,10 +210,10 @@ function R_Jetboost(item)
 		item,
 		'GcRewardJetpackBoost.xml',
 		{
-			Duration		= (10 * item.t),
-			ForwardBoost	= (4.2 * item.b),
-			UpBoost			= (0.9 * item.b),
-			IgnitionBoost	= (1.8 * item.b)
+			Duration		= (10 *  item.tm),
+			ForwardBoost	= (4.2 * item.pw),
+			UpBoost			= (0.9 * item.pw),
+			IgnitionBoost	= (1.6 * item.pw)
 		}
 	)
 end
@@ -236,7 +222,7 @@ function R_Stamina(item)
 	return R_TableItem(
 		item,
 		'GcRewardFreeStamina.xml',
-		{ Duration		= (10 * item.t) }
+		{ Duration		= (10 * item.tm) }
 	)
 end
 
@@ -245,8 +231,8 @@ function R_Hazard(item)
 		item,
 		'GcRewardRefreshHazProt.xml',
 		{
-			Amount	= item.z,
-			Silent	= item.s
+			Amount	= item.hz,
+			Silent	= item.sl
 		}
 	)
 end
@@ -259,7 +245,7 @@ function R_Health(item)
 	return R_TableItem(
 		item,
 		'GcRewardHealth.xml',
-		{ SilentUnlessShieldAtMax = item.s }
+		{ SilentUnlessShieldAtMax = item.sl }
 	)
 end
 
@@ -267,7 +253,7 @@ function R_Wanted(item)
 	return R_TableItem(
 		item,
 		'GcRewardWantedLevel.xml',
-		{ Level	= item.l or 0 }
+		{ Level	= item.lvl or 0 }
 	)
 end
 
@@ -276,7 +262,7 @@ function R_NoSentinels(item)
 		item,
 		'GcRewardDisableSentinels.xml',
 		{
-			Duration			= item.t or -1,
+			Duration			= item.tm or -1,
 			WantedBarMessage	= 'UI_SENTINELS_DISABLED_MSG'
 		}
 	)
@@ -286,7 +272,7 @@ function R_Storm(item)
 	return R_TableItem(
 		item,
 		'GcRewardTriggerStorm.xml',
-		{ Duration			= item.t or -1 }
+		{ Duration			= item.tm or -1 }
 	)
 end
 
@@ -297,9 +283,9 @@ function R_FlyBy(item)
 		{
 			FlybyType = {
 				META	= {'FlybyType', 'GcFrigateFlybyType.xml'},
-				FrigateFlybyType = item.ft or F_.W
+				FrigateFlybyType = item.tp or F_.W
 			},
-			AppearanceDelay	= item.t or 3,
+			AppearanceDelay	= item.tm or 3,
 			CameraShake		= 'FRG_FLYBY_PREP'
 		}
 	)

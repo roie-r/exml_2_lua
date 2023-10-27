@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
----	Model scene tools (VERSION: 0.82.1) ... by lMonk
+---	Model scene tools (VERSION: 0.82.3) ... by lMonk
 ---	Helper functions for adding new TkSceneNodeData nodes and properties
 ---	* Requires lua_2_exml.lua !
 ---	* This script should be in [AMUMSS folder]\ModScript\ModHelperScripts\LIB
@@ -72,8 +72,8 @@ function ScChildren(T)
 	return T
 end
 
---	Builds a light TkSceneNodeData section.
---	receives a table with the following (optional) parameters
+--	Builds light TkSceneNodeData sections.
+--	receives a table, or a table of tables, with the following (optional) parameters
 --	  name= 'n9',	fov= 360,
 --	  i=	30000,	f= 'q',		fr=	2,
 --	  r=	1,		g=	1,		b=	1,
@@ -81,33 +81,46 @@ end
 --	  tx=	0,		ty=	0,		tz=	0,
 --	  rx=	0,		ry=	0,		rz=	0,
 --	  sx=	1,		sy=	1,		sz=	1
-function ScLight(light)
-	if light.c then
-		for i, col in ipairs({'r', 'g', 'b'}) do
-			--  skip the alpha if present
-			light[col] = Hex2Percent(light.c, #light.c > 6 and i+1 or i)
+function ScLight(lights)
+	local function LightNode(light)
+		if light.c then
+			for i, col in ipairs({'r', 'g', 'b'}) do
+				--  skip the alpha if present
+				light[col] = Hex2Percent(light.c, #light.c > 6 and i+1 or i)
+			end
+		end
+		return ScNode(
+			light.name or 'n9', 'LIGHT', {
+				ScTransform(light),
+				ScAttributes({
+					{'FOV',		 	light.fov or 360},
+					{'FALLOFF',	 	(light.f and light.f:sub(1,1) == 'l') and 'linear' or 'quadratic'},
+					{'FALLOFF_RATE',light.fr or 2},
+					{'INTENSITY',	light.i  or 30000},
+					{'COL_R',		light.r  or 1},
+					{'COL_G',		light.g  or 1},
+					{'COL_B',		light.b  or 1},
+					{'VOLUMETRIC',	0},
+					{'COOKIE_IDX',	-1},
+					{'MATERIAL',	'MATERIALS/LIGHT.MATERIAL.MBIN'}
+				})
+			}
+		)
+	end
+	if lights then
+	-- handle table of lights
+		local _,val = next(lights)
+		if type(val) == 'table' then
+			local T = {}
+			for _,dat in pairs(lights) do
+				T[#T+1] = LightNode(dat)
+			end
+			return T
 		end
 	end
-	return ScNode(
-		light.name or 'n9',
-		'LIGHT',
-		{
-			ScTransform(light),
-			ScAttributes({
-				{'FOV',		 	light.fov or 360},
-				{'FALLOFF',	 	(light.f and light.f:sub(1,1) == 'l') and 'linear' or 'quadratic'},
-				{'FALLOFF_RATE',light.fr or 2},
-				{'INTENSITY',	light.i  or 30000},
-				{'COL_R',		light.r  or 1},
-				{'COL_G',		light.g  or 1},
-				{'COL_B',		light.b  or 1},
-				{'VOLUMETRIC',	0},
-				{'COOKIE_IDX',	-1},
-				{'MATERIAL',	'MATERIALS/LIGHT.MATERIAL.MBIN'}
-			})
-		}
-	)
+	return LightNode(lights)
 end
+
 --	wrapper: returns the exml text of ScLight
 function AddNewLight(l)
 	return ToExml(ScLight(l))
