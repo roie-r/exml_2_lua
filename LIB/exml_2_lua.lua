@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
----	EXML 2 LUA (VERSION: 0.82.2) ... by lMonk
+---	EXML 2 LUA (VERSION: 0.83.3) ... by lMonk
 ---	A tool for converting exml to an equivalent lua table and back again.
 ---	Functions for converting an exml file, or sections of one, to
 ---	 a lua table during run-time, or printing the exml as a lua script.
@@ -139,6 +139,8 @@ function PrintExmlAsLua(exml, indent, com)
 		else
 			-- closing the table
 			lvl = lvl - 1
+			-- trim the comma from the last object
+			tlua[#tlua] = tlua[#tlua]:gsub(',\n', '\n')
 			tlua:add({indent:rep(lvl), '},\n'})
 			table.remove(st_array)
 		end
@@ -160,4 +162,15 @@ function SceneNames(node, keys)
 		if k ~= 'META' then SceneNames(scn, keys) end
 	end
 	return keys
+end
+
+--	Load an mbin from the runtime processing temp folder
+function LoadRuntimeMbin(path)
+	path = '../MODBUILDER/_TEMP/DECOMPILED/'..path:gsub('.MBIN$', '.EXML')
+	f = io.open(path, 'r')
+	if f then
+		t = ToLua(f:read('*a'))
+		f:close()
+	end
+	return t or nil
 end

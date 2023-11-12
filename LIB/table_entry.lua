@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
----	Build reality tables entries (VERSION: 0.82.3) ... by lMonk
+---	Build reality tables entries (VERSION: 0.82.4) ... by lMonk
 ---	Add new items into technology, proc-tech, product & basebuilding
 ---	* Not ALL properties of the tables' classes are included, some which
 ---  can be safely left with their deafult value are omited.
@@ -79,7 +79,7 @@ function TechnologyEntry(tech)
 		BuildFullyCharged= true,
 		UsesAmmo		= tech.usesammo,								--	b
 		AmmoId			= tech.ammoid,									--	Id
-		PrimaryItem		= tech.primaryitem	or true,
+		PrimaryItem		= tech.primaryitem,								--	b
 		Upgrade			= tech.upgrade,									--	b
 		Core			= tech.core,									--	b
 		Procedural		= tech.istemplate,								--	not a bug
@@ -115,7 +115,7 @@ function TechnologyEntry(tech)
 		FragmentCost	= tech.fragmentcost	or 1,
 		TechShopRarity	= {
 			META	= {'TechShopRarity', 'GcTechnologyRarity.xml'},
-			TechnologyRarity = 'Normal',								--	E
+			TechnologyRarity = tech.rarity	or 'Normal',				--	Enum
 		},
 		WikiEnabled		= tech.wikienabled,								--	b
 		IsTemplate		= tech.istemplate								--	b
@@ -195,7 +195,7 @@ function ProductEntry(prod)
 		PinObjectiveTip				= prod.pinobjectivetip,			--	s
 		CookingIngredient			= prod.cookingingredient,		--	b
 		CookingValue				= prod.cookingvalue,			--	i
-		GoodForSelling				= prod.goodforselling or true,
+		GoodForSelling				= prod.goodforselling,			--	b
 		EggModifierIngredient		= prod.eggmodifier,				--	b
 		IsTechbox					= prod.istechbox,				--	b
 		CanSendToOtherPlayers		= prod.sendtoplayer				--	b
@@ -210,8 +210,8 @@ function ProcTechStatLevel(tsl)
 			META = {'Stat', 'GcStatsTypes.xml'},
 			StatsType = tsl.st,							--	Enum
 		},
-		ValueMin	= tsl.n,							--	f
-		ValueMax	= tsl.x,							--	f
+		ValueMin	= tsl.mn,							--	f
+		ValueMax	= tsl.mx,							--	f
 		WeightingCurve = {
 			META = {'WeightingCurve', 'GcWeightingCurve.xml'},
 			WeightingCurve = tsl.wc or 'NoWeighting',	--	Enum
@@ -287,7 +287,7 @@ function BaseBuildObjectEntry(bpart)
 		},
 		IsPlaceable					= bpart.isplaceable,			--	b
 		IsDecoration				= bpart.isdecoration,			--	b
-		BuildableOnPlanetBase 		= bpart.onplanetbase or true,	--	b
+		BuildableOnPlanetBase 		= bpart.onplanetbase,			--	b
 		BuildableOnFreighter		= bpart.onfreighter,			--	b
 		BuildableOnPlanet			= bpart.onplanet,				--	b
 		BuildableUnderwater			= true,
@@ -326,7 +326,7 @@ function BaseBuildObjectEntry(bpart)
 			Rate					= bpart.rate,					--	f
 			Storage					= bpart.storage					--	i
 		},
-		ShowGhosts					= bpart.showghosts or true,		--	b
+		ShowGhosts					= bpart.showghosts,				--	b
 		GhostsCountOverride			= 0,
 		SnappingDistanceOverride	= 0,
 		RegionSpawnLOD				= 1

@@ -12,7 +12,8 @@ mod_desc = [[
 ]]---------------------------------------------------------------------
 
 local new_rewards = {
-	{---	add new ship ---
+	{
+	---	add new ship ---
 		id			= 'MY_1ST_SHIP',
 		choice		= C_.ALL,
 		rewardlist	= {
@@ -36,7 +37,8 @@ local new_rewards = {
 			{id=U_.HG,	mn=100,	mx=160,	c=100,	f=R_Money}
 		}
 	},
-	{---	add new multitool ---
+	{
+	---	add new multitool ---
 		id			= 'MY_1ST_TOOL',
 		choice		= C_.ALL,
 		rewardlist	= {

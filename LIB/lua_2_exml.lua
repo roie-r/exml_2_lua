@@ -98,6 +98,7 @@ function Hex2Percent(hex, i)
 end
 
 --	@param h: hex color string in ARGB or RGB format (default is white)
+--	(not really the place for this, but I have nowhere else)
 function ColorFromHex(h)
 	local argb = {{'A', 1}, {'R', 1}, {'G', 1}, {'B', 1}}
 	for i=1, (#h / 2) do
@@ -160,3 +161,15 @@ function StringArray(t, name, size)
 	end
 	return T
 end
+
+--	Save the converted e2l table to the runtime processing temp folder
+-- function SaveRuntimeMbin(t, path)
+-- 	path = '../MODBUILDER/_TEMP/DECOMPILED/'..path:gsub('.MBIN$', '.EXML')
+-- 	f = io.open(path, 'w')
+-- 	if f then
+-- 		f:write(FileWrapping(t))
+-- 		f:close()
+-- 		return true
+-- 	end
+-- 	return false
+-- end

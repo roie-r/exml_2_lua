@@ -108,7 +108,7 @@ function ScLight(lights)
 		)
 	end
 	if lights then
-	-- handle table of lights
+	--  handle table of lights
 		local _,val = next(lights)
 		if type(val) == 'table' then
 			local T = {}
