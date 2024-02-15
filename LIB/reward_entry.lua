@@ -1,17 +1,17 @@
 -------------------------------------------------------------------------------
----	Construct reward table entries (VERSION: 0.82.3) ... by lMonk
+---	Construct reward table entries (VERSION: 0.82.4) ... by lMonk
 ---	* Requires lua_2_exml.lua !
 ---	* This script should be in [AMUMSS folder]\ModScript\ModHelperScripts\LIB
 -------------------------------------------------------------------------------
 
 ---	RewardChoice Enum
-C_={	ALL   =	'GiveAll',			ALL_S =	'GiveAllSilent',
+RC_={	ALL   =	'GiveAll',			ALL_S =	'GiveAllSilent',
 		ONE   =	'SelectAlways',		ONE_S =	'SelectAlwaysSilent',
 		WIN   =	'SelectFromSuccess',WIN_S =	'SelectFromSuccessSilent',
 		TRY   =	'TryEach',			TRY_ONE='TryFirst_ThenSelectAlways'
 }
 ---	ProceduralProductCategory Enum
-P_={	LOT='Loot',					SLV='Salvage',
+PC_={	LOT='Loot',					SLV='Salvage',
 		BIO='BioSample',			BNS='Bones',
 		FOS='Fossil',
 		FRH='FreighterTechHyp',		FRS='FreighterTechSpeed',
@@ -24,26 +24,26 @@ P_={	LOT='Loot',					SLV='Salvage',
 		SPB='SpaceBones',			SPH='SpaceHorror'
 }
 ---	InventoryType Enum
-I_={	PRD='Product',		SBT='Substance',	TCH='Technology' }
+IT_={	PRD='Product',		SBT='Substance',	TCH='Technology' }
 ---	AlienRace Enum
-A_={	TRD='Traders',		WAR='Warriors',		XPR='Explorers',
+AR_={	TRD='Traders',		WAR='Warriors',		XPR='Explorers',
 		RBT='Robots',		ATL='Atlas',		DPL='Diplomats',
 		XTC='Exotics',		NON='None',			BLD='Builders'
 }
 ---	Currency Enum
-U_={	UT='Units',			NN='Nanites',		HG='Specials' }
+CU_={	UT='Units',			NN='Nanites',		HG='Specials' }
 
 ---	MultiItemRewardType Enum
-M_={	PRD='Product',		SBT='Substance',	PRP='ProcProduct' }
+RM_={	PRD='Product',		SBT='Substance',	PRP='ProcProduct' }
 
 ---	Rarity Enum
-R_={	C='Common',			U='Uncommon',		R='Rare' }
+RT_={	C='Common',			U='Uncommon',		R='Rare' }
 
 ---	FrigateFlybyType Enum
-F_={	S='SingleShip',		G='AmbientGroup',	W='DeepSpaceCommon' }
+FT_={	S='SingleShip',		G='AmbientGroup',	W='DeepSpaceCommon' }
 
 function R_RewardTableEntry(rte)
-	-- allows to supply the reward list from outside
+	-- accepts an external list, if not found builds a new list
 	if not rte.list then
 		rte.list = {}
 		for _,rwd in pairs(rte.rewardlist) do
@@ -56,7 +56,7 @@ function R_RewardTableEntry(rte)
 		Id	 = rte.id,
 		List = {
 			META = {'List', 'GcRewardTableItemList.xml'},
-			RewardChoice	= rte.choice or C_.ONE,
+			RewardChoice	= rte.choice or RC_.ONE,
 			OverrideZeroSeed= rte.zeroseed,
 			ItemList		= rte.list
 		}
@@ -283,7 +283,7 @@ function R_FlyBy(item)
 		{
 			FlybyType = {
 				META	= {'FlybyType', 'GcFrigateFlybyType.xml'},
-				FrigateFlybyType = item.tp or F_.W
+				FrigateFlybyType = item.tp or FT_.W
 			},
 			AppearanceDelay	= item.tm or 3,
 			CameraShake		= 'FRG_FLYBY_PREP'
@@ -317,7 +317,7 @@ local function InventoryContainer(inventory)
 			FullyInstalled	= true,
 			Type			= {
 				META	= {'Type', 'GcInventoryType.xml'},
-				InventoryType	= itm.itype or I_.TCH
+				InventoryType	= itm.itype or IT_.TCH
 			},
 			Index	= {
 				META	= {'Index', 'GcInventoryIndex.xml'},
@@ -350,7 +350,7 @@ function R_Ship(item)
 			{
 				META	= {'ShipInventory', 'GcInventoryContainer.xml'},
 				Inventory	= InventoryContainer(item.inventory),
-				Class	= {
+				Class		= {
 					META	= {'Class', 'GcInventoryClass.xml'},
 					InventoryClass	= item.class and item.class:upper() or nil
 				},

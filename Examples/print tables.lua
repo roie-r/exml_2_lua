@@ -7,7 +7,7 @@ dofile('C:/AMUMSS/ModScript/ModHelperScripts/LIB/exml_2_lua.lua')
   run the string through PrintExmlAsLua, then print to output or save to file.
 ]]
 
-exml_sections = [[<Property name="Requirements">
+local exml_sections = [[<Property name="Requirements">
 	<Property value="GcTechnologyRequirement.xml">
 		<Property name="ID" value="STELLAR2"/>
 		<Property name="Type" value="GcInventoryType.xml">
@@ -24,7 +24,7 @@ exml_sections = [[<Property name="Requirements">
 	</Property>
 </Property>]]
 
-function GetTableFromFile(path)
+local function GetTableFromFile(path)
 	local f = io.open(path, 'r')
 	if f then
 		local s = PrintExmlAsLua(f:read('*a'))
@@ -33,11 +33,11 @@ function GetTableFromFile(path)
 	return s
 end
 
-function GetTableFromString(s)
+local function GetTableFromString(s)
 	return PrintExmlAsLua(s)
 end
 
-function WriteToFile(s, path)
+local function WriteToFile(s, path)
 	if s then
 		local f = io.open(path, 'w')
 		f:write(s)
@@ -49,7 +49,7 @@ end
 print( GetTableFromString(exml_sections) )
 
 -- or save the output as a ready-to-use script
-tbl_from_source = GetTableFromFile('C:/TEMP/GCCAMERAGLOBALS.GLOBAL.EXML')
+local tbl_from_source = GetTableFromFile('C:/TEMP/GCCAMERAGLOBALS.GLOBAL.EXML')
 WriteToFile(tbl_from_source, 'C:/TEMP/gccameraglobals.global.lua')
 
 print('saved script to file')

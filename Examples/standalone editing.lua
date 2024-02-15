@@ -4,7 +4,7 @@ dofile('C:/AMUMSS/ModScript/ModHelperScripts/LIB/exml_2_lua.lua')
 -----------------------------------------------------------------------------------------
 --	Simple examples of using ToLua & ToExml (ToExml is called by FileWrapping)
 --	as a stand-alone EXML editor (it's not a full modding tool).
---  * This is a bare-bones, no safeties, example - Not really a working mod script.
+--  * This is a bare-bones, no safeties, example - NOT a working mod script.
 -----------------------------------------------------------------------------------------
 
 function ReadExml(path)

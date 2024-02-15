@@ -6,7 +6,7 @@ dofile('LIB/table_entry.lua')
 NMS_MOD_DEFINITION_CONTAINER = {
 	MOD_FILENAME 		= '_TEST L2E add new tech.pak',
 	MOD_AUTHOR			= 'lMonk',
-	NMS_VERSION			= '4.45',
+	NMS_VERSION			= '4.50',
 	MODIFICATIONS 		= {{
 	MBIN_CHANGE_TABLE	= {
 	{
@@ -34,9 +34,9 @@ NMS_MOD_DEFINITION_CONTAINER = {
 						value			= 5,
 						fragmentcost	= 580,
 						requirements	= {
-							{id='LAVA1',			n=70,	tp=I_.SBT},
-							{id='HYDRALIC',			n=2,	tp=I_.PRD},
-							{id='TECH_COMP',		n=1,	tp=I_.PRD}
+							{id='LAVA1',			n=70,	tp=IT_.SBT},
+							{id='HYDRALIC',			n=2,	tp=IT_.PRD},
+							{id='TECH_COMP',		n=1,	tp=IT_.PRD}
 						},
 						basestat		= 'Vehicle_StunGun',
 						statbonuses		= {
@@ -59,9 +59,9 @@ NMS_MOD_DEFINITION_CONTAINER = {
 						value			= 7,
 						fragmentcost	= 520,
 						requirements	= {
-							{id='ALIEN_TECHBOX',	n=2,	tp=I_.PRD},
-							{id='MIRROR',			n=3,	tp=I_.PRD},
-							{id='LAUNCHSUB2',		n=120,	tp=I_.SBT}
+							{id='ALIEN_TECHBOX',	n=2,	tp=IT_.PRD},
+							{id='MIRROR',			n=3,	tp=IT_.PRD},
+							{id='LAUNCHSUB2',		n=120,	tp=IT_.SBT}
 						},
 						basestat		= 'Ship_PulseDrive',
 						statbonuses		= {
@@ -87,9 +87,9 @@ NMS_MOD_DEFINITION_CONTAINER = {
 						value			= 8,
 						fragmentcost	= 630,
 						requirements	= {
-							{id='ALIEN_TECHBOX',	n=1,	tp=I_.PRD},
-							{id='MIRROR',			n=2,	tp=I_.PRD},
-							{id='LAUNCHSUB2',		n=90,	tp=I_.SBT}
+							{id='ALIEN_TECHBOX',	n=1,	tp=IT_.PRD},
+							{id='MIRROR',			n=2,	tp=IT_.PRD},
+							{id='LAUNCHSUB2',		n=90,	tp=IT_.SBT}
 						},
 						basestat		= 'Ship_Armour_Shield',
 						statbonuses		= {

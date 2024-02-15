@@ -6,7 +6,7 @@ dofile('LIB/table_entry.lua')
 NMS_MOD_DEFINITION_CONTAINER = {
 	MOD_FILENAME 		= '_TEST L2E add new basepart.pak',
 	MOD_AUTHOR			= 'lMonk',
-	NMS_VERSION			= '4.45',
+	NMS_VERSION			= '4.50',
 	MODIFICATIONS 		= {{
 	MBIN_CHANGE_TABLE	= {
 	{
@@ -26,7 +26,7 @@ NMS_MOD_DEFINITION_CONTAINER = {
 					onfreighter		= true,
 					onplanet		= false,
 					groups			= {
-						{grp='DECORATION', sub='DECOLIGHTS'}
+						{group='DECORATION', subname='DECOLIGHTS'}
 					},
 					canpickup		= false,
 					editsterrain	= false,

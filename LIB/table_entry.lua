@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
----	Build reality tables entries (VERSION: 0.82.4) ... by lMonk
+---	Build reality tables entries (VERSION: 0.82.6) ... by lMonk
 ---	Add new items into technology, proc-tech, product & basebuilding
 ---	* Not ALL properties of the tables' classes are included, some which
 ---  can be safely left with their deafult value are omited.
@@ -8,7 +8,7 @@
 -------------------------------------------------------------------------------
 
 --	InventoryType Enum
-I_={ PRD='Product', SBT='Substance', TCH='Technology' }
+IT_={ PRD='Product', SBT='Substance', TCH='Technology' }
 
 --	build the requirements table for tech and products
 --	receives a table of {id, amount, product/substance} items
@@ -115,7 +115,7 @@ function TechnologyEntry(tech)
 		FragmentCost	= tech.fragmentcost	or 1,
 		TechShopRarity	= {
 			META	= {'TechShopRarity', 'GcTechnologyRarity.xml'},
-			TechnologyRarity = tech.rarity	or 'Normal',				--	Enum
+			TechnologyRarity = tech.rarity	or 'Normal',				--	E
 		},
 		WikiEnabled		= tech.wikienabled,								--	b
 		IsTemplate		= tech.istemplate								--	b
@@ -264,8 +264,8 @@ function BaseBuildObjectEntry(bpart)
 		for _,v in ipairs(t) do
 			T[#T+1] = {
 				META	= {'value', 'GcBaseBuildingEntryGroup.xml'},
-				Group			= v.grp,
-				SubGroupName	= v.sub
+				Group			= v.group,
+				SubGroupName	= v.subname
 			}
 		end
 		return T

@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
----	EXML 2 LUA (VERSION: 0.83.3) ... by lMonk
+---	EXML 2 LUA (VERSION: 0.83.2) ... by lMonk
 ---	A tool for converting exml to an equivalent lua table and back again.
 ---	Functions for converting an exml file, or sections of one, to
 ---	 a lua table during run-time, or printing the exml as a lua script.
@@ -164,13 +164,16 @@ function SceneNames(node, keys)
 	return keys
 end
 
---	Load an mbin from the runtime processing temp folder
+--	Load an mbin from the amumss runtime processing temp folder
+--	* The mbin must be loaded from a merged script that runs before the one calling LoadRuntimeMbin
 function LoadRuntimeMbin(path)
 	path = '../MODBUILDER/_TEMP/DECOMPILED/'..path:gsub('.MBIN$', '.EXML')
 	f = io.open(path, 'r')
 	if f then
 		t = ToLua(f:read('*a'))
 		f:close()
+		return t
+	else
+		print('LoadRuntimeMbin failed to load: '..path)
 	end
-	return t or nil
 end

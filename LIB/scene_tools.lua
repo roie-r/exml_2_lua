@@ -109,11 +109,11 @@ function ScLight(lights)
 	end
 	if lights then
 	--  handle table of lights
-		local _,val = next(lights)
-		if type(val) == 'table' then
+		local _,l = next(lights)
+		if type(l) == 'table' then
 			local T = {}
-			for _,dat in pairs(lights) do
-				T[#T+1] = LightNode(dat)
+			for _,lght in pairs(lights) do
+				T[#T+1] = LightNode(lght)
 			end
 			return T
 		end

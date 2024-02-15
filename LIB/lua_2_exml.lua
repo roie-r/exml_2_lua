@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
----	LUA 2 EXML (VERSION: 0.82.6) ... by lMonk
+---	LUA 2 EXML (VERSION: 0.82.8) ... by lMonk
 ---	A tool for converting exml to an equivalent lua table and back again.
 ---	Helper functions for color class, vector class and string arrays
 ---	* This script should be in [AMUMSS folder]\ModScript\ModHelperScripts\LIB
@@ -84,7 +84,7 @@ function FileWrapping(data, template)
 	-- table loaded from file
 	if data.META[1] == 'template' then
 		-- strip mock template
-		txt_data = ToExml(data):sub(#data.META[2] + 36, -12)
+		local txt_data = ToExml(data):sub(#data.META[2] + 36, -12)
 		return string.format(wrapper, data.META[2], txt_data)
 	else
 		return string.format(wrapper, template, ToExml(data))
@@ -161,15 +161,3 @@ function StringArray(t, name, size)
 	end
 	return T
 end
-
---	Save the converted e2l table to the runtime processing temp folder
--- function SaveRuntimeMbin(t, path)
--- 	path = '../MODBUILDER/_TEMP/DECOMPILED/'..path:gsub('.MBIN$', '.EXML')
--- 	f = io.open(path, 'w')
--- 	if f then
--- 		f:write(FileWrapping(t))
--- 		f:close()
--- 		return true
--- 	end
--- 	return false
--- end
