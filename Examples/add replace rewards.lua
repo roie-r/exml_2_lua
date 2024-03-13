@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
-dofile('LIB/lua_2_exml.lua')
+dofile('LIB/_lua_2_exml.lua')
 dofile('LIB/reward_entry.lua')
 -----------------------------------------------------------------------
 local mod_desc = [[
@@ -522,7 +522,7 @@ end
 NMS_MOD_DEFINITION_CONTAINER = {
 	MOD_FILENAME 		= '_TEST L2E add replace rewards.pak',
 	MOD_AUTHOR			= 'lMonk',
-	NMS_VERSION			= '4.50',
+	NMS_VERSION			= '4.52',
 	MOD_DESCRIPTION		= mod_desc,
 	MODIFICATIONS 		= {{
 	MBIN_CHANGE_TABLE	= {

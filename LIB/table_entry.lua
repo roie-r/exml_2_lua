@@ -1,9 +1,9 @@
 -------------------------------------------------------------------------------
----	Build reality tables entries (VERSION: 0.82.6) ... by lMonk
+---	Build reality tables entries (VERSION: 0.82.7) ... by lMonk
 ---	Add new items into technology, proc-tech, product & basebuilding
 ---	* Not ALL properties of the tables' classes are included, some which
 ---  can be safely left with their deafult value are omited.
----	* Requires lua_2_exml.lua !
+---	* Requires _lua_2_exml.lua !
 ---	* This script should be in [AMUMSS folder]\ModScript\ModHelperScripts\LIB
 -------------------------------------------------------------------------------
 
@@ -66,7 +66,7 @@ function TechnologyEntry(tech)
 			META	= {'Icon', 'TkTextureResource.xml'},
 			Filename	= tech.icon,
 		},
-		Colour			= ColorData(tech.color, 'Colour'),				--	rgb or hex
+		Colour			= ColorData(tech.color, 'Colour'),				--	rgb/hex
 		Level			= 1,
 		Chargeable		= tech.chargeable,								--	b
 		ChargeAmount	= tech.chargeamount	or 100,						--	i
@@ -108,8 +108,8 @@ function TechnologyEntry(tech)
 		)(),
 		RequiredTech	= tech.requiredtech,							--	Id
 		FocusLocator	= tech.focuslocator,							--	??
-		UpgradeColour	= ColorData(tech.upgradecolor, 'UpgradeColour'),--	rgb or hex
-		LinkColour		= ColorData(tech.linkcolor, 'LinkColour'),		--	rgb or hex
+		UpgradeColour	= ColorData(tech.upgradecolor, 'UpgradeColour'),--	rgb/hex
+		LinkColour		= ColorData(tech.linkcolor, 'LinkColour'),		--	rgb/hex
 		BaseValue		= 1,
 		RequiredRank	= tech.requiredrank	or 1,
 		FragmentCost	= tech.fragmentcost	or 1,
@@ -147,7 +147,7 @@ function ProductEntry(prod)
 			META	= {'Icon', 'TkTextureResource.xml'},
 			Filename= prod.icon
 		},
-		Colour		= ColorData(prod.color, 'Colour'),				--	rgb or hex
+		Colour		= ColorData(prod.color, 'Colour'),				--	rgb/hex
 		Category	= {
 			META	= {'Category', 'GcRealitySubstanceCategory.xml'},
 			SubstanceCategory	= prod.category	or 'Earth'			--	Enum
@@ -231,7 +231,7 @@ function ProcTechEntry(tech)
 		Group			= tech.namelower, -- not a bug
 		Subtitle		= tech.subtitle,
 		Description		= tech.description,
-		Colour			= ColorData(tech.color, 'Colour'),			--	rgb or hex
+		Colour			= ColorData(tech.color, 'Colour'),			--	rgb/hex
 		Quality			= tech.quality or 'Normal',					--	Enum
 		Category		= {
 			META = {'Category', 'GcProceduralTechnologyCategory.xml'},
@@ -258,18 +258,6 @@ end
 
 --	Build a new entry for BASEBUILDINGOBJECTSTABLE
 function BaseBuildObjectEntry(bpart)
-	local function getGroups(t)
-		if not t then return nil end
-		local T = {META = {'name', 'Groups'}}
-		for _,v in ipairs(t) do
-			T[#T+1] = {
-				META	= {'value', 'GcBaseBuildingEntryGroup.xml'},
-				Group			= v.group,
-				SubGroupName	= v.subname
-			}
-		end
-		return T
-	end
 	return {
 		META = {'value', 'GcBaseBuildingEntry.xml'},
 		ID							= bpart.id,
@@ -295,7 +283,20 @@ function BaseBuildObjectEntry(bpart)
 		CheckPlayerCollision		= false,
 		CanRotate3D					= true,
 		CanScale					= true,
-		Groups						= getGroups(bpart.groups),
+		Groups						= (
+			function()
+				if not bpart.groups then return nil end
+				local T = {META = {'name', 'Groups'}}
+				for _,v in ipairs(bpart.groups) do
+					T[#T+1] = {
+						META	= {'value', 'GcBaseBuildingEntryGroup.xml'},
+						Group			= v.group,
+						SubGroupName	= v.subname
+					}
+				end
+				return T
+			end			
+		)(),
 		StorageContainerIndex 		= -1,							--	i
 		CanChangeColour				= true,
 		CanChangeMaterial			= true,
@@ -335,32 +336,29 @@ end
 
 --	Build a new entry for BASEBUILDINGPARTSTABLE
 function BaseBuildPartEntry(bpart)
-	local function getStyleModels(t)
-		local T = {META = {'name', 'StyleModels'}}
-		for _,src in ipairs(t) do
-			T[#T+1] = {
-				META = {'value', 'GcBaseBuildingPartStyleModel.xml'},
-				Style = {
-					META = {'Style', 'GcBaseBuildingPartStyle.xml'},
-					Style = src.style or 'None',					--	Enum
-				},
-				Model = {
-					META = {'Model', 'TkModelResource.xml'},
-					Filename = src.act,
-				},
-				Inactive = {
-					META = {'Inactive', 'TkModelResource.xml'},
-					Filename = src.lod
-				}
-			}
-		end
-		return T
-	end
-	return {
+	local T = {
 		META	= {'value', 'GcBaseBuildingPart.xml'},
 		ID		= bpart.id,
-		StyleModels = getStyleModels(bpart.stylemodels)
+		StyleModels = {META = {'name', 'StyleModels'}}
 	}
+	for _,src in ipairs(bpart.stylemodels) do
+		T.StyleModels[#T.StyleModels+1] = {
+			META = {'value', 'GcBaseBuildingPartStyleModel.xml'},
+			Style = {
+				META = {'Style', 'GcBaseBuildingPartStyle.xml'},
+				Style = src.style or 'None',						--	Enum
+			},
+			Model = {
+				META = {'Model', 'TkModelResource.xml'},
+				Filename = src.act,
+			},
+			Inactive = {
+				META = {'Inactive', 'TkModelResource.xml'},
+				Filename = src.lod
+			}
+		}
+	end
+	return T
 end
 
 --	Build a new entry for NMS_REALITY_GCRECIPETABLE

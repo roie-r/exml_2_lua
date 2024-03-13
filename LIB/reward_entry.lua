@@ -1,6 +1,6 @@
 -------------------------------------------------------------------------------
----	Construct reward table entries (VERSION: 0.82.4) ... by lMonk
----	* Requires lua_2_exml.lua !
+---	Construct reward table entries (VERSION: 0.82.5) ... by lMonk
+---	* Requires _lua_2_exml.lua !
 ---	* This script should be in [AMUMSS folder]\ModScript\ModHelperScripts\LIB
 -------------------------------------------------------------------------------
 
@@ -137,6 +137,18 @@ function R_Product(item)
 		{
 			ID		= item.id,
 			Silent	= item.sl
+		}
+	)
+end
+
+function R_DisguisedProduct(item)
+	return R_TableItem(
+		item,
+		'GcRewardDisguisedProduct.xml',
+		{
+			ID						= item.id,
+			DisplayAs				= item.display,
+			UseDisplayIDWhenInShip	= true,
 		}
 	)
 end

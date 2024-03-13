@@ -1,5 +1,5 @@
 --------------------------------------------------------------------------------
-dofile('C:/AMUMSS/ModScript/ModHelperScripts/LIB/exml_2_lua.lua')
+dofile('C:/AMUMSS/ModScript/ModHelperScripts/LIB/_exml_2_lua.lua')
 --------------------------------------------------------------------------------
 --[[
   PrintExmlAsLua function is a tool for printing the exml-2-lua data.

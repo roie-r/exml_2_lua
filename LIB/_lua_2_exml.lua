@@ -52,7 +52,7 @@ function ToExml(class)
 		end
 		return table.concat(exml)
 	end
-
+	-------------------------------------------------------------------------
 	-- check the table level structure and meta placement
 	-- add the needed layer for the recursion and handle multiple tables
 	local klen = len2(class)
@@ -98,7 +98,7 @@ function Hex2Percent(hex, i)
 end
 
 --	@param h: hex color string in ARGB or RGB format (default is white)
---	(not really the place for this, but I have nowhere else)
+--	(not really the place for this one, but I have nowhere else)
 function ColorFromHex(h)
 	local argb = {{'A', 1}, {'R', 1}, {'G', 1}, {'B', 1}}
 	for i=1, (#h / 2) do

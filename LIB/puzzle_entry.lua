@@ -1,7 +1,7 @@
 -------------------------------------------------------------------------------
 ---	!! WORK IN PROGESS !! WORK IN PROGESS !! WORK IN PROGESS !!
----	Construct alien puzzle dialog entries (VERSION: 0.2) ... by lMonk
----	* Requires lua_2_exml.lua !
+---	Construct alien puzzle dialog entries (VERSION: 0.1) ... by lMonk
+---	* Requires _lua_2_exml.lua !
 ---	* This script should be in [AMUMSS folder]\ModScript\ModHelperScripts\LIB
 -------------------------------------------------------------------------------
 
@@ -22,7 +22,7 @@ function PuzzleOption(option)
 		Rewards					= StringArray(option.rewards, 'Rewards', 10),
 		Mood = {
 			META = {'Mood','GcAlienMood.xml'},
-			Mood				= option.mood or 'Neutral',		-- Enum
+			Mood				= option.mood,					-- Enum
 		},
 		Prop = {
 			META = {'Prop','GcNPCPropType.xml'},
