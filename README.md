@@ -1,15 +1,16 @@
 # EXML 2 LUA
-A system for converting EXML - a No Mans Sky data set - to a lua table and back.
-The tool handles full files or specific sections. It can load the data to memory directly or write the data as a ready-to-use script to a text file.
+A system for converting EXML - the No Man's Sky game file format - to a lua table and back.
+The tool handles full files or specific sections. It can load the data to memory directly or write it to a text file as a ready-to-use lua script.
 ## Exml-as-lua table format
-Every section in its own table, and the section has a META table describing its attributes. The first item in a meta table is `name`, `value`, or the named attribute. A string looks like this:
+Every section in its own table, and each section has a META table describing its attributes. The first item in a meta table is `name`, `value`, or the named attribute.
+Using these rules, the following describes a string class section:
 ```lua
 {
     META  = {"value", "NMSString0x20.xml"},
     Value = [[my text string]]
 }
 ```
-A named colour class looks like this:
+A colour class:
 ```lua
 {
     META = {"LinkColour", "Colour.xml"},
@@ -19,7 +20,7 @@ A named colour class looks like this:
     A    = 1
 }
 ```
-Technology/product requirement, which contains a table for inventory type, looks like this:
+Technology/product requirement, containing a sub-section for inventory type, class:
 ```lua
 {
     META   = {"value", "GcTechnologyRequirement.xml"},
@@ -31,4 +32,4 @@ Technology/product requirement, which contains a table for inventory type, looks
     }
 }
 ```
-Using this format allows to describe any EXML data.
+This format can describe any EXML data.
