@@ -10,7 +10,7 @@
 --	{
 --	  name	= scene node name (NameHash is calculated automatically)
 --	  stype	= scene node type
---	  form	= [optional] Transform data. a list of 9 ordred values or keyed values,
+--	  form	= [optional] Transform data. a list of 9 ordered values or keyed values,
 --			  but NOT a combination of the two!
 --	  attr	= [optional] Attributes table of {name, value} pairs
 --	  child	= [optional] Children table for ScNode tables

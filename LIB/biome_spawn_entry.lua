@@ -44,7 +44,7 @@ function ObjectSpawnEntry(osd)
 						}
 					end
 					T.Samplers[#T.Samplers+1] = tsam
-				end				
+				end
 				return T
 			end
 			)()
@@ -98,8 +98,8 @@ function ObjectSpawnEntry(osd)
 					FlatDensity				= osdv.flatdensity,				-- f
 					SlopeDensity			= osdv.slopedensity,			-- f
 					SlopeMultiplier			= osdv.slopemultiplier,			-- f
-					MaxRegionRadius			= osdv.maxregion or 9999,		-- i
-					MaxImposterRadius		= osdv.maximposter or 10,		-- i
+					MaxRegionRadius			= osdv.maxregion or 10,			-- i
+					MaxImposterRadius		= osdv.maximposter or 88,		-- i
 					FadeOutStartDistance	= osdv.fadeoutstart or 9999,	-- f
 					FadeOutEndDistance		= osdv.fadeoutend or 9999,		-- f
 					FadeOutOffsetDistance	= osdv.fadeoutoffset or 0,		-- f

@@ -27,14 +27,14 @@ local exml_sections = [[<Property name="Requirements">
 local function GetTableFromFile(path)
 	local f = io.open(path, 'r')
 	if f then
-		local s = PrintExmlAsLua(f:read('*a'))
+		local s = PrintExmlAsLua({exml=f:read('*a'), indent='  '})
 		f:close()
 	end
 	return s
 end
 
 local function GetTableFromString(s)
-	return PrintExmlAsLua(s)
+	return PrintExmlAsLua({exml=s, com='"'})
 end
 
 local function WriteToFile(s, path)

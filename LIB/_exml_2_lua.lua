@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
----	EXML 2 LUA (VERSION: 0.83.2) ... by lMonk
+---	EXML 2 LUA (VERSION: 0.83.3) ... by lMonk
 ---	A tool for converting exml to an equivalent lua table and back again.
 ---	Functions for converting an exml file, or sections of one, to
 ---	 a lua table during run-time, or printing the exml as a lua script.
@@ -83,9 +83,15 @@ end
 
 --	Converts EXML to a pretty-printed, ready-to-work, lua script.
 --	When parsing a full file, the header is stripped and a mock template is added
---	@param exml: requires complete EXML sections in the nomral format
+--	@param vars: a table containing the required properties
+--	{
+--	  exml	 = complete EXML sections in the nomral format or a full file
+--	  name	 = the table's variable name..	Default: EXML_SOURCE
+--	  indent = code indentation..			Default: [\t] (tab)
+--	  com	 = ['] or ["]..					Default: [']
+--	}
 --	* Does not handle commented lines!
-function PrintExmlAsLua(exml, indent, com)
+function PrintExmlAsLua(vars)
 	local function eval(val)
 		if #val == 0 then
 			return 'nil'
@@ -100,17 +106,17 @@ function PrintExmlAsLua(exml, indent, com)
 	local tag	= [[<[/]?Property[ ]?(.-[/]?)>]]
 	local tag1	= [[([%w_]+)="(.+)"[ ]?([/]?)]]
 	local tag2	= [[name="([%w_]+)" value="(.*)"[ ]?([/]?)]]
-	indent		= indent or '\t'
-	com			= com or [[']]
+	local ind	= vars.indent or '\t'
+	local com	= vars.com or [[']]
 	local lvl	= 0
-	local tlua	= {'exml_source'}
+	local tlua	= {(vars.name or 'EXML_SOURCE')}
 	function tlua:add(t)
 		for _,v in ipairs(t) do self[#self+1] = v end
 	end
 	--	array=true when processing an ordered (name) section
 	local array	= false
 	local st_array = {false}
-	for prop in UnWrap(exml):gmatch(tag) do
+	for prop in UnWrap(vars.exml):gmatch(tag) do
 		_,eql = prop:gsub('=', '')
 		if eql > 0 then
 			-- choose tag by the count of [=] in a property
@@ -120,20 +126,20 @@ function PrintExmlAsLua(exml, indent, com)
 				array = att == 'name'
 				-- look up if parent is an array
 				if st_array[#st_array] or att == 'value' then
-					tlua:add({indent:rep(lvl), '{\n'})
+					tlua:add({ind:rep(lvl), '{\n'})
 				else
-					tlua:add({indent:rep(lvl), (att == 'name' and val or att), ' = ', '{\n'})
+					tlua:add({ind:rep(lvl), (att == 'name' and val or att), ' = ', '{\n'})
 				end
 				table.insert(st_array, att == 'name')
 				lvl = lvl + 1
-				tlua:add({indent:rep(lvl), 'META = {', com, att, com, ',', com, val, com, '},\n'})
+				tlua:add({ind:rep(lvl), 'META = {', com, att, com, ',', com, val, com, '},\n'})
 			else
 				-- value property or properties in an array
 				if att == 'value' or array then
-					tlua:add({indent:rep(lvl), '{', att, ' = ', com, val, com, '},\n'})
+					tlua:add({ind:rep(lvl), '{', att, ' = ', com, val, com, '},\n'})
 				-- regular property (skips stubs)
 				elseif att ~= 'name' then
-					tlua:add({indent:rep(lvl), att, ' = ', eval(val), ',\n'})
+					tlua:add({ind:rep(lvl), att, ' = ', eval(val), ',\n'})
 				end
 			end
 		else
@@ -141,7 +147,7 @@ function PrintExmlAsLua(exml, indent, com)
 			lvl = lvl - 1
 			-- trim the comma from the last object
 			tlua[#tlua] = tlua[#tlua]:gsub(',\n', '\n')
-			tlua:add({indent:rep(lvl), '},\n'})
+			tlua:add({ind:rep(lvl), '},\n'})
 			table.remove(st_array)
 		end
 	end
