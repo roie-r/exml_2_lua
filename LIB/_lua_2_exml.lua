@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
----	LUA 2 EXML (VERSION: 0.82.8) ... by lMonk
+---	LUA 2 EXML (VERSION: 0.83.1) ... by lMonk
 ---	A tool for converting exml to an equivalent lua table and back again.
 ---	Helper functions for color class, vector class and string arrays
 ---	* This script should be in [AMUMSS folder]\ModScript\ModHelperScripts\LIB
@@ -75,7 +75,7 @@ end
 --	@param data: a lua2exml formatted table
 --	@param template: an nms file template string
 function FileWrapping(data, template)
-	local wrapper = [[<?xml version="1.0" encoding="utf-8"?><Data template="%s">%s</Data>]]
+	local wrapper = '<Data template="%s">%s</Data>'
 	if type(data) == 'string' then
 		return string.format(wrapper, template, data)
 	end
@@ -117,6 +117,9 @@ function ColorData(T, name)
 		for i=1, (#T / 2) do
 			argb[#T > 6 and i or i + 1] = Hex2Percent(T, i)
 		end
+	elseif T == 0 then
+		-- 'real' black
+		argb = {1, -1, -1, -1}
 	else
 		argb = T or {}
 	end

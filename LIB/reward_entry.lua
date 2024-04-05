@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
----	Construct reward table entries (VERSION: 0.82.5) ... by lMonk
+---	Construct reward table entries (VERSION: 0.82.6) ... by lMonk
 ---	* Requires _lua_2_exml.lua !
 ---	* This script should be in [AMUMSS folder]\ModScript\ModHelperScripts\LIB
 -------------------------------------------------------------------------------
@@ -303,6 +303,17 @@ function R_FlyBy(item)
 	)
 end
 
+function R_OpenPage(item)
+	return R_TableItem(
+		item,
+		'GcRewardOpenPage.xml',
+		{
+			PageToOpen				= item.id,
+			ReinteractWhenComplete	= item.Reinteract
+		}
+	)
+end
+
 function R_UnlockTree(item)
 	return R_TableItem(
 		item,
@@ -381,12 +392,18 @@ function R_Ship(item)
 					}
 				}
 			},
+			-- CostAmount	 = 10,
+			-- CostCurrency = {
+				-- META	= {'CostCurrency', 'GcCurrency.xml'},
+				-- Currency	= CU_.NN
+			-- },
 			ShipType	= {
 				META	= {'ShipType', 'GcSpaceshipClasses.xml'},
 				ShipClass	= item.modeltype
 			},
 			NameOverride = item.name,
-			IsRewardShip = true
+			IsRewardShip = true,
+			IsGift		 = true
 		}
 	)
 end

@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
----	EXML 2 LUA (VERSION: 0.83.3) ... by lMonk
+---	EXML 2 LUA (VERSION: 0.83.4) ... by lMonk
 ---	A tool for converting exml to an equivalent lua table and back again.
 ---	Functions for converting an exml file, or sections of one, to
 ---	 a lua table during run-time, or printing the exml as a lua script.
@@ -182,4 +182,22 @@ function LoadRuntimeMbin(path)
 	else
 		print('LoadRuntimeMbin failed to load: '..path)
 	end
+end
+
+-- A Union All function for an ordered array of tables
+-- Returns a copy by-value. Repeating keys's values are overwritten.
+--	@param arr: A table of tables.
+function UnionTables(arr)
+	local merged = {}
+	for _, tbl in ipairs(arr) do
+		for k, val in pairs(tbl) do
+			if type(val) == 'table' then
+				merged[k] = merged[k] or {}
+				merged[k] = UnionTables({merged[k], val})
+			else
+				merged[k] = val
+			end
+		end
+	end
+	return merged
 end
