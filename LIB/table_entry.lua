@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
----	Build reality tables entries (VERSION: 0.82.8) ... by lMonk
+---	Build reality tables entries (VERSION: 0.83.0) ... by lMonk
 ---	Add new items into technology, proc-tech, product & basebuilding
 ---	* Not ALL properties of the tables' classes are included, some which
 ---  can be safely left with their deafult value are omited.
@@ -51,14 +51,8 @@ function TechnologyEntry(tech)
 		Group			= tech.group,
 		Name			= tech.name,
 		NameLower		= tech.namelower,
-		Subtitle		= {
-			META	= {'Subtitle', 'VariableSizeString.xml'},
-			Value		= tech.subtitle
-		},
-		Description		= {
-			META	= {'Description', 'VariableSizeString.xml'},
-			Value		= tech.description
-		},
+		Subtitle		= tech.subtitle,
+		Description		= tech.description,
 		Teach			= true,
 		HintStart		= tech.hintstart,
 		HintEnd			= tech.hintend,
@@ -130,14 +124,8 @@ function ProductEntry(prod)
 		ID			= prod.id,
 		Name		= prod.name,
 		NameLower	= prod.namelower,
-		Subtitle	= {
-			META	= {'Subtitle', 'VariableSizeString.xml'},
-			Value	= prod.subtitle
-		},
-		Description	= {
-			META	= {'Description', 'VariableSizeString.xml'},
-			Value	= prod.description
-		},
+		Subtitle	= prod.subtitle,
+		Description	= prod.description,
 		DebrisFile	= {
 			META	= {'DebrisFile', 'TkModelResource.xml'},
 			Filename= 'MODELS/EFFECTS/DEBRIS/TERRAINDEBRIS/TERRAINDEBRIS4.SCENE.MBIN'
@@ -295,7 +283,7 @@ function BaseBuildObjectEntry(bpart)
 					}
 				end
 				return T
-			end
+			end			
 		)(),
 		StorageContainerIndex 		= -1,							--	i
 		CanChangeColour				= true,

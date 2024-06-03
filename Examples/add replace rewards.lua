@@ -21,17 +21,46 @@ local new_rewards = {
 				f			= R_Ship,
 				c			= 100,
 				name		= 'Scrap Bucket',
-				filename	= 'MODELS/COMMON/SPACECRAFT/SHUTTLE/SHUTTLE_PROC.SCENE.MBIN',
+				filename	= 'MODELS/COMMON/SPACECRAFT/DROPSHIP/DROPSHIP_PROC.SCENE.MBIN',
 				seed		= '0x1015EED',
 				slots		= 42,
 				class		= 'A',
-				shiptype	= 'Shuttle',
+				shiptype	= 'Dropship',
 				inventory	= {
-					{id='HYPERDRIVE',	amount=true},
-					{id='LAUNCHER',		amount=true},
-					{id='SHIPSHIELD',	amount=true},
-					{id='SHIPJUMP1',	amount=true},
-					{id='SHIPGUN1'}
+				--	Tech Id			Has Charge
+					HYPERDRIVE		= true,
+					LAUNCHER		= true,
+					SHIPSHIELD		= true,
+					SHIPJUMP1		= true,
+					PHOTONIX_CORE	= false,
+					SHIPGUN1		= false
+				},
+				custom		= {
+					shipparts	= {
+						'DROPS_COCKS13',
+						'DROPS_ENGIS13',
+						'DROPS_WINGS13'
+					},
+					paletteid	= 'SHIP_METALLIC',
+					colors		= {
+						{
+							palette	= 'Paint',
+							alt		= 'Primary',
+							rgb		= 'FF34AB30'
+						},
+						{
+							palette	= 'Undercoat',
+							alt		= 'Primary',
+							rgb		= 'FF34AB50'
+						},
+						{
+							palette	= 'Paint',
+							alt		= 'Alternative3',
+							rgb		= 'FFA5A5A5'
+						},
+					},
+					texturegroup= 'SHIP_FIGHT',
+					texturename	= 'METALBOLT'
 				}
 			},
 			{id=CU_.HG,	mn=100,	mx=160,	c=100,	f=R_Money}
@@ -52,10 +81,12 @@ local new_rewards = {
 				class		= 'A',
 				weapontype	= 'Royal',
 				inventory	= {
-					{id='LASER',	amount=true},
-					{id='BOLT'},
-					{id='SCAN1'},
-					{id='SCANBINOC1'}
+				--	Tech Id			Has Charge
+					LASER			= true,
+					TERRAINEDITOR	= true,
+					BOLT			= false,
+					SCAN1			= false,
+					SCANBINOC1		= false
 				}
 			},
 			{id=CU_.HG,	mn=100,	mx=160,	c=100,	f=R_Money}
@@ -361,15 +392,15 @@ local new_rewards = {
 		id			= 'PIRATELOOT_EASY',
 		choice		= RC_.ONE_S,
 		rewardlist	= {
-			--id					Min		Max		%		function
-			{id='SHIPCHARGE',				x=1,	c=80,	f=R_Product},
-			{id='TRA_ALLOY1',		n=1,	x=2,	c=40,	f=R_Product},
-			{id='TRA_ENERGY1',		n=1,	x=2,	c=40,	f=R_Product},
-			{id='TRA_EXOTICS1',		n=1,	x=2,	c=40,	f=R_Product},
-			{id='ILLEGAL_PROD3',	n=1,	x=2,	c=40,	f=R_Product},
-			{id=PC_.DBI,				r=RT_.C,			c=30,	f=R_Procedural},
-			{id=PC_.DTC,				r=RT_.C,			c=30,	f=R_Procedural},
-			{id=CU_.UT,				n=18000,x=30000,c=80,	f=R_Money}
+			--id					Min			Max			%		function
+			{id='SHIPCHARGE',					x=1,		c=80,	f=R_Product},
+			{id='TRA_ALLOY1',		n=1,		x=2,		c=40,	f=R_Product},
+			{id='TRA_ENERGY1',		n=1,		x=2,		c=40,	f=R_Product},
+			{id='TRA_EXOTICS1',		n=1,		x=2,		c=40,	f=R_Product},
+			{id='ILLEGAL_PROD3',	n=1,		x=2,		c=40,	f=R_Product},
+			{id=PC_.DBI,			r=RT_.C,				c=30,	f=R_Procedural},
+			{id=PC_.DTC,			r=RT_.C,				c=30,	f=R_Procedural},
+			{id=CU_.UT,				n=18000,	x=30000,	c=80,	f=R_Money}
 		}
 	},
 	{--- pirate attack :: easy ---
@@ -382,8 +413,8 @@ local new_rewards = {
 			{id='TRA_ENERGY1',		mn=1,		mx=2,		c=40,	f=R_Product},
 			{id='TRA_EXOTICS1',		mn=1,		mx=2,		c=40,	f=R_Product},
 			{id='ILLEGAL_PROD3',	mn=1,		mx=2,		c=40,	f=R_Product},
-			{id=PC_.DBI,				rt=RT_.C,				c=30,	f=R_Procedural},
-			{id=PC_.DTC,				rt=RT_.C,				c=30,	f=R_Procedural},
+			{id=PC_.DBI,			rt=RT_.C,				c=30,	f=R_Procedural},
+			{id=PC_.DTC,			rt=RT_.C,				c=30,	f=R_Procedural},
 			{id=CU_.UT,				mn=18000,	mx=30000,	c=30,	f=R_Money}
 		}
 	},
@@ -404,8 +435,8 @@ local new_rewards = {
 			{id='TRA_MINERALS3',	mn=1,		mx=3,		c=40,	f=R_Product},
 			{id='ILLEGAL_PROD4',	mn=1,		mx=2,		c=30,	f=R_Product},
 			{id='AF_METAL',			mn=100,		mx=130,		c=30,	f=R_Substance},
-			{id=PC_.DBI,				ort=true,	rt=RT_.U,	c=30,	f=R_Procedural},
-			{id=PC_.DTC,				ort=true,	rt=RT_.U,	c=30,	f=R_Procedural},
+			{id=PC_.DBI,			ort=true,	rt=RT_.U,	c=30,	f=R_Procedural},
+			{id=PC_.DTC,			ort=true,	rt=RT_.U,	c=30,	f=R_Procedural},
 			{id=CU_.NN,				mn=100,		mx=250,		c=20,	f=R_Money}
 		}
 	},
@@ -429,8 +460,8 @@ local new_rewards = {
 			{id='TRA_TECH4',		mn=1,		mx=3,		c=50,	f=R_Product},
 			{id='ILLEGAL_PROD5',	mn=1,		mx=2,		c=30,	f=R_Product},
 			{id='GEODE_RARE',					mx=1,		c=20,	f=R_Product},
-			{id=PC_.DBI,				ort=true,	rt=RT_.U,	c=20,	f=R_Procedural},
-			{id=PC_.DTC,				ort=true,	rt=RT_.U,	c=20,	f=R_Procedural},
+			{id=PC_.DBI,			ort=true,	rt=RT_.U,	c=20,	f=R_Procedural},
+			{id=PC_.DTC,			ort=true,	rt=RT_.U,	c=20,	f=R_Procedural},
 			{id=CU_.NN,				mn=300,		mx=400,		c=20,	f=R_Money}
 		}
 	},
@@ -445,8 +476,8 @@ local new_rewards = {
 			{id='ILLEGAL_PROD2',	mn=1,		mx=4,		c=30,	f=R_Product},
 			{id='WATER2',			mn=260,		mx=280,		c=30,	f=R_Substance},
 			{id='GEODE_RARE',					mx=1,		c=20,	f=R_Product},
-			{id=PC_.DBI,				ort=true,	rt=RT_.U,	c=20,	f=R_Procedural},
-			{id=PC_.DTC,				ort=true,	rt=RT_.U,	c=20,	f=R_Procedural},
+			{id=PC_.DBI,			ort=true,	rt=RT_.U,	c=20,	f=R_Procedural},
+			{id=PC_.DTC,			ort=true,	rt=RT_.U,	c=20,	f=R_Procedural},
 			{id=CU_.UT,				mn=25000,	mx=35000,	c=20,	f=R_Money}
 		}
 	},
@@ -455,18 +486,18 @@ local new_rewards = {
 		choice		= RC_.ALL,
 		replacement	= true,
 		rewardlist	= {
-			{id='jetboost',			tm=5,	pw=1.25,	c=100,	f=R_Jetboost}
+			{id='jetboost',			tm=5,	pw=1.25,		c=100,	f=R_Jetboost}
 		}
 	},
 	{--- health + shield + stamina + hazard + jetboost = balatant cheat! ---
 		id			= 'HEALTH_MAJOR',
 		choice		= RC_.ALL_S,
 		rewardlist	= {
-			{id='health',			mn=3,	mx=5,		c=100,	f=R_Health},
-			{id='shield',			mn=70,	mx=100,		c=100,	f=R_Shield},
-			{id='hazard',			hz=80,				c=100,	f=R_Hazard},
-			{id='stamina',			tm=6,				c=100,	f=R_Stamina},
-			{id='jetboost',			tm=4,	pw=1.2,		c=100,	f=R_Jetboost}
+			{id='health',			mn=3,	mx=5,			c=100,	f=R_Health},
+			{id='shield',			mn=70,	mx=100,			c=100,	f=R_Shield},
+			{id='hazard',			hz=80,					c=100,	f=R_Hazard},
+			{id='stamina',			tm=6,					c=100,	f=R_Stamina},
+			{id='jetboost',			tm=4,	pw=1.2,			c=100,	f=R_Jetboost}
 		}
 	},
 	{--- more tests ---
@@ -480,8 +511,8 @@ local new_rewards = {
 			{id='no_sentinels',		tm=20,					c=95,	f=R_NoSentinels},
 			{id='ROGUE_HAZBOX',					mx=1,		c=10,	f=R_Product},
 			{id='UT_SHIPLAS',					mx=1,		c=10,	f=R_Product},
-			{id=PC_.FOS,				rt=RT_.R,				c=10,	f=R_Procedural},
-			{id=PC_.SPH,				rt=RT_.U,				c=10,	f=R_Procedural},
+			{id=PC_.FOS,				rt=RT_.R,			c=10,	f=R_Procedural},
+			{id=PC_.SPH,				rt=RT_.U,			c=10,	f=R_Procedural},
 			{id='SCRAP_WEAP',					mx=1,		c=10,	f=R_Product},
 			{id='STEALTH',			sl=true,				c=10,	f=R_Technology},
 			{id='ACCESS1',			sl=true,				c=10,	f=R_ProductRecipe},
@@ -522,8 +553,9 @@ end
 NMS_MOD_DEFINITION_CONTAINER = {
 	MOD_FILENAME 		= '_TEST L2E add replace rewards.pak',
 	MOD_AUTHOR			= 'lMonk',
-	NMS_VERSION			= '4.52',
+	NMS_VERSION			= '4.71',
 	MOD_DESCRIPTION		= mod_desc,
+	AMUMSS_SUPPRESS_MSG	= 'MIXED_TABLE',
 	MODIFICATIONS 		= {{
 	MBIN_CHANGE_TABLE	= {
 	{

@@ -6,7 +6,7 @@ dofile('LIB/table_entry.lua')
 NMS_MOD_DEFINITION_CONTAINER = {
 	MOD_FILENAME 		= '_TEST L2E add new tech.pak',
 	MOD_AUTHOR			= 'lMonk',
-	NMS_VERSION			= '4.52',
+	NMS_VERSION			= '4.71',
 	MODIFICATIONS 		= {{
 	MBIN_CHANGE_TABLE	= {
 	{

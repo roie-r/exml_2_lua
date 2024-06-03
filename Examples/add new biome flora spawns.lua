@@ -6,7 +6,7 @@ dofile('LIB/biome_spawn_entry.lua')
 NMS_MOD_DEFINITION_CONTAINER = {
 	MOD_FILENAME 		= '_TEST L2E add new biome spawn.pak',
 	MOD_AUTHOR			= 'lMonk',
-	NMS_VERSION			= '4.52',
+	NMS_VERSION			= '4.71',
 	MODIFICATIONS 		= {{
 	MBIN_CHANGE_TABLE	= {
 	{

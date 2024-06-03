@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
----	Construct reward table entries (VERSION: 0.82.7) ... by lMonk
+---	Construct reward table entries (VERSION: 0.83.0) ... by lMonk
 ---	* Requires _lua_2_exml.lua !
 ---	* This script should be in [AMUMSS folder]\ModScript\ModHelperScripts\LIB
 -------------------------------------------------------------------------------
@@ -198,7 +198,7 @@ function R_Word(item)
 		{
 			Race = {
 				META		= {'Race', 'GcAlienRace.xml'},
-				AlienRace	= item.id
+				AlienRace	= item.ar
 			}
 		}
 	)
@@ -327,20 +327,47 @@ function R_UnlockTree(item)
 	)
 end
 
+function R_UnlockSeasonal(item)
+	return R_TableItem(
+		item,
+		'GcRewardUnlockSeasonReward.xml',
+		{
+			ProductID				= item.id,
+			Silent					= item.sl,
+			UseSpecialFormatting	= item.frt,
+			MarkAsClaimedInShop		= item.mc or true,
+			UniqueInventoryItem		= item.unq
+		}
+	)
+end
+
+function R_Special(item)
+	return R_TableItem(
+		item,
+		'GcRewardSpecificSpecial.xml',
+		{
+			ProductID				= item.id,
+			ShowSpecialProductPopup	= item.pop,
+			UseSpecialFormatting	= item.frt,
+			HideInSeasonRewards		= item.hid
+		}
+	)
+end
+
 --	for tech inventory only. used by ship & tool rewards
 local function InventoryContainer(inventory)
 	if not inventory then return nil end
 	local T = {META = {'name', 'Slots'}}
-	for _,itm in ipairs(inventory) do
+	for id, chrg in pairs(inventory) do
 		T[#T+1] = {
 			META	= {'value', 'GcInventoryElement.xml'},
-			Id				= itm.id,
-			Amount			= itm.itype and itm.amount or (itm.amount and 1000 or -1),
-			MaxAmount		= itm.amount and 10000 or 100,
+			Id				= id,
+			Amount			= chrg and 10000 or -1,
+			MaxAmount		= chrg and 10000 or 100,
 			FullyInstalled	= true,
 			Type			= {
 				META	= {'Type', 'GcInventoryType.xml'},
-				InventoryType	= itm.itype or IT_.TCH
+				InventoryType	= IT_.TCH
 			},
 			Index	= {
 				META	= {'Index', 'GcInventoryIndex.xml'},
@@ -370,7 +397,7 @@ function R_Ship(item)
 				META	= {'ShipLayout', 'GcInventoryLayout.xml'},
 				Slots	= item.slots or 50
 			},
-			{
+			ShipInventory = {
 				META	= {'ShipInventory', 'GcInventoryContainer.xml'},
 				Inventory	= InventoryContainer(item.inventory),
 				Class		= {
@@ -392,6 +419,37 @@ function R_Ship(item)
 					}
 				}
 			},
+			Customisation = item.custom and {
+				META = {'Customisation','GcCharacterCustomisationData.xml'},
+				DescriptorGroups	= StringArray(item.custom.shipparts, 'DescriptorGroups'),
+				PaletteID			= item.custom.paletteid,
+				Colours				= (
+					function()
+						local T = {META = {'name','Colours'}}
+						for _,col in ipairs(item.custom.colors) do
+							T[#T+1] = {
+								META	= {'value','GcCharacterCustomisationColourData.xml'},
+								Palette	= {
+									META	= {'Palette','TkPaletteTexture.xml'},
+									Palette		= col.palette,
+									ColourAlt	= col.alt
+								},
+								Colour	= ColorData(col.rgb, 'Colour')
+							}
+						end
+						return T
+					end
+				)(),
+				TextureOptions		= {
+					META = {'name','TextureOptions'},
+					{
+						META = {'value','GcCharacterCustomisationTextureOptionData.xml'},
+						TextureOptionGroupName	= item.custom.texturegroup,
+						TextureOptionName		= item.custom.texturename
+					}
+				},
+				Scale	= 1
+			} or nil,
 			-- CostAmount	 = 10,
 			-- CostCurrency = {
 				-- META	= {'CostCurrency', 'GcCurrency.xml'},

@@ -166,20 +166,6 @@ function SceneNames(node, keys)
 	return keys
 end
 
---	Load an mbin from the amumss runtime processing temp folder
---	* The mbin must be loaded from a merged script that runs before the one calling LoadRuntimeMbin
-function LoadRuntimeMbin(path)
-	path = '../MODBUILDER/_TEMP/DECOMPILED/'..path:gsub('.MBIN$', '.EXML')
-	f = io.open(path, 'r')
-	if f then
-		t = ToLua(f:read('*a'))
-		f:close()
-		return t
-	else
-		print('LoadRuntimeMbin failed to load: '..path)
-	end
-end
-
 -- A Union All function for an ordered array of tables
 -- Returns a copy by-value. Repeating keys's values are overwritten.
 --	@param arr: A table of tables.
@@ -196,4 +182,18 @@ function UnionTables(arr)
 		end
 	end
 	return merged
+end
+
+--	Load an mbin from the amumss runtime processing temp folder
+--	* The mbin must be loaded from a merged script that runs before the one calling LoadRuntimeMbin
+function LoadRuntimeMbin(path)
+	path = '../MODBUILDER/_TEMP/DECOMPILED/'..path:gsub('.MBIN$', '.EXML')
+	f = io.open(path, 'r')
+	if f then
+		t = ToLua(f:read('*a'))
+		f:close()
+		return t
+	else
+		print([[!/^\_! LoadRuntimeMbin failed to load: ]]..path)
+	end
 end

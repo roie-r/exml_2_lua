@@ -38,7 +38,7 @@ function ToExml(class)
 					end
 					exml:add({exml_r(cls), '</Property>'})
 				else
-					-- add normal property
+					-- add a regular property
 					if type(cls) == 'table' then
 						key, cls = next(cls)
 					end
@@ -92,6 +92,7 @@ function FileWrapping(data, template)
 end
 
 -- translates a 0xFF hex section from a longer string to 0-1.0 percentage
+-- @param hex: hex string (case insensitive [A-z0-9])
 -- @param i: the hex pair's index
 function Hex2Percent(hex, i)
 	return math.floor(tonumber(hex:sub(i * 2 - 1, i * 2), 16) / 255 * 1000) / 1000
