@@ -47,7 +47,7 @@ function ToLua(exml)
 			if close == '' then
 				-- open new property table
 				table.insert(st_node, parent)
-				node = {META = {att , val}}
+				node = {meta = {att , val}}
 
 				-- is_ord[#is_ord] == true when parent is an ordered (name) section
 				if is_ord[#is_ord] == true or att == 'value' then
@@ -128,7 +128,7 @@ function PrintExmlAsLua(vars)
 				-- keep meta if classes are ordered
 				is_ord[#is_ord+1] = att == 'name'
 				lvl = lvl + 1
-				tlua:add({ind:rep(lvl), 'META = {', com, att, com, ',', com, val, com, '},\n'})
+				tlua:add({ind:rep(lvl), 'meta = {', com, att, com, ',', com, val, com, '},\n'})
 			else
 				-- value property or properties in an ordered array
 				if is_ord[#is_ord] == true or att == 'value' then
@@ -157,7 +157,7 @@ end
 --	Returns a table with Name property as keys linking to their to TkSceneNodeData sections.
 function SceneNames(node, keys)
 	keys = keys or {}
-	if node.META[2] == 'TkSceneNodeData.xml' then
+	if node.meta[2] == 'TkSceneNodeData.xml' then
 		keys[node.Name] = node
 	end
 	for k, scn in ipairs(node.Children or {}) do

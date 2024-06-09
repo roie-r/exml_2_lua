@@ -6,33 +6,33 @@
 
 function ObjectSpawnEntry(osd)
 	return {
-		META	= {'value','GcObjectSpawnData.xml'},
+		meta	= {'value','GcObjectSpawnData.xml'},
 		Type		= osd.type or 'Instanced',								-- Enum
 		Resource	= {
-			META	= {'Resource','GcResourceElement.xml'},
+			meta	= {'Resource','GcResourceElement.xml'},
 			Filename	= osd.filename,										-- s
 			Seed		= {
-				META = {'Seed','GcSeed.xml'},
+				meta = {'Seed','GcSeed.xml'},
 				Seed			= osd.resourceseed,							-- i
 				UseSeedValue	= osd.resourceseed ~= nil
 			},
 			ProceduralTexture	= osd.texturesamplers and {
-				META = {'ProceduralTexture','TkProceduralTextureChosenOptionList.xml'},
+				meta = {'ProceduralTexture','TkProceduralTextureChosenOptionList.xml'},
 				Samplers = (
 					function()
-						local T = { META = {'name','Samplers'} }
+						local T = { meta = {'name','Samplers'} }
 						for _,ptco in ipairs(osd.texturesamplers) do
 							local tsam = {
-								META = {'value','TkProceduralTextureChosenOptionSampler.xml'},
-								Options = { META = {'name','Options'} }
+								meta = {'value','TkProceduralTextureChosenOptionSampler.xml'},
+								Options = { meta = {'name','Options'} }
 							}
 							for _, opt in ipairs(ptco) do
 								tsam.Options[#tsam.Options+1] = {
-									META = {'value','TkProceduralTextureChosenOption.xml'},
+									meta = {'value','TkProceduralTextureChosenOption.xml'},
 									Layer			= opt.layer,						-- s
 									Group			= opt.group,						-- s
 									Palette			= {
-										META = {'Palette','TkPaletteTexture.xml'},
+										meta = {'Palette','TkPaletteTexture.xml'},
 										Palette		= opt.palette	or 'Rock',			-- Enum
 										ColourAlt	= opt.colouralt	or 'None'			-- Enum
 									},
@@ -42,7 +42,7 @@ function ObjectSpawnEntry(osd)
 								}
 							end
 							T[#T+1] = tsam
-						end						
+						end
 						return T
 					end
 				)()
@@ -50,7 +50,7 @@ function ObjectSpawnEntry(osd)
 		},
 		Placement					= osd.placement,						-- s
 		Seed = {
-			META = {'Seed','GcSeed.xml'},
+			meta = {'Seed','GcSeed.xml'},
 			Seed			= osd.spawnseed,								-- i
 			UseSeedValue	= osd.spawnseed ~= nil
 		},
@@ -87,10 +87,10 @@ function ObjectSpawnEntry(osd)
 		DestroyedByVehicleEffect	= osd.vehicleeffect or 'VEHICLECRASH',	-- s
 		QualityVariants = (													-- list
 			function()
-				local T = {META = {'name','QualityVariants'}}
+				local T = {meta = {'name','QualityVariants'}}
 				for i, osdv in ipairs(osd.qualityvariants) do
 					T[#T+1] = {
-						META	= {'value','GcObjectSpawnDataVariant.xml'},
+						meta	= {'value','GcObjectSpawnDataVariant.xml'},
 						ID						= i == 1 and 'STANDARD' or 'ULTRA',
 						Coverage				= osdv.coverage,			-- f
 						FlatDensity				= osdv.flatdensity,			-- f
@@ -102,7 +102,7 @@ function ObjectSpawnEntry(osd)
 						FadeOutEndDistance		= osdv.fadeoutend or 9999,	-- f
 						FadeOutOffsetDistance	= osdv.fadeoutoffset or 0,	-- f
 						LodDistances	= {									-- list
-							META = {'name','LodDistances'},
+							meta = {'name','LodDistances'},
 							{value	= 0},
 							{value	= osdv.lod and osdv.lod[1] or 20},	-- f
 							{value	= osdv.lod and osdv.lod[2] or 60},	-- f

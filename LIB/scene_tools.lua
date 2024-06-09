@@ -1,11 +1,11 @@
 -------------------------------------------------------------------------------
----	Model scene tools (VERSION: 0.83.1) ... by lMonk
+---	Model scene tools (VERSION: 0.84.0) ... by lMonk
 ---	Helper function for adding new TkSceneNodeData nodes and properties
 ---	* Requires _lua_2_exml.lua !
 ---	* This script should be in [AMUMSS folder]\ModScript\ModHelperScripts\LIB
 -------------------------------------------------------------------------------
 
---	Build a TkSceneNodeData class
+--	Build a single -or list of scene nodes
 --	@param props: a keyed table for scene class properties.
 --	{
 --	  name	= scene node name (NameHash is calculated automatically)
@@ -15,12 +15,12 @@
 --	  attr	= [optional] Attributes table of {name, value} pairs
 --	  child	= [optional] Children table for ScNode tables
 --	}
-function ScNode(props)
+function ScNode(nodes)
 	--	Builds a TkTransformData class
 	local function scTransform(T)
 		T = T or {}
 		return {
-			META	= {'Transform', 'TkTransformData.xml'},
+			meta	= {'Transform', 'TkTransformData.xml'},
 			TransX	= (T.tx or T[1]) or 0,
 			TransY	= (T.ty or T[2]) or 0,
 			TransZ	= (T.tz or T[3]) or 0,
@@ -34,10 +34,10 @@ function ScNode(props)
 	end
 	--	Builds a scene node attributes array
 	local function scAttributes(T)
-		local atr = {META = {'name', 'Attributes'}}
+		local atr = {meta = {'name', 'Attributes'}}
 		for _,at in ipairs(T) do
 			atr[#atr+1] = {
-				META	= {'value', 'TkSceneNodeAttributeData.xml'},
+				meta	= {'value', 'TkSceneNodeAttributeData.xml'},
 				Name	= at[1],
 				Value	= at[2]
 			}
@@ -59,28 +59,41 @@ function ScNode(props)
 		hash = (hash + (hash << 15)) & 0xffffffff
 		return tostring(hash)
 	end
+	--	Build a TkSceneNodeData class
+	local function sceneNode(props)
+		local T	= {
+			meta	= {'value', 'TkSceneNodeData.xml'},
+			Name 		= props.name,
+			NameHash	= jenkinsHash(props.name),
+			Type		= props.stype
+		}
+		T[#T+1]		= scTransform(props.form or {})
+		if props.attr then
+			T[#T+1] = scAttributes(props.attr)
+		end
+		if props.child then
+			local tc = { meta = {'name', 'Children'} }
+			for _,pc in ipairs(props.child) do tc[#tc+1] = pc end
+			T[#T+1]	= tc
+		end
+		return T
+	end
 	-----------------------------------------------------------------
-	local T	= {
-		META	= {'value', 'TkSceneNodeData.xml'},
-		Name 		= props.name,
-		NameHash	= jenkinsHash(props.name),
-		Type		= props.stype
-	}
-	T[#T+1]		= scTransform(props.form or {})
-	if props.attr then
-		T[#T+1] = scAttributes(props.attr)
+	local k,_ = next(nodes)
+	if k == 1 then
+		-- k=1 means the first of a list of tables
+		local T = {}
+		for _,nd in pairs(nodes) do
+				T[#T+1] = sceneNode(nd)
+		end
+		return T
 	end
-	if props.child then
-		local tc = { META = {'name', 'Children'} }
-		for _,pc in ipairs(props.child) do tc[#tc+1] = pc end
-		T[#T+1]	= tc
-	end
-	return T
+	return sceneNode(nodes)
 end
 
 --	Builds light TkSceneNodeData sections.
 --	receives a table, or a table of tables, with the following (optional) parameters
---	  name= 'n9',	fov= 360,
+--	  name= 'n9',	fov= 360,	v=	0,
 --	  i=	30000,	f= 'q',		fr=	2,
 --	  r=	1,		g=	1,		b=	1,
 --	  c=	'7E450A' (color as hex - overwrites rgb)
@@ -88,7 +101,7 @@ end
 --	  rx=	0,		ry=	0,		rz=	0,
 --	  sx=	1,		sy=	1,		sz=	1
 function ScLight(lights)
-	local function LightNode(light)
+	local function lightNode(light)
 		if light.c then
 			for i, col in ipairs({'r', 'g', 'b'}) do
 				--  skip the alpha if present
@@ -107,7 +120,7 @@ function ScLight(lights)
 				{'COL_R',		light.r  or 1},
 				{'COL_G',		light.g  or 1},
 				{'COL_B',		light.b  or 1},
-				{'VOLUMETRIC',	0},
+				{'VOLUMETRIC',	light.v  or 0},
 				{'COOKIE_IDX',	-1},
 				{'MATERIAL',	'MATERIALS/LIGHT.MATERIAL.MBIN'}
 			}
@@ -116,19 +129,15 @@ function ScLight(lights)
 	-----------------------------------------------------------------
 	if lights then
 	--  handle table of lights
-		local _,l = next(lights)
-		if type(l) == 'table' then
+		local k,_ = next(lights)
+		if k == 1 then
+		-- k=1 means the first of a list of tables
 			local T = {}
 			for _,lght in pairs(lights) do
-				T[#T+1] = LightNode(lght)
+				T[#T+1] = lightNode(lght)
 			end
 			return T
 		end
 	end
-	return LightNode(lights)
-end
-
---	wrapper: returns the exml text of ScLight
-function AddNewLight(l)
-	return ToExml(ScLight(l))
+	return lightNode(lights)
 end

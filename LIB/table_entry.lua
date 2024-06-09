@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
----	Build reality tables entries (VERSION: 0.83.0) ... by lMonk
+---	Build reality tables entries (VERSION: 0.83.1) ... by lMonk
 ---	Add new items into technology, proc-tech, product & basebuilding
 ---	* Not ALL properties of the tables' classes are included, some which
 ---  can be safely left with their deafult value are omited.
@@ -7,21 +7,21 @@
 ---	* This script should be in [AMUMSS folder]\ModScript\ModHelperScripts\LIB
 -------------------------------------------------------------------------------
 
---	InventoryType Enum
-IT_={ PRD='Product', SBT='Substance', TCH='Technology' }
-
+IT_={--	InventoryType Enum
+	SBT='Substance',	TCH='Technology',	PRD='Product'
+}
 --	build the requirements table for tech and products
 --	receives a table of {id, amount, product/substance} items
 function GetRequirements(r)
 	if not r then return nil end
-	local reqs = {META = {'name', 'Requirements'}}
+	local reqs = {meta = {'name', 'Requirements'}}
 	for _,req in ipairs(r) do
 		reqs[#reqs+1] = {
-			META	= {'value', 'GcTechnologyRequirement.xml'},
+			meta	= {'value', 'GcTechnologyRequirement.xml'},
 			ID		= req.id,
 			Amount	= req.n,							--	i
 			Type	= {
-				META	= {'Type', 'GcInventoryType.xml'},
+				meta	= {'Type', 'GcInventoryType.xml'},
 				InventoryType = req.tp					--	Enum
 			}
 		}
@@ -32,9 +32,9 @@ end
 --	receives a table of {type, bonus, level} items
 function TechStatBonus(tsb)
 	return {
-		META	= {'value', 'GcStatsBonus.xml'},
+		meta	= {'value', 'GcStatsBonus.xml'},
 		Stat	= {
-			META		= {'Stat', 'GcStatsTypes.xml'},
+			meta		= {'Stat', 'GcStatsTypes.xml'},
 			StatsType	= tsb.st					--	Enum
 		},
 		Bonus	= tsb.bn,							--	f
@@ -42,11 +42,11 @@ function TechStatBonus(tsb)
 	}
 end
 
---	Build a new entry for NMS_REALITY_GCTECHNOLOGYTABLE
+--	Build an entry for NMS_REALITY_GCTECHNOLOGYTABLE
 --	sub lists (requirements and color) are entered in separate tables
 function TechnologyEntry(tech)
 	return {
-		META			= {'value', 'GcTechnology.xml'},
+		meta			= {'value', 'GcTechnology.xml'},
 		ID				= tech.id,
 		Group			= tech.group,
 		Name			= tech.name,
@@ -57,7 +57,7 @@ function TechnologyEntry(tech)
 		HintStart		= tech.hintstart,
 		HintEnd			= tech.hintend,
 		Icon			= {
-			META	= {'Icon', 'TkTextureResource.xml'},
+			meta	= {'Icon', 'TkTextureResource.xml'},
 			Filename	= tech.icon,
 		},
 		Colour			= ColorData(tech.color, 'Colour'),				--	rgb/hex
@@ -65,7 +65,7 @@ function TechnologyEntry(tech)
 		Chargeable		= tech.chargeable,								--	b
 		ChargeAmount	= tech.chargeamount	or 100,						--	i
 		ChargeType		= {
-			META	= {'ChargeType', 'GcRealitySubstanceCategory.xml'},
+			meta	= {'ChargeType', 'GcRealitySubstanceCategory.xml'},
 			SubstanceCategory = (tech.chargetype or 'Earth'),			--	E
 		},
 		ChargeBy		= StringArray(tech.chargeby, 'ChargeBy'),		--	Id
@@ -78,22 +78,22 @@ function TechnologyEntry(tech)
 		Core			= tech.core,									--	b
 		Procedural		= tech.istemplate,								--	not a bug
 		Category		= {
-			META	= {'Category', 'GcTechnologyCategory.xml'},
+			meta	= {'Category', 'GcTechnologyCategory.xml'},
 			TechnologyCategory = tech.category,							--	Enum
 		},
 		Rarity			= {
-			META	= {'Rarity', 'GcTechnologyRarity.xml'},
+			meta	= {'Rarity', 'GcTechnologyRarity.xml'},
 			TechnologyRarity = tech.rarity	or 'Normal',				--	Enum
 		},
 		Value			= tech.value		or 10,						--	i
 		Requirements	= GetRequirements(tech.requirements),
 		BaseStat		= {
-			META	= {'BaseStat', 'GcStatsTypes.xml'},
+			meta	= {'BaseStat', 'GcStatsTypes.xml'},
 			StatsType	= tech.basestat,								--	Enum
 		},
 		StatBonuses		= (
 			function()
-				local stats = {META = {'name', 'StatBonuses'}}
+				local stats = {meta = {'name', 'StatBonuses'}}
 				for _,tsb in ipairs(tech.statbonuses) do
 					stats[#stats+1] = TechStatBonus(tsb)
 				end
@@ -108,7 +108,7 @@ function TechnologyEntry(tech)
 		RequiredRank	= tech.requiredrank	or 1,
 		FragmentCost	= tech.fragmentcost	or 1,
 		TechShopRarity	= {
-			META	= {'TechShopRarity', 'GcTechnologyRarity.xml'},
+			meta	= {'TechShopRarity', 'GcTechnologyRarity.xml'},
 			TechnologyRarity = tech.rarity	or 'Normal',				--	E
 		},
 		WikiEnabled		= tech.wikienabled,								--	b
@@ -116,40 +116,40 @@ function TechnologyEntry(tech)
 	}
 end
 
---	Build a new entry for NMS_REALITY_GCPRODUCTTABLE
+--	Build an entry for NMS_REALITY_GCPRODUCTTABLE
 --	sub lists (requirements and color) are entered in separate tables
 function ProductEntry(prod)
 	return {
-		META	= {'value', 'GcProductData.xml'},
+		meta	= {'value', 'GcProductData.xml'},
 		ID			= prod.id,
 		Name		= prod.name,
 		NameLower	= prod.namelower,
 		Subtitle	= prod.subtitle,
 		Description	= prod.description,
 		DebrisFile	= {
-			META	= {'DebrisFile', 'TkModelResource.xml'},
+			meta	= {'DebrisFile', 'TkModelResource.xml'},
 			Filename= 'MODELS/EFFECTS/DEBRIS/TERRAINDEBRIS/TERRAINDEBRIS4.SCENE.MBIN'
 		},
 		BaseValue	= prod.basevalue or 1,							--	i
 		Icon		= {
-			META	= {'Icon', 'TkTextureResource.xml'},
+			meta	= {'Icon', 'TkTextureResource.xml'},
 			Filename= prod.icon
 		},
 		Colour		= ColorData(prod.color, 'Colour'),				--	rgb/hex
 		Category	= {
-			META	= {'Category', 'GcRealitySubstanceCategory.xml'},
+			meta	= {'Category', 'GcRealitySubstanceCategory.xml'},
 			SubstanceCategory	= prod.category	or 'Earth'			--	Enum
 		},
 		Type		= {
-			META	= {'Type', 'GcProductCategory.xml'},
+			meta	= {'Type', 'GcProductCategory.xml'},
 			ProductCategory		= prod.type		or 'Component'		--	Enum
 		},
 		Rarity		= {
-			META	= {'Rarity', 'GcRarity.xml'},
+			meta	= {'Rarity', 'GcRarity.xml'},
 			Rarity				= prod.rarity	or 'Common'			--	Enum
 		},
 		Legality	= {
-			META	= {'Legality', 'GcLegality.xml'},
+			meta	= {'Legality', 'GcLegality.xml'},
 			Legality			= prod.legality	or 'Legal'			--	Enum
 		},
 		Consumable				= prod.consumable,					--	b
@@ -160,7 +160,7 @@ function ProductEntry(prod)
 		CraftAmountMultiplier	= prod.crafmultiplier	or 1,
 		Requirements			= GetRequirements(prod.requirements),
 		Cost		= {
-			META	= {'Cost', 'GcItemPriceModifiers.xml'},
+			meta	= {'Cost', 'GcItemPriceModifiers.xml'},
 			SpaceStationMarkup	= prod.spacestationmarkup,
 			LowPriceMod			= prod.lowpricemod		or -0.1,
 			HighPriceMod		= prod.highpricemod		or 0.1,
@@ -172,7 +172,7 @@ function ProductEntry(prod)
 		NormalisedValueOnWorld	= prod.normalisedvalueonworld,		--	f
 		NormalisedValueOffWorld	= prod.normalisedvalueoffworld,		--	f
 		TradeCategory= {
-			META	= {'TradeCategory', 'GcTradeCategory.xml'},
+			meta	= {'TradeCategory', 'GcTradeCategory.xml'},
 			TradeCategory	= prod.tradecategory or 'None'			--	Enum
 		},
 		WikiCategory				= prod.wikicategory or 'NotEnabled',
@@ -193,25 +193,25 @@ end
 --	receives a table of {type, min, max, weightcurve, always} items
 function ProcTechStatLevel(tsl)
 	return {
-		META		= {'value', 'GcProceduralTechnologyStatLevel.xml'},
+		meta		= {'value', 'GcProceduralTechnologyStatLevel.xml'},
 		Stat		= {
-			META = {'Stat', 'GcStatsTypes.xml'},
+			meta = {'Stat', 'GcStatsTypes.xml'},
 			StatsType = tsl.st,							--	Enum
 		},
 		ValueMin	= tsl.mn,							--	f
 		ValueMax	= tsl.mx,							--	f
 		WeightingCurve = {
-			META = {'WeightingCurve', 'GcWeightingCurve.xml'},
+			meta = {'WeightingCurve', 'GcWeightingCurve.xml'},
 			WeightingCurve = tsl.wc or 'NoWeighting',	--	Enum
 		},
 		AlwaysChoose= tsl.ac							--	b
 	}
 end
 
---	Build a new entry for NMS_REALITY_GCPROCEDURALTECHNOLOGYTABLE
+--	Build an entry for NMS_REALITY_GCPROCEDURALTECHNOLOGYTABLE
 function ProcTechEntry(tech)
 	return {
-		META	= {'value', 'GcProceduralTechnologyData.xml'},
+		meta	= {'value', 'GcProceduralTechnologyData.xml'},
 		ID				= tech.id,
 		Template		= tech.template,
 		Name			= tech.name,
@@ -222,19 +222,19 @@ function ProcTechEntry(tech)
 		Colour			= ColorData(tech.color, 'Colour'),			--	rgb/hex
 		Quality			= tech.quality or 'Normal',					--	Enum
 		Category		= {
-			META = {'Category', 'GcProceduralTechnologyCategory.xml'},
+			meta = {'Category', 'GcProceduralTechnologyCategory.xml'},
 			ProceduralTechnologyCategory = tech.category,			--	Enum
 		},
 		NumStatsMin		= tech.numstatsmin,							--	i
 		NumStatsMax		= tech.numstatsmax,							--	i
 		WeightingCurve	= {
-			META = {'WeightingCurve', 'GcWeightingCurve.xml'},
+			meta = {'WeightingCurve', 'GcWeightingCurve.xml'},
 			WeightingCurve = tech.weightingcurve or 'NoWeighting',	--	Enum
 		},
 		UpgradeColour	= ColorData(tech.upgradecolor, 'UpgradeColour'),
 		StatLevels		= (
 			function()
-				local stats = {META = {'name', 'StatLevels'}}
+				local stats = {meta = {'name', 'StatLevels'}}
 				for _,sl in ipairs(tech.statlevels) do
 					stats[#stats+1] = ProcTechStatLevel(sl)
 				end
@@ -244,21 +244,21 @@ function ProcTechEntry(tech)
 	}
 end
 
---	Build a new entry for BASEBUILDINGOBJECTSTABLE
+--	Build an entry for BASEBUILDINGOBJECTSTABLE
 function BaseBuildObjectEntry(bpart)
 	return {
-		META = {'value', 'GcBaseBuildingEntry.xml'},
+		meta = {'value', 'GcBaseBuildingEntry.xml'},
 		ID							= bpart.id,
 		Style						= {
-			META		= {'Style', 'GcBaseBuildingPartStyle.xml'},
+			meta		= {'Style', 'GcBaseBuildingPartStyle.xml'},
 			Style		= bpart.style or 'None'						--	Enum
 		},
 		PlacementScene				= {
-			META		= {'PlacementScene', 'TkModelResource.xml'},
+			meta		= {'PlacementScene', 'TkModelResource.xml'},
 			Filename	= bpart.placementscene
 		},
 		DecorationType				= {
-			META		= {'DecorationType', 'GcBaseBuildingObjectDecorationTypes.xml'},
+			meta		= {'DecorationType', 'GcBaseBuildingObjectDecorationTypes.xml'},
 			BaseBuildingDecorationType = bpart.decorationtype or 'Normal'--	Enum
 		},
 		IsPlaceable					= bpart.isplaceable,			--	b
@@ -274,16 +274,16 @@ function BaseBuildObjectEntry(bpart)
 		Groups						= (
 			function()
 				if not bpart.groups then return nil end
-				local T = {META = {'name', 'Groups'}}
+				local T = {meta = {'name', 'Groups'}}
 				for _,v in ipairs(bpart.groups) do
 					T[#T+1] = {
-						META	= {'value', 'GcBaseBuildingEntryGroup.xml'},
+						meta	= {'value', 'GcBaseBuildingEntryGroup.xml'},
 						Group			= v.group,
 						SubGroupName	= v.subname
 					}
 				end
 				return T
-			end			
+			end
 		)(),
 		StorageContainerIndex 		= -1,							--	i
 		CanChangeColour				= true,
@@ -301,11 +301,11 @@ function BaseBuildObjectEntry(bpart)
 		IsSealed					= bpart.issealed,				--	b
 		CloseMenuAfterBuild			= bpart.closemenuafterbuild,
 		LinkGridData				= {
-			META = {'LinkGridData', 'GcBaseLinkGridData.xml'},
+			meta = {'LinkGridData', 'GcBaseLinkGridData.xml'},
 			Connection = {
-				META	= {'Connection', 'GcBaseLinkGridConnectionData.xml'},
+				meta	= {'Connection', 'GcBaseLinkGridConnectionData.xml'},
 				Network	= {
-					META = {'Network', 'GcLinkNetworkTypes.xml'},
+					meta = {'Network', 'GcLinkNetworkTypes.xml'},
 					LinkNetworkType = bpart.linknetwork or 'Power'	--	Enum
 				},
 				NetworkSubGroup		= bpart.networksubgroup,		--	i
@@ -322,26 +322,26 @@ function BaseBuildObjectEntry(bpart)
 	}
 end
 
---	Build a new entry for BASEBUILDINGPARTSTABLE
+--	Build an entry for BASEBUILDINGPARTSTABLE
 function BaseBuildPartEntry(bpart)
 	local T = {
-		META	= {'value', 'GcBaseBuildingPart.xml'},
+		meta	= {'value', 'GcBaseBuildingPart.xml'},
 		ID		= bpart.id,
-		StyleModels = {META = {'name', 'StyleModels'}}
+		StyleModels = {meta = {'name', 'StyleModels'}}
 	}
 	for _,src in ipairs(bpart.stylemodels) do
 		T.StyleModels[#T.StyleModels+1] = {
-			META = {'value', 'GcBaseBuildingPartStyleModel.xml'},
+			meta = {'value', 'GcBaseBuildingPartStyleModel.xml'},
 			Style = {
-				META = {'Style', 'GcBaseBuildingPartStyle.xml'},
+				meta = {'Style', 'GcBaseBuildingPartStyle.xml'},
 				Style = src.style or 'None',						--	Enum
 			},
 			Model = {
-				META = {'Model', 'TkModelResource.xml'},
+				meta = {'Model', 'TkModelResource.xml'},
 				Filename = src.act,
 			},
 			Inactive = {
-				META = {'Inactive', 'TkModelResource.xml'},
+				meta = {'Inactive', 'TkModelResource.xml'},
 				Filename = src.lod
 			}
 		}
@@ -349,25 +349,25 @@ function BaseBuildPartEntry(bpart)
 	return T
 end
 
---	Build a new entry for NMS_REALITY_GCRECIPETABLE
+--	Build an entry for NMS_REALITY_GCRECIPETABLE
 function RefinerRecipeEntry(recipe)
 	local function addIngredient(elem, result)
 		return {
-			META	= {result and 'Result' or 'value', 'GcRefinerRecipeElement.xml'},
+			meta	= {result and 'Result' or 'value', 'GcRefinerRecipeElement.xml'},
 			Id		= elem.id,
 			Amount	= elem.n,										--	i
 			Type	= {
-				META			= {'Type', 'GcInventoryType.xml'},
+				meta			= {'Type', 'GcInventoryType.xml'},
 				InventoryType	= elem.tp							--	Enum
 			}
 		}
 	end
-	local t_ings = {META = {'name', 'Ingredients'}}
+	local t_ings = {meta = {'name', 'Ingredients'}}
 	for _,elem in ipairs(recipe.ingredients) do
 		t_ings[#t_ings+1] = addIngredient(elem)
 	end
 	return {
-		META	= {'value', 'GcRefinerRecipe.xml'},
+		meta	= {'value', 'GcRefinerRecipe.xml'},
 		Id			= recipe.id,
 		RecipeType	= recipe.name,									--	s
 		RecipeName	= recipe.name,									--	s
