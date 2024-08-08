@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
----	Construct reward table entries (VERSION: 0.83.1) ... by lMonk
+---	Construct reward table entries (VERSION: 0.83.3) ... by lMonk
 ---	* Requires _lua_2_exml.lua !
 ---	* This script should be in [AMUMSS folder]\ModScript\ModHelperScripts\LIB
 -------------------------------------------------------------------------------
@@ -13,16 +13,18 @@ RC_={--	RewardChoice Enum
 }
 PC_={--	ProceduralProductCategory Enum
 	LOT='Loot',					SLV='Salvage',
+	DOC='Document',				FOS='Fossil',
 	BIO='BioSample',			BNS='Bones',
-	FOS='Fossil',
+	PLT='Plant',				TOL='Tool',
+	FAR='Farm',					SLT='SeaLoot',
+	SHR='SeaHorror',			SPH='SpaceHorror',
+	SPB='SpaceBones',
 	FRH='FreighterTechHyp',		FRS='FreighterTechSpeed',
 	FRF='FreighterTechFuel',	FRT='FreighterTechTrade',
 	FRC='FreighterTechCombat',	FRM='FreighterTechMine',
 	FRE='FreighterTechExp',
 	DBI='DismantleBio',			DTC='DismantleTech',
-	DDT='DismantleData',
-	SLT='SeaLoot',				SHR='SeaHorror',
-	SPB='SpaceBones',			SPH='SpaceHorror'
+	DDT='DismantleData'
 }
 IT_={--	InventoryType Enum
 	SBT='Substance',	TCH='Technology',	PRD='Product'
@@ -49,10 +51,10 @@ FT_={--	FrigateFlybyType Enum
 }
 
 function R_RewardTableEntry(rte)
-	-- accepts an external list, if not found builds a new list
+	-- accepts an external list, if not found builds a new one
 	if not rte.list then
 		rte.list = {}
-		for _,rwd in pairs(rte.rewardlist) do
+		for _,rwd in ipairs(rte.itemlist) do
 			rte.list[#rte.list+1] = rwd.f(rwd)
 		end
 	end
@@ -64,7 +66,7 @@ function R_RewardTableEntry(rte)
 			meta = {'List', 'GcRewardTableItemList.xml'},
 			RewardChoice	= rte.choice or RC_.ONE,
 			OverrideZeroSeed= rte.zeroseed,
-			ItemList		= rte.list
+			List			= rte.list
 		}
 	}
 end
@@ -81,19 +83,19 @@ function R_TableItem(item, reward_type, props)
 end
 
 function R_MultiItem(item)
-	local multies = {meta = {'name', 'Items'}}
-	for _,itm in ipairs(item) do
-		multies[#multies+1] = {
+	local T = {meta = {'name', 'Items'}}
+	for _,itm in ipairs(item.list) do
+		T[#T+1] = {
 			meta = {'value', 'GcMultiSpecificItemEntry.xml'},
 			MultiItemRewardType	= itm.tp,
 			Id					= itm.id,
 			Amount				= itm.mn or 1,
 			ProcTechGroup		= itm.tg,
-			ProcTechQuality		= itm.qt,
+			ProcTechQuality		= itm.qt, -- used instead of ProcProdRarity
 			IllegalProcTech		= itm.lgl,
 			ProcProdType		= {
 				meta = {'ProcProdType', 'GcProceduralProductCategory.xml'},
-				ProceduralProductCategory = itm.pid or 'Loot'
+				ProceduralProductCategory = itm.pid or PC_.LOT
 			}
 		}
 	end
@@ -102,7 +104,7 @@ function R_MultiItem(item)
 		'GcRewardMultiSpecificItems.xml',
 		{
 			Silent	= item.sl,
-			Items	= multies
+			Items	= T
 		}
 	)
 end
