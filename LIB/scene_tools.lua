@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
----	Model scene tools (VERSION: 0.84.1) ... by lMonk
+---	Model scene tools (VERSION: 0.85.0) ... by lMonk
 ---	Helper function for adding new TkSceneNodeData nodes and properties
 ---	* Requires _lua_2_exml.lua !
 ---	* This script should be in [AMUMSS folder]\ModScript\ModHelperScripts\LIB
@@ -66,9 +66,10 @@ function ScNode(nodes)
 		end
 		if props.child then
 		--	add children list if found
-			local tc = { meta = {'name', 'Children'} }
-			for _,pc in ipairs(props.child) do tc[#tc+1] = pc end
-			T[#T+1]	= tc
+			local k,_ = next(props.child)
+			cnd = ScNode(props.child)
+			T.Child	= k == 1 and cnd or {cnd}
+			T.Child.meta = {'name', 'Children'}
 		end
 		return T
 	end
@@ -77,7 +78,7 @@ function ScNode(nodes)
 	if k == 1 then
 	-- k=1 means the first of a list of unrelated, non-nested, nodes
 		local T = {}
-		for _,nd in pairs(nodes) do
+		for _,nd in ipairs(nodes) do
 				T[#T+1] = sceneNode(nd)
 		end
 		return T
@@ -94,6 +95,7 @@ end
 --	  tx=	0,		ty=	0,		tz=	0,
 --	  rx=	0,		ry=	0,		rz=	0,
 --	  sx=	1,		sy=	1,		sz=	1
+--	  mt=	MATERIALS/LIGHT.MATERIAL.MBIN
 function ScLight(lights)
 	local function lightNode(light)
 		if light.c then
@@ -115,8 +117,8 @@ function ScLight(lights)
 				{'COL_G',		light.g  or 1},
 				{'COL_B',		light.b  or 1},
 				{'VOLUMETRIC',	light.v  or 0},
-				{'COOKIE_IDX',	-1},
-				{'MATERIAL',	'MATERIALS/LIGHT.MATERIAL.MBIN'}
+				-- {'COOKIE_IDX',	-1},
+				{'MATERIAL',	light.mt or 'MATERIALS/LIGHT.MATERIAL.MBIN'}
 			}
 		})
 	end

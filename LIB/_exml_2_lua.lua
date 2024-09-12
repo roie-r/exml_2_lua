@@ -186,6 +186,7 @@ end
 
 --	Load an mbin from the amumss runtime processing temp folder
 --	* The mbin must be loaded from a merged script that runs before the one calling LoadRuntimeMbin
+--	DEPRECATED! Doesn't work with latest amumss versions - use EXT_FUNC instead.
 function LoadRuntimeMbin(path)
 	path = '../MODBUILDER/_TEMP/DECOMPILED/'..path:gsub('.MBIN$', '.EXML')
 	f = io.open(path, 'r')

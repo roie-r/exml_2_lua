@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
----	LUA 2 EXML (VERSION: 0.83.2) ... by lMonk
+---	LUA 2 EXML (VERSION: 0.84.0) ... by lMonk
 ---	A tool for converting exml to an equivalent lua table and back again.
 ---	Helper functions for color class, vector class and string arrays
 ---	* This script should be in [AMUMSS folder]\ModScript\ModHelperScripts\LIB
@@ -110,7 +110,7 @@ end
 
 --	Returns a Colour.xml class
 --	@param T: ARGB color in percentage values or hex format.
---	  Either {1.0, 0.5, 0.4, 0.3} or {a=1.0, r=0.5, g=0.4, b=0.3} or 'FFA0B1C2'
+--	  Either {1.0, 0.5, 0.4, 0.3} or {<a=1.0> <,r=0.5> <,g=0.4> <,b=0.3>} or 'FFA0B1C2'
 --	@param name: class name
 function ColorData(T, name)
 	local argb = {}
@@ -134,9 +134,9 @@ function ColorData(T, name)
 	}
 end
 
---	Returns a Vector3f.xml or Vector4f.xml class, depending on number of values
---	@param T: xyz<t> vector
---	  Either {1.0, 0.5, 0.4, <2>} or {x=1.0, y=0.5, z=0.4, <t=2>}
+--	Returns a Vector 2, 3 or 4f class, depending on number of values
+--	@param T: xy<z<t>> vector
+--	  Either {1.0, 0.5 <,0.4, <,2>>} or {x=1.0, y=0.5 <,z=0.4 <,t=2>>}
 --	@param name: class name
 function VectorData(T, name)
 	T = T or {}
@@ -145,7 +145,7 @@ function VectorData(T, name)
 		meta= {name or 'value', 'Vector'..len2(T)..'f.xml'},
 		x	= T[1] or T.x,
 		y	= T[2] or T.y,
-		z	= T[3] or T.z,
+		z	= (T[3] or T.z) or nil,
 		t	= (T[4] or T.t) or nil
 	}
 end
