@@ -100,7 +100,7 @@ function ObjectSpawnEntry(osd)
 						MaxImposterRadius		= osdv.maximposter or 88,	-- i
 						FadeOutStartDistance	= osdv.fadeoutstart or 9999,-- f
 						FadeOutEndDistance		= osdv.fadeoutend or 9999,	-- f
-						FadeOutOffsetDistance	= osdv.fadeoutoffset or 0,	-- f
+						FadeOutOffsetDistance	= osdv.fadeoutoffset or nil,-- f
 						LodDistances	= {									-- list
 							meta = {'name','LodDistances'},
 							{value	= 0},

@@ -42,7 +42,7 @@ function PuzzleEntry(diag)
 		meta = {'value','GcAlienPuzzleEntry.xml'},
 		Id 							= diag.id,
 		ProgressionIndex 			= diag.index or -1,
-		MinProgressionForSelection	= diag.minprogress or 0,
+		MinProgressionForSelection	= diag.minprogress or nil,
 		Race = {
 			meta = {'Race','GcAlienRace.xml'},
 			AlienRace				= diag.race or 'None',		-- Enum
