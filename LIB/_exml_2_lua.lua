@@ -91,9 +91,9 @@ end
 --	* Does not handle commented lines!
 function PrintExmlAsLua(vars)
 	local function eval(val)
-		if #val == 0 then
-			return 'nil'
-		elseif val == 'True' or val == 'False' then
+		-- if #val == 0 then
+			-- return 'nil'
+		if val == 'True' or val == 'False' then
 			return val:lower()
 		elseif tonumber(val) and #val < 18 and not val:match('^0x') then
 			return val
@@ -166,8 +166,8 @@ function SceneNames(node, keys)
 	return keys
 end
 
--- A Union All function for an ordered array of tables
--- Returns a copy by-value. Repeating keys's values are overwritten.
+-- A Union All function for an ordered array of tables. Last in the array wins
+-- Returns a copy by-value. A repeating keys's values are overwritten.
 --	@param arr: A table of tables.
 function UnionTables(arr)
 	local merged = {}

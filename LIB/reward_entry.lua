@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
----	Construct reward table entries (VERSION: 0.83.4) ... by lMonk
+---	Construct reward table entries (VERSION: 0.83.6) ... by lMonk
 ---	* Requires _lua_2_exml.lua !
 ---	* This script should be in [AMUMSS folder]\ModScript\ModHelperScripts\LIB
 -------------------------------------------------------------------------------
@@ -362,7 +362,7 @@ function R_Special(item)
 	)
 end
 
---	for tech inventory only. used by ship & tool rewards
+--	Used by ship & tool rewards for tech inventory only
 local function InventoryContainer(inventory)
 	if not inventory then return nil end
 	local T = {meta = {'name', 'Slots'}}
@@ -412,20 +412,21 @@ function R_Ship(item)
 					meta	= {'Class', 'GcInventoryClass.xml'},
 					InventoryClass	= item.class and item.class:upper() or nil	-- Enum
 				},
-				BaseStatValues	= {
-					meta	= {'name', 'BaseStatValues'},
-					{
-						meta		= {'value', 'GcInventoryBaseStatEntry.xml'},
-						Value		= 1,
-						BaseStatID	= (
-							function()
-								if item.filename:find('BIOSHIP')  then return 'ALIEN_SHIP' end
-								if item.filename:find('SENTINEL') then return 'ROBOT_SHIP' end
-								return nil
-							end
-						)()
-					}
-				}
+				BaseStatValues	= (
+					function()
+						local stat = nil
+						if item.filename:find('BIOSHIP')  then stat = 'ALIEN_SHIP' end
+						if item.filename:find('SENTINEL') then stat = 'ROBOT_SHIP' end
+						return stat and {
+							meta	= {'name', 'BaseStatValues'},
+							{
+								meta		= {'value', 'GcInventoryBaseStatEntry.xml'},
+								Value		= 1,
+								BaseStatID	= stat
+							}
+						} or nil
+					end
+				)(),
 			},
 			Customisation = item.custom and {
 				meta = {'Customisation','GcCharacterCustomisationData.xml'},
@@ -467,6 +468,11 @@ function R_Ship(item)
 				meta	= {'ShipType', 'GcSpaceshipClasses.xml'},
 				ShipClass	= item.modeltype					-- Enum
 			},
+			UseOverrideSizeType	= item.sizetype ~= nil,
+			OverrideSizeType	= {
+				meta	= {'OverrideSizeType', 'GcInventoryLayoutSizeType.xml'},
+				SizeType	= item.sizetype						-- Enum
+			},
 			NameOverride = item.name,							-- s
 			IsRewardShip = true,
 			IsGift		 = true
@@ -503,6 +509,10 @@ function R_Multitool(item)
 			WeaponType		= {
 				meta	= {'WeaponType', 'GcWeaponClasses.xml'},
 				WeaponStatClass	= item.modeltype				-- Enum
+			},
+			InventorySizeOverride	= {
+				meta	= {'InventorySizeOverride', 'GcInventoryLayoutSizeType.xml'},
+				SizeType	= item.sizetype	or 'WeaponLarge'	-- Enum
 			},
 			NameOverride = item.name,							-- s
 			IsRewardWeapon = true
