@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
----	LUA 2 EXML (VERSION: 0.84.0) ... by lMonk
+---	LUA 2 EXML (VERSION: 0.84.2) ... by lMonk
 ---	A tool for converting exml to an equivalent lua table and back again.
 ---	Helper functions for color class, vector class and string arrays
 ---	* This script should be in [AMUMSS folder]\ModScript\ModHelperScripts\LIB
@@ -98,12 +98,13 @@ function Hex2Percent(hex, i)
 	return math.floor(tonumber(hex:sub(i * 2 - 1, i * 2), 16) / 255 * 1000) / 1000
 end
 
+--	Builds an amumss VCT table from a hex color string
 --	@param h: hex color string in ARGB or RGB format (default is white)
 --	(not really the place for this one, but I have nowhere else)
-function ColorFromHex(h)
+function Hex2VCT(h)
 	local argb = {{'A', 1}, {'R', 1}, {'G', 1}, {'B', 1}}
-	for i=1, (#h / 2) do
-		argb[#h > 6 and i or i + 1][2] = Hex2Percent(h, i)
+	for i=#h > 6 and 1 or 2, #h/2 do
+		argb[i][2] = Hex2Percent(h, i)
 	end
 	return argb
 end
@@ -112,17 +113,16 @@ end
 --	@param T: ARGB color in percentage values or hex format.
 --	  Either {1.0, 0.5, 0.4, 0.3} or {<a=1.0> <,r=0.5> <,g=0.4> <,b=0.3>} or 'FFA0B1C2'
 --	@param name: class name
-function ColorData(T, name)
+function ColorData(C, name)
 	local argb = {}
-	if type(T) == 'string' then
-		for i=1, (#T / 2) do
-			argb[#T > 6 and i or i + 1] = Hex2Percent(T, i)
+	if type(C) == 'string' then
+		for i=#C > 6 and 1 or 2, #C/2 do
+			argb[i] = Hex2Percent(C, i)
 		end
-	elseif T == 0 then
-		-- 'real' black
-		argb = {1, -1, -1, -1}
+	elseif C == 0 then
+		argb = {1, -1, -1, -1} -- 'real' black
 	else
-		argb = T or {}
+		argb = C or {}
 	end
 	return {
 		-- if a name is present then use 2-property tags

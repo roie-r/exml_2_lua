@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
----	Model scene tools (VERSION: 0.85.6) ... by lMonk
+---	Model scene tools (VERSION: 0.85.7) ... by lMonk
 ---	Helper function for adding new TkSceneNodeData nodes and properties
 ---	* Requires _lua_2_exml.lua !
 ---	* This script should be in [AMUMSS folder]\ModScript\ModHelperScripts\LIB
@@ -108,28 +108,28 @@ end
 --	  sx=	1,		sy=	1,		sz=	1
 --	  mt=	MATERIALS/LIGHT.MATERIAL.MBIN
 function ScLight(lights)
-	local function lightNode(light)
-		if light.c then
+	local function lightNode(lgt)
+		if lgt.c then
+			lgt.c = lgt.c:sub(#lgt.c > 6 and 3 or 1, #lgt.c) -- remove alpha if present
 			for i, col in ipairs({'r', 'g', 'b'}) do
-				--  skip the alpha if present
-				light[col] = Hex2Percent(light.c, #light.c > 6 and i+1 or i)
+				lgt[col] = Hex2Percent(lgt.c, i)
 			end
 		end
 		return {
-			name	= light.name or 'n9',
+			name	= lgt.name or 'n9',
 			stype	= 'LIGHT',
-			form	= light,
+			form	= lgt,
 			attr	= {
-				FOV			= light.fov or 360,
-				FALLOFF		= (light.f and light.f:sub(1,1) == 'l') and 'linear' or 'quadratic',
-				FALLOFF_RATE= light.fr or 2,
-				INTENSITY	= light.i  or 30000,
-				COL_R		= light.r  or 1,
-				COL_G		= light.g  or 1,
-				COL_B		= light.b  or 1,
-				VOLUMETRIC	= light.v  or nil,
+				FOV			= lgt.fov or 360,
+				FALLOFF		= (lgt.f and lgt.f:sub(1,1) == 'l') and 'linear' or 'quadratic',
+				FALLOFF_RATE= lgt.fr or 2,
+				INTENSITY	= lgt.i  or 30000,
+				COL_R		= lgt.r  or 1,
+				COL_G		= lgt.g  or 1,
+				COL_B		= lgt.b  or 1,
+				VOLUMETRIC	= lgt.v  or nil,
 				COOKIE_IDX	= -1,
-				MATERIAL	= light.mt or 'MATERIALS/LIGHT.MATERIAL.MBIN'
+				MATERIAL	= lgt.mt or 'MATERIALS/LIGHT.MATERIAL.MBIN'
 			}
 		}
 	end

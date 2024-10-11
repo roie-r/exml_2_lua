@@ -459,11 +459,6 @@ function R_Ship(item)
 				},
 				Scale	= 1
 			} or nil,
-			-- CostAmount	= item.cost or 0,
-			-- CostCurrency = {
-				-- meta	= {'CostCurrency', 'GcCurrency.xml'},
-				-- Currency	= item.currency or CU_.NN
-			-- },
 			ShipType	= {
 				meta	= {'ShipType', 'GcSpaceshipClasses.xml'},
 				ShipClass	= item.modeltype					-- Enum
