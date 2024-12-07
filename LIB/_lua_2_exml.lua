@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
----	LUA 2 EXML (VERSION: 0.84.2) ... by lMonk
+---	LUA 2 EXML (VERSION: 0.84.1) ... by lMonk
 ---	A tool for converting exml to an equivalent lua table and back again.
 ---	Helper functions for color class, vector class and string arrays
 ---	* This script should be in [AMUMSS folder]\ModScript\ModHelperScripts\LIB
@@ -75,7 +75,7 @@ end
 --	@param data: a lua2exml formatted table
 --	@param template: an nms file template string
 function FileWrapping(data, template)
-	local wrapper = '<Data template="%s">%s</Data>'
+	local wrapper = '<?xml version="1.0" encoding="utf-8"?><Data template="%s">%s</Data>'
 	if type(data) == 'string' then
 		return string.format(wrapper, template, data)
 	end

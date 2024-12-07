@@ -4,7 +4,7 @@
 ---	* This script should be in [AMUMSS folder]\ModScript\ModHelperScripts\LIB
 -------------------------------------------------------------------------------
 
---  * Deafult is first
+--  * Default is first
 RC_={--	RewardChoice Enum
 	ALL   =	'GiveAll',			ALL_S =	'GiveAllSilent',
 	ONE   =	'SelectAlways',		ONE_S =	'SelectAlwaysSilent',

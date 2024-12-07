@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
----	Build GcObjectSpawnData entries (VERSION: 0.4) ... by lMonk
+---	Build GcObjectSpawnData entries (VERSION: 0.41) ... by lMonk
 ---	* Requires _lua_2_exml.lua !
 ---	* This script should be in [AMUMSS folder]\ModScript\ModHelperScripts\LIB
 -------------------------------------------------------------------------------
@@ -80,6 +80,7 @@ function ObjectSpawnEntry(osd)
 		DestroyedByPlayerVehicle	= osd.destroyedbyvehicle or true,		-- b
 		DestroyedByPlayerShip		= osd.destroyedbyship or true,			-- b
 		DestroyedByTerrainEdit		= osd.destroyedbyterrainedit or true,	-- b
+		IsFloatingIsland			= osd.isfloatingisland,					-- b
 		InvisibleToCamera			= osd.invisibletocamera or true,		-- b
 		CreaturesCanEat				= osd.creaturescaneat,					-- b
 		ShearWindStrength			= osd.shearwind,						-- f

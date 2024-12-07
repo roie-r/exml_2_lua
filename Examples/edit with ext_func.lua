@@ -81,7 +81,7 @@ end
 NMS_MOD_DEFINITION_CONTAINER = {
 	MOD_FILENAME		= '_TEST L2E edit with ext_func.pak',
 	MOD_AUTHOR			= 'lMonk',
-	NMS_VERSION			= '5.12',
+	NMS_VERSION			= '5.28',
 	MODIFICATIONS 		= {{
 	MBIN_CHANGE_TABLE	= {
 	{

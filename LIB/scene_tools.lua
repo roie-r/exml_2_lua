@@ -9,7 +9,7 @@
 --	@param props: a keyed table for scene class properties.
 --	{
 --	  name	= scene node name (NameHash is calculated automatically)
---	  stype	= scene node type
+--	  ntype	= scene node type
 --	  form	= [optional] Transform data. a list of 9 ordered values or keyed values,
 --			  but NOT a combination of the two!
 --	  pxlud = [optional] PlatformExclusion
@@ -38,7 +38,7 @@ function ScNode(nodes)
 			meta	= {'value', 'TkSceneNodeData.xml'},
 			Name 				= props.name,
 			NameHash			= jenkinsHash(props.name),
-			Type				= props.stype,
+			Type				= props.ntype,
 			PlatformExclusion	= props.pxlud or nil
 		}
 		--	add TkTransformData class
@@ -117,7 +117,7 @@ function ScLight(lights)
 		end
 		return {
 			name	= lgt.name or 'n9',
-			stype	= 'LIGHT',
+			ntype	= 'LIGHT',
 			form	= lgt,
 			attr	= {
 				FOV			= lgt.fov or 360,

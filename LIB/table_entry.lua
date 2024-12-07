@@ -198,7 +198,7 @@ function ProcTechStatLevel(tsl)
 			meta = {'Stat', 'GcStatsTypes.xml'},
 			StatsType = tsl.st,							--	Enum
 		},
-		ValueMin	= tsl.mn,							--	f
+		ValueMin	= tsl.mn and tsl.mn or tsl.mx,		--	f
 		ValueMax	= tsl.mx,							--	f
 		WeightingCurve = {
 			meta = {'WeightingCurve', 'GcWeightingCurve.xml'},
