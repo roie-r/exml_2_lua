@@ -5,7 +5,7 @@ dofile('LIB/scene_tools.lua')
 NMS_MOD_DEFINITION_CONTAINER = {
 	MOD_FILENAME 		= '_TEST L2E add scene nodes.pak',
 	MOD_AUTHOR			= 'lMonk',
-	NMS_VERSION			= '5.28',
+	NMS_VERSION			= '5.29',
 	AMUMSS_SUPPRESS_MSG	= 'MIXED_TABLE',
 	MODIFICATIONS 		= {{
 	MBIN_CHANGE_TABLE	= {

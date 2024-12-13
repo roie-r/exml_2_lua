@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
----	Model scene tools (VERSION: 0.85.7) ... by lMonk
+---	Model scene tools (VERSION: 0.85.9) ... by lMonk
 ---	Helper function for adding new TkSceneNodeData nodes and properties
 ---	* Requires _lua_2_exml.lua !
 ---	* This script should be in [AMUMSS folder]\ModScript\ModHelperScripts\LIB
@@ -79,17 +79,7 @@ function ScNode(nodes)
 		end
 		return T
 	end
-	-----------------------------------------------------------------
-	local k,_ = next(nodes)
-	if k == 1 then
-	-- k=1 means the first of a list of unrelated, non-nested, nodes
-		local T = {}
-		for _,nd in ipairs(nodes) do
-				T[#T+1] = sceneNode(nd)
-		end
-		return T
-	end
-	return sceneNode(nodes)
+	return processOnenAll(nodes, sceneNode)
 end
 
 --	Wrapper function. Accepts lua scene nodes and Returns an exml string.
@@ -135,9 +125,8 @@ function ScLight(lights)
 	end
 	-----------------------------------------------------------------
 	if lights then
-		local k,_ = next(lights)
-		if k == 1 then
-		-- k=1 means the first of a list of tables
+		-- first key=1 means a list of light nodes
+		if next(lights) == 1 then
 			local T = {}
 			for _,l in pairs(lights) do
 				T[#T+1] = lightNode(l)

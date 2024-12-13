@@ -6,7 +6,7 @@ dofile('LIB/biome_spawn_entry.lua')
 NMS_MOD_DEFINITION_CONTAINER = {
 	MOD_FILENAME 		= '_TEST L2E add new biome spawn.pak',
 	MOD_AUTHOR			= 'lMonk',
-	NMS_VERSION			= '5.28',
+	NMS_VERSION			= '5.29',
 	MODIFICATIONS 		= {{
 	MBIN_CHANGE_TABLE	= {
 	{
@@ -34,7 +34,7 @@ NMS_MOD_DEFINITION_CONTAINER = {
 									group		= 'BARK',
 									palette		= 'Wood',
 									colouralt	= 'Primary',
-									override	= true,				-- default value (can be skipped)
+									override	= true,
 									color		= {1, 0.93, 0.891, 0.838},
 									optionname	= 3
 								},
@@ -42,7 +42,7 @@ NMS_MOD_DEFINITION_CONTAINER = {
 									layer		= 'BASE',
 									palette		= 'Plant',
 									colouralt	= 'Primary',
-									override	= true,				-- default value (can be skipped)
+									override	= true,
 									color		= {1, 0.164, 0.509, 0.63},
 									optionname	= 2
 								},
@@ -51,7 +51,7 @@ NMS_MOD_DEFINITION_CONTAINER = {
 									group		= 'LEAF',
 									palette		= 'Leaf',
 									colouralt	= 'Primary',
-									override	= true,				-- default value (can be skipped)
+									override	= true,
 									color		= {1, 0.923, 0.484, 0.046},
 									optionname	= 1
 								},
