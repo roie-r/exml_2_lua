@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
----	Reality tables entries (VERSION: 0.85.2) ... by lMonk
+---	Reality tables entries (VERSION: 0.86.0) ... by lMonk
 ---	Build full table entries, conversion-ready with ToExml; For technology,
 --	 proc-tech, product, recipe, basebuild objects and basebuild parts.
 ---	* Not ALL properties of the tables' classes are included. Some properties
@@ -16,14 +16,14 @@ IT_={--	InventoryType Enum
 --	receives a table of {id, amount, product/substance} items
 function GetRequirements(r)
 	if not r then return nil end
-	local reqs = {meta = {'name', 'Requirements'}}
+	local reqs = {meta = {att='name', val='Requirements'}}
 	for _,req in ipairs(r) do
 		reqs[#reqs+1] = {
-			meta	= {'value', 'GcTechnologyRequirement.xml'},
+			meta	= {att='Requirements', val='GcTechnologyRequirement'},
 			ID		= req.id,
 			Amount	= req.n,							--	i
 			Type	= {
-				meta	= {'Type', 'GcInventoryType.xml'},
+				meta	= {att='Type', val='GcInventoryType'},
 				InventoryType = req.tp					--	Enum
 			}
 		}
@@ -34,9 +34,9 @@ end
 --	receives a table of {type, bonus, level} items
 function TechStatBonus(tsb)
 	return {
-		meta	= {'value', 'GcStatsBonus.xml'},
+		meta	= {att='StatBonuses', val='GcStatsBonus'},
 		Stat	= {
-			meta		= {'Stat', 'GcStatsTypes.xml'},
+			meta		= {att='Stat', val='GcStatsTypes'},
 			StatsType	= tsb.st					--	Enum
 		},
 		Bonus	= tsb.bn,							--	f
@@ -49,7 +49,7 @@ end
 function TechnologyEntry(items)
 	local function techEntry(tech)
 		return {
-			meta			= {'value', 'GcTechnology.xml'},
+			meta			= {att='Table', val='GcTechnology'},
 			ID				= tech.id,
 			Group			= tech.group,									--	s
 			Name			= tech.name,									--	s
@@ -60,7 +60,7 @@ function TechnologyEntry(items)
 			HintStart		= tech.hintstart,
 			HintEnd			= tech.hintend,
 			Icon			= {
-				meta	= {'Icon', 'TkTextureResource.xml'},
+				meta	= {att='Icon', val='TkTextureResource'},
 				Filename	= tech.icon,									--	s
 			},
 			Colour			= ColorData(tech.color, 'Colour'),				--	rgb/hex
@@ -68,7 +68,7 @@ function TechnologyEntry(items)
 			Chargeable		= tech.chargeable,								--	b
 			ChargeAmount	= tech.chargeamount	or 100,						--	i
 			ChargeType		= {
-				meta	= {'ChargeType', 'GcRealitySubstanceCategory.xml'},
+				meta	= {att='ChargeType', val='GcRealitySubstanceCategory'},
 				SubstanceCategory = (tech.chargetype or 'Earth'),			--	E
 			},
 			ChargeBy		= StringArray(tech.chargeby, 'ChargeBy'),		--	Id
@@ -81,22 +81,22 @@ function TechnologyEntry(items)
 			Core			= tech.core,									--	b
 			Procedural		= tech.istemplate,								--	not a bug
 			Category		= {
-				meta	= {'Category', 'GcTechnologyCategory.xml'},
+				meta	= {att='Category', val='GcTechnologyCategory'},
 				TechnologyCategory = tech.category,							--	Enum
 			},
 			Rarity			= {
-				meta	= {'Rarity', 'GcTechnologyRarity.xml'},
+				meta	= {att='Rarity', val='GcTechnologyRarity'},
 				TechnologyRarity = tech.rarity	or 'Normal',				--	Enum
 			},
 			Value			= tech.value		or 10,						--	i
 			Requirements	= GetRequirements(tech.requirements),
 			BaseStat		= {
-				meta	= {'BaseStat', 'GcStatsTypes.xml'},
+				meta	= {att='BaseStat', val='GcStatsTypes'},
 				StatsType	= tech.basestat,								--	Enum
 			},
 			StatBonuses		= (
 				function()
-					local stats = {meta = {'name', 'StatBonuses'}}
+					local stats = {meta = {att='name', val='StatBonuses'}}
 					for _,tsb in ipairs(tech.statbonuses) do
 						stats[#stats+1] = TechStatBonus(tsb)
 					end
@@ -111,14 +111,15 @@ function TechnologyEntry(items)
 			RequiredRank	= tech.requiredrank	or 1,
 			FragmentCost	= tech.fragmentcost	or 1,
 			TechShopRarity	= {
-				meta	= {'TechShopRarity', 'GcTechnologyRarity.xml'},
+				meta	= {att='TechShopRarity', val='GcTechnologyRarity'},
 				TechnologyRarity = tech.rarity	or 'Normal',				--	E
 			},
 			WikiEnabled		= tech.wikienabled,								--	b
-			IsTemplate		= tech.istemplate								--	b
+			IsTemplate		= tech.istemplate,								--	b
+			ExclusivePrimaryStat = tech.exclusiveprimarystat				--	b
 		}
 	end
-	return processOnenAll(items, techEntry)
+	return ProcessOnenAll(items, techEntry)
 end
 
 --	Build an entry for NMS_REALITY_GCPRODUCTTABLE
@@ -126,36 +127,36 @@ end
 function ProductEntry(items)
 	local function prodEntry(prod)
 		return {
-			meta	= {'value', 'GcProductData.xml'},
+			meta	= {att='value', val='GcProductData'},
 			ID			= prod.id,
 			Name		= prod.name,									--	s
 			NameLower	= prod.namelower,								--	s
 			Subtitle	= prod.subtitle,								--	s
 			Description	= prod.description,								--	s
 			DebrisFile	= {
-				meta	= {'DebrisFile', 'TkModelResource.xml'},
+				meta	= {att='DebrisFile', val='TkModelResource'},
 				Filename= 'MODELS/EFFECTS/DEBRIS/TERRAINDEBRIS/TERRAINDEBRIS4.SCENE.MBIN'
 			},
 			BaseValue	= prod.basevalue or 1,							--	i
 			Icon		= {
-				meta	= {'Icon', 'TkTextureResource.xml'},
+				meta	= {att='Icon', val='TkTextureResource'},
 				Filename= prod.icon										--	s
 			},
 			Colour		= ColorData(prod.color, 'Colour'),				--	rgb/hex
 			Category	= {
-				meta	= {'Category', 'GcRealitySubstanceCategory.xml'},
+				meta	= {att='Category', val='GcRealitySubstanceCategory'},
 				SubstanceCategory	= prod.category	or 'Earth'			--	Enum
 			},
 			Type		= {
-				meta	= {'Type', 'GcProductCategory.xml'},
+				meta	= {att='Type', val='GcProductCategory'},
 				ProductCategory		= prod.type		or 'Component'		--	Enum
 			},
 			Rarity		= {
-				meta	= {'Rarity', 'GcRarity.xml'},
+				meta	= {att='Rarity', val='GcRarity'},
 				Rarity				= prod.rarity	or 'Common'			--	Enum
 			},
 			Legality	= {
-				meta	= {'Legality', 'GcLegality.xml'},
+				meta	= {att='Legality', val='GcLegality'},
 				Legality			= prod.legality	or 'Legal'			--	Enum
 			},
 			Consumable				= prod.consumable,					--	b
@@ -166,7 +167,7 @@ function ProductEntry(items)
 			CraftAmountMultiplier	= prod.crafmultiplier	or 1,
 			Requirements			= GetRequirements(prod.requirements),
 			Cost		= {
-				meta	= {'Cost', 'GcItemPriceModifiers.xml'},
+				meta	= {att='Cost', val='GcItemPriceModifiers'},
 				SpaceStationMarkup	= prod.spacestationmarkup,
 				LowPriceMod			= prod.lowpricemod		or -0.1,
 				HighPriceMod		= prod.highpricemod		or 0.1,
@@ -178,7 +179,7 @@ function ProductEntry(items)
 			NormalisedValueOnWorld	= prod.normalisedvalueonworld,		--	f
 			NormalisedValueOffWorld	= prod.normalisedvalueoffworld,		--	f
 			TradeCategory= {
-				meta	= {'TradeCategory', 'GcTradeCategory.xml'},
+				meta	= {att='TradeCategory', val='GcTradeCategory'},
 				TradeCategory	= prod.tradecategory or 'None'			--	Enum
 			},
 			WikiCategory				= prod.wikicategory or 'NotEnabled',
@@ -195,21 +196,21 @@ function ProductEntry(items)
 			CanSendToOtherPlayers		= prod.sendtoplayer				--	b
 		}
 	end
-	return processOnenAll(items, prodEntry)
+	return ProcessOnenAll(items, prodEntry)
 end
 
 --	receives a table of {type, min, max, weightcurve, always} items
 function ProcTechStatLevel(tsl)
 	return {
-		meta		= {'value', 'GcProceduralTechnologyStatLevel.xml'},
+		meta		= {att='value', val='GcProceduralTechnologyStatLevel'},
 		Stat		= {
-			meta = {'Stat', 'GcStatsTypes.xml'},
+			meta = {att='Stat', val='GcStatsTypes'},
 			StatsType = tsl.st,							--	Enum
 		},
 		ValueMin	= tsl.mn and tsl.mn or tsl.mx,		--	f
 		ValueMax	= tsl.mx,							--	f
 		WeightingCurve = {
-			meta = {'WeightingCurve', 'GcWeightingCurve.xml'},
+			meta = {att='WeightingCurve', val='GcWeightingCurve'},
 			WeightingCurve = tsl.wc or 'NoWeighting',	--	Enum
 		},
 		AlwaysChoose= tsl.ac							--	b
@@ -220,7 +221,7 @@ end
 function ProcTechEntry(items)
 	local function proctechEntry(tech)
 		return {
-			meta	= {'value', 'GcProceduralTechnologyData.xml'},
+			meta	= {att='value', val='GcProceduralTechnologyData'},
 			ID				= tech.id,
 			Template		= tech.template,
 			Name			= tech.name,
@@ -231,19 +232,19 @@ function ProcTechEntry(items)
 			Colour			= ColorData(tech.color, 'Colour'),			--	rgb/hex
 			Quality			= tech.quality or 'Normal',					--	Enum
 			Category		= {
-				meta = {'Category', 'GcProceduralTechnologyCategory.xml'},
+				meta = {att='Category', val='GcProceduralTechnologyCategory'},
 				ProceduralTechnologyCategory = tech.category,			--	Enum
 			},
 			NumStatsMin		= tech.numstatsmin,							--	i
 			NumStatsMax		= tech.numstatsmax,							--	i
 			WeightingCurve	= {
-				meta = {'WeightingCurve', 'GcWeightingCurve.xml'},
+				meta = {att='WeightingCurve', val='GcWeightingCurve'},
 				WeightingCurve = tech.weightingcurve or 'NoWeighting',	--	Enum
 			},
 			UpgradeColour	= ColorData(tech.upgradecolor, 'UpgradeColour'),
 			StatLevels		= (
 				function()
-					local stats = {meta = {'name', 'StatLevels'}}
+					local stats = {meta = {att='name', val='StatLevels'}}
 					for _,sl in ipairs(tech.statlevels) do
 						stats[#stats+1] = ProcTechStatLevel(sl)
 					end
@@ -252,25 +253,25 @@ function ProcTechEntry(items)
 			)()
 		}
 	end
-	return processOnenAll(items, proctechEntry)
+	return ProcessOnenAll(items, proctechEntry)
 end
 
 --	Build an entry for BASEBUILDINGOBJECTSTABLE
 function BaseBuildObjectEntry(items)
 	local function baseObjectEntry(bpart)
 		return {
-			meta = {'value', 'GcBaseBuildingEntry.xml'},
+			meta = {att='value', val='GcBaseBuildingEntry'},
 			ID							= bpart.id,
 			Style						= {
-				meta		= {'Style', 'GcBaseBuildingPartStyle.xml'},
+				meta		= {att='Style', val='GcBaseBuildingPartStyle'},
 				Style		= bpart.style or 'None'						--	Enum
 			},
 			PlacementScene				= {
-				meta		= {'PlacementScene', 'TkModelResource.xml'},
+				meta		= {att='PlacementScene', val='TkModelResource'},
 				Filename	= bpart.placementscene
 			},
 			DecorationType				= {
-				meta		= {'DecorationType', 'GcBaseBuildingObjectDecorationTypes.xml'},
+				meta		= {att='DecorationType', val='GcBaseBuildingObjectDecorationTypes'},
 				BaseBuildingDecorationType = bpart.decorationtype or 'Normal'--	Enum
 			},
 			IsPlaceable					= bpart.isplaceable,			--	b
@@ -286,10 +287,10 @@ function BaseBuildObjectEntry(items)
 			Groups						= (
 				function()
 					if not bpart.groups then return nil end
-					local T = {meta = {'name', 'Groups'}}
+					local T = {meta = {att='name', val='Groups'}}
 					for _,v in ipairs(bpart.groups) do
 						T[#T+1] = {
-							meta	= {'value', 'GcBaseBuildingEntryGroup.xml'},
+							meta	= {att='value', val='GcBaseBuildingEntryGroup'},
 							Group			= v.group,
 							SubGroupName	= v.subname
 						}
@@ -313,11 +314,11 @@ function BaseBuildObjectEntry(items)
 			IsSealed					= bpart.issealed,				--	b
 			CloseMenuAfterBuild			= bpart.closemenuafterbuild,
 			LinkGridData				= {
-				meta = {'LinkGridData', 'GcBaseLinkGridData.xml'},
+				meta = {att='LinkGridData', val='GcBaseLinkGridData'},
 				Connection = {
-					meta	= {'Connection', 'GcBaseLinkGridConnectionData.xml'},
+					meta	= {att='Connection', val='GcBaseLinkGridConnectionData'},
 					Network	= {
-						meta = {'Network', 'GcLinkNetworkTypes.xml'},
+						meta = {att='Network', val='GcLinkNetworkTypes'},
 						LinkNetworkType = bpart.linknetwork or 'Power'	--	Enum
 					},
 					NetworkSubGroup		= bpart.networksubgroup,		--	i
@@ -333,59 +334,59 @@ function BaseBuildObjectEntry(items)
 			RegionSpawnLOD				= 1
 		}
 	end
-	return processOnenAll(items, baseObjectEntry)
+	return ProcessOnenAll(items, baseObjectEntry)
 end
 
 --	Build an entry for BASEBUILDINGPARTSTABLE
 function BaseBuildPartEntry(items)
 	local function basePartEntry(bpart)
 		local T = {
-			meta	= {'value', 'GcBaseBuildingPart.xml'},
+			meta	= {att='value', val='GcBaseBuildingPart'},
 			ID		= bpart.id,
-			StyleModels = {meta = {'name', 'StyleModels'}}
+			StyleModels = {meta = {att='name', val='StyleModels'}}
 		}
 		for _,src in ipairs(bpart.stylemodels) do
 			T.StyleModels[#T.StyleModels+1] = {
-				meta = {'value', 'GcBaseBuildingPartStyleModel.xml'},
+				meta = {att='value', val='GcBaseBuildingPartStyleModel'},
 				Style = {
-					meta = {'Style', 'GcBaseBuildingPartStyle.xml'},
+					meta = {att='Style', val='GcBaseBuildingPartStyle'},
 					Style = src.style or 'None',						--	Enum
 				},
 				Model = {
-					meta = {'Model', 'TkModelResource.xml'},
+					meta = {att='Model', val='TkModelResource'},
 					Filename = src.act,
 				},
 				Inactive = {
-					meta = {'Inactive', 'TkModelResource.xml'},
+					meta = {att='Inactive', val='TkModelResource'},
 					Filename = src.lod
 				}
 			}
 		end
 		return T
 	end
-	return processOnenAll(items, basePartEntry)
+	return ProcessOnenAll(items, basePartEntry)
 end
 
 --	Build an entry for NMS_REALITY_GCRECIPETABLE
 function RefinerRecipeEntry(items)
 	local function addIngredient(elem, result)
 		return {
-			meta	= {result and 'Result' or 'value', 'GcRefinerRecipeElement.xml'},
+			meta	= {att=(result and 'Result' or 'value'), val='GcRefinerRecipeElement'},
 			Id		= elem.id,
 			Amount	= elem.n,										--	i
 			Type	= {
-				meta			= {'Type', 'GcInventoryType.xml'},
+				meta			= {att='Type', val='GcInventoryType'},
 				InventoryType	= elem.tp							--	Enum
 			}
 		}
 	end
 	local function refinerecipeEntry(recipe)
-		local igrds = {meta = {'name', 'Ingredients'}}
+		local igrds = {meta = {att='name', val='Ingredients'}}
 		for _,elem in ipairs(recipe.ingredients) do
 			igrds[#igrds+1] = addIngredient(elem)
 		end
 		return {
-			meta	= {'value', 'GcRefinerRecipe.xml'},
+			meta	= {att='value', val='GcRefinerRecipe'},
 			Id			= recipe.id,
 			RecipeType	= recipe.name,									--	s
 			RecipeName	= recipe.name,									--	s
@@ -394,6 +395,6 @@ function RefinerRecipeEntry(items)
 			Result		= addIngredient(recipe.result, true),
 			Ingredients	= igrds
 		}
-	end	
-	return processOnenAll(items, refinerecipeEntry)
+	end
+	return ProcessOnenAll(items, refinerecipeEntry)
 end

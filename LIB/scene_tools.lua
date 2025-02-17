@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
----	Model scene tools (VERSION: 0.85.9) ... by lMonk
+---	Model scene tools (VERSION: 0.86.1) ... by lMonk
 ---	Helper function for adding new TkSceneNodeData nodes and properties
 ---	* Requires _lua_2_exml.lua !
 ---	* This script should be in [AMUMSS folder]\ModScript\ModHelperScripts\LIB
@@ -35,7 +35,7 @@ function ScNode(nodes)
 	--	Build a TkSceneNodeData class
 	local function sceneNode(props)
 		local T	= {
-			meta	= {'value', 'TkSceneNodeData.xml'},
+			meta	= {att='Children', val='TkSceneNodeData'},
 			Name 				= props.name,
 			NameHash			= jenkinsHash(props.name),
 			Type				= props.ntype,
@@ -44,7 +44,7 @@ function ScNode(nodes)
 		--	add TkTransformData class
 		props.form = props.form or {}
 		T.Form = {
-			meta	= {'Transform', 'TkTransformData.xml'},
+			meta	= {att='Transform', val='TkTransformData'},
 			TransX	= (props.form.tx or props.form[1]) or nil,
 			TransY	= (props.form.ty or props.form[2]) or nil,
 			TransZ	= (props.form.tz or props.form[3]) or nil,
@@ -61,10 +61,10 @@ function ScNode(nodes)
 			if props.attr.SCENEGRAPH then
 				props.attr.EMBEDGEOMETRY = 'TRUE'
 			end
-			T.Attr = { meta = {'name', 'Attributes'} }
+			T.Attr = { meta = {att='name', val='Attributes'} }
 			for nm, val in pairs(props.attr) do
 				T.Attr[#T.Attr+1] = {
-					meta	= {'value', 'TkSceneNodeAttributeData.xml'},
+					meta	= {att='Attributes', val='TkSceneNodeAttributeData'},
 					Name	= nm,
 					Value	= val
 				}
@@ -75,11 +75,11 @@ function ScNode(nodes)
 			local k,_ = next(props.child)
 			cnd = ScNode(props.child)
 			T.Child	= k == 1 and cnd or {cnd}
-			T.Child.meta = {'name', 'Children'}
+			T.Child.meta = {att='name', val='Children'}
 		end
 		return T
 	end
-	return processOnenAll(nodes, sceneNode)
+	return ProcessOnenAll(nodes, sceneNode)
 end
 
 --	Wrapper function. Accepts lua scene nodes and Returns an exml string.

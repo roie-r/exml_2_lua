@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
----	EXML 2 LUA (VERSION: 0.84.1) ... by lMonk
+---	EXML 2 LUA (VERSION: 0.86.0) ... by lMonk
 ---	A tool for converting exml to an equivalent lua table and back again.
 ---	Functions for converting an exml file, or sections of one, to
 ---	 a lua table during run-time, or printing the exml as a lua script.
@@ -25,9 +25,9 @@ end
 --	@param exml: requires complete EXML sections in the nomral format
 function ToLua(exml)
 	local function eval(val)
-		if val == 'True' then
+		if val == 'true' then
 			return true
-		elseif val == 'False' then
+		elseif val == 'false' then
 			return false
 		else
 			return val
@@ -35,7 +35,8 @@ function ToLua(exml)
 	end
 	local tag	= [[<[/]?Property[ ]?(.-[/]?)>]]
 	local tag1	= [[([%w_]+)="(.+)"[ ]?([/]?)]]
-	local tag2	= [[name="([%w_]+)" value="(.*)"[ ]?([/]?)]]
+	local tag2	= [[name="([%w_ ]+)" value="(.*)"[ ]?([/]?)]] -- space in property name!?!
+	local tag3	= [[name="([%w_]+)" value="(.*)" (.*)="(.*)"]]
 	local tlua, st_node, is_ord = {}, {}, {false}
 	local parent= tlua
 	local node	= nil
@@ -43,12 +44,15 @@ function ToLua(exml)
 		_,eql = prop:gsub('=', '')
 		if eql > 0 then
 			-- choose tag by the count of [=] in a property
-			local att, val, close = prop:match(eql > 1 and tag2 or tag1)
-			if close == '' then
+			-- at3 captures either closing char or 3rd attribute value
+			local att, val, at3, val3 = prop:match(eql > 2 and tag3 or (eql > 1 and tag2 or tag1))
+			if #at3 ~= 1 then
 				-- open new property table
 				table.insert(st_node, parent)
-				node = {meta = {att , val}}
-
+				node = {meta = {att=att , val=val}}
+				if val3 then
+					node.meta[at3 == 'index' and 'inx' or 'lnk'] = val3
+				end
 				-- is_ord[#is_ord] == true when parent is an ordered (name) section
 				if is_ord[#is_ord] == true or att == 'value' then
 					parent[#parent+1] = node
@@ -62,10 +66,9 @@ function ToLua(exml)
 				is_ord[#is_ord+1] = att == 'name'
 			else
 				-- add property to parent table
-				if is_ord[#is_ord] == true or att == 'value' then
+				if is_ord[#is_ord] == true or att == 'name' or att == 'value' then
 					node[#node+1] = {[att] = eval(val)}
-				-- regular property (skips stubs)
-				elseif att ~= 'name' then
+				else
 					node[att] = eval(val)
 				end
 			end
@@ -82,18 +85,20 @@ end
 --	Converts EXML to a pretty-printed, ready-to-work, lua script.
 --	When parsing a full file, the header is stripped and a mock template is added
 --	* Does not handle commented lines!
---	@param vars: a table containing the required properties
+--	@param vars: a table containing the following required properties
 --	{
---	  exml	 = complete EXML sections in the nomral format or a full file
+--	  mxml	 = complete MXML sections in the nomral format or a full file
 --	  indent = code indentation..			Default: [\t] (tab)
 --	  com	 = ['] or ["]..					Default: [']
+--	  sq_k	 = bool..						Default: false
 --	}
+--	* or just the exml string (instead of a table)
 function PrintExmlAsLua(vars)
 	local function eval(val)
 		-- if #val == 0 then
 			-- return 'nil' -- doesn't work for variable length strings (for now)
-		if val == 'True' or val == 'False' then
-			return val:lower()
+		if val == 'true' or val == 'false' then
+			return val
 		elseif tonumber(val) and #val < 18 and not val:match('^0x') then
 			return val
 		else
@@ -102,39 +107,47 @@ function PrintExmlAsLua(vars)
 	end
 	local tag	= [[<[/]?Property[ ]?(.-[/]?)>]]
 	local tag1	= [[([%w_]+)="(.+)"[ ]?([/]?)]]
-	local tag2	= [[name="([%w_]+)" value="(.*)"[ ]?([/]?)]]
+	local tag2	= [[name="([%w_ ]+)" value="(.*)"[ ]?([/]?)]] -- space in property name!?!
+	local tag3	= [[name="([%w_]+)" value="(.*)" (.*)="(.*)"]]
 	local ind	= vars.indent or '\t'
 	local com	= vars.com or [[']]
+	local ko	= vars.sq_k and '['..com or ''
+	local kc	= vars.sq_k and com..']' or ''
 	local lvl	= 0
 	local tlua	= {'return '}
 	function tlua:add(t)
 		for _,v in ipairs(t) do self[#self+1] = v end
 	end
 	local is_ord = {false}
-	for prop in UnWrap(vars.exml):gmatch(tag) do
+	for prop in UnWrap(vars.mxml or vars):gmatch(tag) do
 		_,eql = prop:gsub('=', '')
 		if eql > 0 then
 			-- choose tag by the count of [=] in a property
-			local att, val, closed = prop:match(eql > 1 and tag2 or tag1)
-			if closed == '' then
+			-- at3 captures either closing char or 3rd attribute value
+			local att, val, at3, val3 = prop:match(eql > 2 and tag3 or (eql > 1 and tag2 or tag1))
+			if #at3 ~= 1 then
 				-- opening a new table
 				-- is_ord[#is_ord] == true when parent is an ordered (name) section
 				if is_ord[#is_ord] == true or att == 'value' then
 					tlua:add({ind:rep(lvl), '{\n'})
 				else
-					tlua:add({ind:rep(lvl), (att == 'name' and val or att), ' = ', '{\n'})
+					tlua:add({ind:rep(lvl), ko, (att == 'name' and val or att), kc, ' = ', '{\n'})
 				end
 				-- keep meta if classes are ordered
 				is_ord[#is_ord+1] = att == 'name'
 				lvl = lvl + 1
-				tlua:add({ind:rep(lvl), 'meta = {', com, att, com, ',', com, val, com, '},\n'})
+				tlua:add({ind:rep(lvl), 'meta = {att=', com, att, com, ', val=', com, val, com})
+				if val3 then
+					tlua:add({', ', (at3 == 'index' and 'inx' or 'lnk'), '=', com, val3, com})
+				end
+				tlua:add({'},\n'})
+
 			else
 				-- value property or properties in an ordered array
-				if is_ord[#is_ord] == true or att == 'value' then
-					tlua:add({ind:rep(lvl), '{', att, ' = ', com, val, com, '},\n'})
-				-- regular property (skips stubs)
-				elseif att ~= 'name' then
-					tlua:add({ind:rep(lvl), att, ' = ', eval(val), ',\n'})
+				if is_ord[#is_ord] == true or att == 'value' or att == 'name' then
+					tlua:add({ind:rep(lvl), '{', ko, att, kc, ' = ', eval(val), '},\n'})
+				else
+					tlua:add({ind:rep(lvl), ko, att, kc, ' = ', eval(val), ',\n'})
 				end
 			end
 		else
@@ -147,7 +160,9 @@ function PrintExmlAsLua(vars)
 		end
 	end
 	-- start & end trims
-	if tlua[4] == ' = ' then
+	if tlua[6] == ' = ' then
+		table.remove(tlua, 3)
+		table.remove(tlua, 3)
 		table.remove(tlua, 3)
 		table.remove(tlua, 3)
 	end
@@ -159,10 +174,10 @@ end
 --	Returns a table with Name property as keys linking to their to TkSceneNodeData sections.
 function SceneNames(node, keys)
 	keys = keys or {}
-	if node.meta[2] == 'TkSceneNodeData.xml' then
+	if node.meta[2] == 'TkSceneNodeData' then
 		keys[node.Name] = node
 	end
-	for k, scn in ipairs(node.Children or {}) do
+	for _, scn in ipairs(node.Children or {}) do
 		SceneNames(scn, keys)
 	end
 	return keys
@@ -184,19 +199,4 @@ function UnionTables(arr)
 		end
 	end
 	return merged
-end
-
---	Load an mbin from the amumss runtime processing temp folder
---	* The mbin must be loaded from a merged script that runs before the one calling LoadRuntimeMbin
---	DEPRECATED! Doesn't work with latest amumss versions - use EXT_FUNC instead.
-function LoadRuntimeMbin(path)
-	path = '../MODBUILDER/_TEMP/DECOMPILED/'..path:gsub('.MBIN$', '.EXML')
-	f = io.open(path, 'r')
-	if f then
-		t = ToLua(f:read('*a'))
-		f:close()
-		return t
-	else
-		print([[!/^\_! LoadRuntimeMbin failed to load: ]]..path)
-	end
 end

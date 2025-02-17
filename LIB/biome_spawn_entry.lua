@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
----	Build GcObjectSpawnData entries (VERSION: 0.50) ... by lMonk
+---	Build GcObjectSpawnData entries (VERSION: 0.56) ... by lMonk
 ---	* Requires _lua_2_exml.lua !
 ---	* This script should be in [AMUMSS folder]\ModScript\ModHelperScripts\LIB
 -------------------------------------------------------------------------------
@@ -7,33 +7,33 @@
 function ObjectSpawnEntry(items)
 	local function spawnEntry(osd)
 		return {
-			meta	= {'value','GcObjectSpawnData.xml'},
+			meta	= {name=(osd.class or 'Objects'), value='GcObjectSpawnData'},
 			Type		= osd.type or 'Instanced',								-- Enum
 			Resource	= {
-				meta	= {'Resource','GcResourceElement.xml'},
+				meta	= {att='Resource', val='GcResourceElement'},
 				Filename	= osd.filename,										-- s
 				Seed		= {
-					meta = {'Seed','GcSeed.xml'},
+					meta = {att='Seed', val='GcSeed'},
 					Seed			= osd.resourceseed,							-- i
 					UseSeedValue	= osd.resourceseed ~= nil
 				},
 				ProceduralTexture	= osd.texturesamplers and {
-					meta = {'ProceduralTexture','TkProceduralTextureChosenOptionList.xml'},
+					meta = {att='ProceduralTexture', val='TkProceduralTextureChosenOptionList'},
 					Samplers = (
 						function()
-							local T = { meta = {'name','Samplers'} }
+							local T = { meta = {att='name', val='Samplers'} }
 							for _,ptco in ipairs(osd.texturesamplers) do
 								local tsam = {
-									meta = {'value','TkProceduralTextureChosenOptionSampler.xml'},
-									Options = { meta = {'name','Options'} }
+									meta = {att='Samplers', val='TkProceduralTextureChosenOptionSampler'},
+									Options = { meta = {att='name', val='Options'} }
 								}
 								for _, opt in ipairs(ptco) do
 									tsam.Options[#tsam.Options+1] = {
-										meta = {'value','TkProceduralTextureChosenOption.xml'},
+										meta = {att='Options', val='TkProceduralTextureChosenOption'},
 										Layer			= opt.layer,						-- s
 										Group			= opt.group,						-- s
 										Palette			= {
-											meta = {'Palette','TkPaletteTexture.xml'},
+											meta = {att='Palette', val='TkPaletteTexture'},
 											Palette		= opt.palette	or 'Rock',			-- Enum
 											ColourAlt	= opt.colouralt	or 'None'			-- Enum
 										},
@@ -51,7 +51,7 @@ function ObjectSpawnEntry(items)
 			},
 			Placement					= osd.placement,						-- s
 			Seed = {
-				meta = {'Seed','GcSeed.xml'},
+				meta = {att='Seed', val='GcSeed'},
 				Seed			= osd.spawnseed,								-- i
 				UseSeedValue	= osd.spawnseed ~= nil
 			},
@@ -68,7 +68,7 @@ function ObjectSpawnEntry(items)
 			SwapPrimaryForSecondaryColour=osd.swap1stfor2nd,					-- b
 			SwapPrimaryForRandomColour	= osd.swap1stforRand,					-- b
 			AlignToNormal				= osd.aligntonormal,					-- b
-			MinScale					= osd.minscale,							-- f
+			['MinScale ']				= osd.minscale,							-- f
 			MaxScale					= osd.maxscale,							-- f
 			MinScaleY					= osd.minscaley,						-- f
 			MaxScaleY					= osd.maxscaley,						-- f
@@ -89,10 +89,10 @@ function ObjectSpawnEntry(items)
 			DestroyedByVehicleEffect	= osd.vehicleeffect or 'VEHICLECRASH',	-- s
 			QualityVariants = (													-- list
 				function()
-					local T = {meta = {'name','QualityVariants'}}
+					local T = {meta = {att='name', val='QualityVariants'}}
 					for i, osdv in ipairs(osd.qualityvariants) do
 						T[#T+1] = {
-							meta	= {'value','GcObjectSpawnDataVariant.xml'},
+							meta	= {att='QualityVariants', val='GcObjectSpawnDataVariant'},
 							ID						= i == 1 and 'STANDARD' or 'ULTRA',
 							Coverage				= osdv.coverage,			-- f
 							FlatDensity				= osdv.flatdensity,			-- f
@@ -104,7 +104,7 @@ function ObjectSpawnEntry(items)
 							FadeOutEndDistance		= osdv.fadeoutend or 9999,	-- f
 							FadeOutOffsetDistance	= osdv.fadeoutoffset or nil,-- f
 							LodDistances	= {									-- list
-								meta = {'name','LodDistances'},
+								meta = {att='name', val='LodDistances'},
 								{value	= 0},
 								{value	= osdv.lod and osdv.lod[1] or 20},	-- f
 								{value	= osdv.lod and osdv.lod[2] or 60},	-- f
@@ -118,5 +118,5 @@ function ObjectSpawnEntry(items)
 			)()
 		}
 	end
-	return processOnenAll(items, spawnEntry)
+	return ProcessOnenAll(items, spawnEntry)
 end
